@@ -7,7 +7,6 @@ Release/
 
 # DxLib関係
 Log.txt
-dxlib/
 
 # ユーザ設定
 *.log
