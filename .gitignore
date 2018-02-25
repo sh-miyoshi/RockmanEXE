@@ -1,0 +1,15 @@
+# Visual Studio関係
+Debug/
+Release/
+.vs/
+*.db
+*.vcxproj.filters
+
+# DxLib関係
+Log.txt
+dxlib/
+
+# ユーザ設定
+*.log
+todo.txt
+save.dat
