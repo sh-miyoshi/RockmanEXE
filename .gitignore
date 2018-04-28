@@ -6,9 +6,11 @@ Release/
 *.vcxproj.filters
 
 # DxLib関係
+dxlib/
 Log.txt
 
 # ユーザ設定
 *.log
 todo.txt
 save.dat
+image_local/
