@@ -52,6 +52,6 @@ public:
 	void Draw();
 	int Process();
 	void SetColor(SelectColor color, int active = -1);
-	void SetUnSelectable(int index,int active=-1);
+	void SetUnSelectable(int index,int active = -1);
 	void SetPointer(int pointer, int active = -1);
 };

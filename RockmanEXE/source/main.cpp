@@ -10,6 +10,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "effectMgr.h"
+#include "myInfo.h"
 
 bool g_exitFlag = false;
 unsigned long long g_count = 0;
@@ -80,11 +81,12 @@ class Main{
 		void Process();
 	};
 
-	class StateLog:public StateBase{
+	class StateMyInfo:public StateBase{
 		Main *obj;
+		MyInfo myInfo;
 	public:
-		StateLog(Main *obj);
-		~StateLog();
+		StateMyInfo(Main *obj);
+		~StateMyInfo();
 
 		void Draw();
 		void Process();
@@ -297,7 +299,7 @@ void Main::StateCharSelect::Draw(){
 		"ビリー x1",
 		"メットール and ビリー",
 		"フォルテ",
-		"戦歴"
+		"My情報"
 	};
 
 
@@ -324,11 +326,11 @@ void Main::StateCharSelect::Draw(){
 	case def::eKIND_フォルテ:
 		allEnemy[EnemyMgr::ID_フォルテ]->DrawAnim(def::FMX / 2, def::FMY / 2 - 10);
 		break;
-	case def::eKIND_戦歴:
-		DrawString(def::FMX / 2 - 20, def::FMY / 2 - 40, "戦歴", WHITE);
+	case def::eKIND_My情報:
+		DrawStringCenter(def::FMX / 2, def::FMY / 2 - 40, SELECT_NAMES[def::eKIND_My情報], WHITE);
 		break;
 	default:
-		ASSERT(0,"Main::StateCharSelect::Draw wrong enemy kind ("+ToString<int>(select)+")");
+		ASSERT(0, "Main::StateCharSelect::Draw wrong enemy kind (" + ToString<int>(select) + ")");
 		break;
 	}
 
@@ -395,8 +397,8 @@ void Main::StateCharSelect::Process(){
 			data.push_back(BattleEnemyInit_t{ EnemyMgr::ID_フォルテ,CPoint<int>(4,1) });
 			isBoss = true;
 			break;
-		case def::eKIND_戦歴:
-			obj->stateMgr.ChangeNext(new StateLog(obj));
+		case def::eKIND_My情報:
+			obj->stateMgr.ChangeNext(new StateMyInfo(obj));
 			return;
 		default:
 			ASSERT(0, "Main::StateCharSelect::Process wrong enemy kind (" + ToString<int>(select) + ")");
@@ -436,37 +438,18 @@ void Main::StateBattle::Process(){
 //-------------------------------------------------------
 // 戦績
 //-------------------------------------------------------
-Main::StateLog::StateLog(Main * obj):obj(obj){
+Main::StateMyInfo::StateMyInfo(Main * obj):obj(obj){
 }
 
-Main::StateLog::~StateLog(){
+Main::StateMyInfo::~StateMyInfo(){
 }
 
-void Main::StateLog::Draw(){
-	static const std::string SELECT_NAMES[def::eKIND_MAX-1] = {
-		"メットール x1        ",
-		"メットール x3        ",
-		"ビリー x1            ",
-		"メットール and ビリー",
-		"フォルテ             ",
-	};
-
-	// 戦績 (勝利回数・敗北回数)
-//	int win_num = PlayerMgr::GetInst()->GetBattleResult("win");
-//	int lose_num = PlayerMgr::GetInst()->GetBattleResult("lose");
-	DrawStringCenter(def::FMX / 2, 50, "--戦績--", WHITE);
-	DrawString(250,80,"勝利回数  敗北回数",WHITE);
-	for( int i = 0; i < sizeof(SELECT_NAMES) / sizeof(SELECT_NAMES[0]); i++ ){
-		DrawString(50,110+i*30, SELECT_NAMES[i].c_str(),WHITE);
-		int win = PlayerMgr::GetInst()->GetBattleResult(PlayerMgr::eBT_RTN_WIN,i);
-		int lose = PlayerMgr::GetInst()->GetBattleResult(PlayerMgr::eBT_RTN_LOSE, i);
-		DrawFormatString(280, 110 + i * 30,WHITE,"%4d",win);
-		DrawFormatString(365, 110 + i * 30, WHITE, "%4d", lose);
-	}
+void Main::StateMyInfo::Draw(){
+	myInfo.Draw();
 }
 
-void Main::StateLog::Process(){
-	if( CKey::GetInst()->CheckKey(eKEY_ENTER) == 1 || CKey::GetInst()->CheckKey(eKEY_CANCEL) == 1 ){
+void Main::StateMyInfo::Process(){
+	if( myInfo.Process() ){
 		obj->stateMgr.ChangeNext(new StateCharSelect(obj));
 	}
 }

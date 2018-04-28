@@ -27,7 +27,7 @@ namespace def{
 		eKIND_ビリー,
 		eKIND_メットール_ビリー,
 		eKIND_フォルテ,
-		eKIND_戦歴,
+		eKIND_My情報,
 
 		eKIND_MAX
 	};
@@ -40,7 +40,7 @@ namespace def{
 		eCHAR_ALL = eCHAR_PLAYER | eCHAR_ENEMY | eCHAR_OBJECT,
 	};
 
-	const std::string IMAGE_FILE_PATH = "data/image/";
+	const std::string IMAGE_FILE_PATH = "data/image_public/";
 	const std::string ENEMY_IMAGE_PATH = IMAGE_FILE_PATH + "敵関連/";
 	const std::string SKILL_IMAGE_PATH = IMAGE_FILE_PATH + "技関連/";
 	const std::string TEXT_FILE_PATH = "data/text/";
