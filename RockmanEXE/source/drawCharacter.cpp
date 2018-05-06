@@ -117,3 +117,8 @@ void DrawCharacter::DrawString(int x, int y, std::string data, unsigned int colo
 	ASSERT(isLoad, "DrawCharacter::DrawString font is not loaded");
 	DrawStringToHandle(x, y, data.c_str(), color, fontStr, edgeColor);
 }
+
+void DrawCharacter::DrawStringCenter(int x, int y, std::string data, unsigned int color, unsigned edgeColor){
+	int size = GetDrawStringWidth(data.c_str(), ( int ) data.size());
+	DrawString(x - size / 2, y, data, color, edgeColor);
+}

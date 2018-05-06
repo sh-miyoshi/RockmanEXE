@@ -35,8 +35,3 @@ int LoadSoundMemWithCheckError(std::string fileName, std::string position){
 	}
 	return handle;
 }
-
-void DrawStringCenter(int x, int y, std::string val, int color){
-	int size = GetDrawStringWidth(val.c_str(), ( int ) val.size());
-	DrawString(x - size / 2, y, val.c_str(), color);
-}

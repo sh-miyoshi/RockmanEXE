@@ -36,4 +36,5 @@ public:
 	void DrawNumberCenter(int x,int y,int data,Color color);
 	void DrawChipCode(int x,int y,char code,int percent=-1);
 	void DrawString(int x,int y,std::string data,unsigned int color,unsigned edgeColor=-1);
+	void DrawStringCenter(int x, int y, std::string data, unsigned int color, unsigned edgeColor = -1);
 };

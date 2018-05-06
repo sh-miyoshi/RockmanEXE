@@ -12,6 +12,8 @@
 #include "effectMgr.h"
 #include "myInfo.h"
 
+// todo(ÉoÉO: éûÉLÉÉÉâñ≥ìGéûÇ…çUåÇÉ_ÉÅÅ[ÉWÇ™ì¸ÇÁÇ»Ç¢)
+
 bool g_exitFlag = false;
 unsigned long long g_count = 0;
 
@@ -303,7 +305,7 @@ void Main::StateCharSelect::Draw(){
 	};
 
 
-	DrawStringCenter(def::FMX / 2, 20, SELECT_NAMES[select], WHITE);// ìGñºï`âÊ
+	DrawCharacter::GetInst()->DrawStringCenter(def::FMX / 2, 20, SELECT_NAMES[select], WHITE);// ìGñºï`âÊ
 	DrawBox(def::FMX / 2 - 75, 50, def::FMX / 2 + 75, 200, WHITE, FALSE);// ÉtÉåÅ[ÉÄï`âÊ
 
 	// ìGÇÃÉÅÉCÉìâÊëúï`âÊ
@@ -327,7 +329,7 @@ void Main::StateCharSelect::Draw(){
 		allEnemy[EnemyMgr::ID_ÉtÉHÉãÉe]->DrawAnim(def::FMX / 2, def::FMY / 2 - 10);
 		break;
 	case def::eKIND_MyèÓïÒ:
-		DrawStringCenter(def::FMX / 2, def::FMY / 2 - 40, SELECT_NAMES[def::eKIND_MyèÓïÒ], WHITE);
+		DrawCharacter::GetInst()->DrawStringCenter(def::FMX / 2, def::FMY / 2 - 40, SELECT_NAMES[def::eKIND_MyèÓïÒ], WHITE);
 		break;
 	default:
 		ASSERT(0, "Main::StateCharSelect::Draw wrong enemy kind (" + ToString<int>(select) + ")");
