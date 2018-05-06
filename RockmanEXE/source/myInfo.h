@@ -25,9 +25,10 @@ class MyInfo{
 		void Process();
 	};
 
-	// 戦績を表示するクラス
+	// キャラ情報を表示するクラス
 	class StateRockman:public StateBase{
 		MyInfo *obj;
+		int image;
 	public:
 		StateRockman(MyInfo *obj);
 		~StateRockman();

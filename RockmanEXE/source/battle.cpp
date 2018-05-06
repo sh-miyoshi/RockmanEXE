@@ -420,10 +420,22 @@ Battle::StateWin::StateWin(Battle * obj)
 	// todo(d‚İ‚ğ‚à‚½‚¹‚é)
 	// ƒ‰ƒ“ƒ_ƒ€‚Å‘I‘ğ
 	getItem = getItems[rand() % getItems.size()];
+	std::string msg = "Battle::StateWin::StateWin enemy's items: ";
 	for( auto d : getItems ){
-		std::string msg = "Battle::StateWin::StateWin ";
-		msg += d.name + " " + ToString<int>(d.value);
-		AppLogger::Debug(msg);
+		msg += d.name + " " + ToString<int>(d.value) + ",";
+	}
+	msg.pop_back();// delete last comma
+	AppLogger::Debug(msg);
+	switch( getItem.type ){
+	case ResultView_t::eTYPE_CHIP:
+		// todo(–¢À‘•)
+		break;
+	case ResultView_t::eTYPE_ZENNY:
+		PlayerMgr::GetInst()->SetMoney(PlayerMgr::GetInst()->GetMoney() + getItem.value);
+		break;
+	default:
+		ASSERT(0, ToString("Battle::StateWin::StateWin unknown result item type(%d)", getItem.type));
+		break;
 	}
 }
 

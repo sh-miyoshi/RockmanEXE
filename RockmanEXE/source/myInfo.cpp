@@ -1,6 +1,7 @@
 #include "include.h"
 #include "myInfo.h"
 #include "player.h"
+#include "drawCharacter.h"
 
 MyInfo::MyInfo():isFinish(false){
 	stateMgr.ChangeNext(new StateTop(this));
@@ -24,7 +25,7 @@ MyInfo::StateTop::StateTop(MyInfo * obj):obj(obj){
 		"êÌê—",
 		"èIóπ"
 	};
-	selectMgr.Create(0, 0, SELECTS);
+	selectMgr.Create(50, 50, SELECTS);
 	selectMgr.SetColor(SelectColor{ WHITE,WHITE });
 }
 
@@ -53,14 +54,34 @@ void MyInfo::StateTop::Process(){
 }
 
 MyInfo::StateRockman::StateRockman(MyInfo * obj):obj(obj){
+	int t[4];
+	LoadDivGraphWithCheckError(t, def::IMAGE_FILE_PATH + "player_move.png", "MyInfo::StateRockman::StateRockman", 4, 1, 100, 100);
+	image = t[0];
+	for( int i = 1; i < 4; i++ )
+		DeleteGraph(t[i]);
 }
 
 MyInfo::StateRockman::~StateRockman(){
+	DeleteGraph(image);
 }
 
 void MyInfo::StateRockman::Draw(){
-	// todo
-	DrawStringCenter(def::FMX / 2, def::FMY / 2 - 10, "This Function is not implemented now.", WHITE);
+	int hp = PlayerMgr::GetInst()->GetHp();
+	int hpMax = PlayerMgr::GetInst()->GetHpMax();
+	int zenny = PlayerMgr::GetInst()->GetMoney();
+
+	const std::string DATA[] = {
+		ToString("ÉçÉbÉNÉ}Éì"),
+		ToString("HP   %4d / %4d", hp, hpMax),
+		ToString("ZENNY    %7d", zenny),
+	};
+
+	DrawBox(300, 50, 400, 150, WHITE, FALSE);
+	DrawRotaGraph(350, 100, 1, 0, image, TRUE);
+
+	for( unsigned i = 0; i < sizeof(DATA) / sizeof(DATA[0]); i++ ){
+		DrawCharacter::GetInst()->DrawString(100, 50 + i * 30, DATA[i], WHITE);
+	}
 }
 
 void MyInfo::StateRockman::Process(){
@@ -87,14 +108,14 @@ void MyInfo::StateLog::Draw(){
 	};
 
 	// êÌê— (èüóòâÒêîÅEîsñkâÒêî)
-	DrawStringCenter(def::FMX / 2, 50, "--êÌê—--", WHITE);
-	DrawString(250, 80, "èüóòâÒêî  îsñkâÒêî", WHITE);
+	DrawCharacter::GetInst()->DrawStringCenter(def::FMX / 2, 50, "--êÌê—--", WHITE);
+	DrawCharacter::GetInst()->DrawString(250, 80, "èüóòâÒêî  îsñkâÒêî", WHITE);
 	for( int i = 0; i < sizeof(SELECT_NAMES) / sizeof(SELECT_NAMES[0]); i++ ){
-		DrawString(50, 110 + i * 30, SELECT_NAMES[i].c_str(), WHITE);
+		DrawCharacter::GetInst()->DrawString(50, 110 + i * 30, SELECT_NAMES[i].c_str(), WHITE);
 		int win = PlayerMgr::GetInst()->GetBattleResult(PlayerMgr::eBT_RTN_WIN, i);
 		int lose = PlayerMgr::GetInst()->GetBattleResult(PlayerMgr::eBT_RTN_LOSE, i);
-		DrawFormatString(280, 110 + i * 30, WHITE, "%4d", win);
-		DrawFormatString(365, 110 + i * 30, WHITE, "%4d", lose);
+		DrawCharacter::GetInst()->DrawString(280, 110 + i * 30, ToString(" % 4d", win), WHITE);
+		DrawCharacter::GetInst()->DrawString(365, 110 + i * 30, ToString(" % 4d", lose), WHITE);
 	}
 }
 
