@@ -128,6 +128,8 @@ public:
 	void LoadAnim();
 };
 
+// todo(移動時の無敵時間が変)
+// todo(ダークアームブレードよけれん)
 class Enemy_フォルテ:public EnemyBase{
 	class ActMove:public AnimProcess{
 		Enemy_フォルテ *obj;

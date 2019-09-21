@@ -238,6 +238,33 @@ public:
 	void Process();
 };
 
+class Skill_フレイムライン:public SkillData{
+protected:
+	static const int SKILL_DELAY = 4;// 次の画像に移るまでのカウント
+	static const int BODY_DRAW_DELAY = 2;
+
+	std::vector<CPoint<int>> atkPoses;
+	CPoint<int> charPos;
+
+	int count;
+	int img_body[4];
+	int img_fire[5];
+public:
+	Skill_フレイムライン(CPoint<int> charPos, int damage, def::charType myCharType);
+	~Skill_フレイムライン();
+
+	void Draw();
+};
+
+class Skill_フレイムライン_固定:public Skill_フレイムライン{
+	static const int NEXT_STEP_COUNT = 20;
+public:
+	Skill_フレイムライン_固定(CPoint<int> charPos, int damage, def::charType myCharType);
+	~Skill_フレイムライン_固定();
+
+	void Process();
+};
+
 class Skill_シューティングバスター:public SkillData{
 	static const int SKILL_DELAY = 3;// 次の画像に移るまでのカウント
 
@@ -313,8 +340,10 @@ std::shared_ptr<SkillData> SkillMgr::GetData(int id, SkillArg args, def::charTyp
 		return std::shared_ptr<SkillData>(new Skill_ワイドソード(args.atkPos, args.damage, myCharType));
 	case eID_シューティングバスター:
 		return std::shared_ptr<SkillData>(new Skill_シューティングバスター(args.atkPos, args.damage, myCharType));
+	case eID_フレイムライン_固定:
+		return std::shared_ptr<SkillData>(new Skill_フレイムライン_固定(args.atkPos, args.damage, myCharType));
 	default:
-		ASSERT(0,position+"そのようなスキルは実装されていません ("+ToString<int>(id)+")");
+		ASSERT(0, position + "そのようなスキルは実装されていません (" + ToString<int>(id) + ")");
 	}
 	return std::shared_ptr<SkillData>();
 }
@@ -378,7 +407,7 @@ Skill_バスター::Skill_バスター(CPoint<int> atkPos, int damage, def::charType myC
 		for( int x = atkPos.x - 1; x >= xmax; x-- )
 			SkillData::damageList.push_back(DamageData(CPoint<int>(x, atkPos.y), damage, myCharType, false, damagePower, SkillData::id, false));
 	} else
-		ASSERT(0,"Skill_バスター missing char type ("+ToString<int>(myCharType)+")");
+		ASSERT(0, "Skill_バスター missing char type (" + ToString<int>(myCharType) + ")");
 }
 
 Skill_バスター::~Skill_バスター(){
@@ -690,7 +719,7 @@ void Skill_ブーメラン::Process(){
 			atkPos.x += ( myCharType == def::eCHAR_PLAYER ) ? 1 : -1;
 			break;
 		case eTYPE_周回:
-			ASSERT(muki == def::eMUKI_UP || muki == def::eMUKI_DOWN,"Skill_ブーメラン::Process wrong direction ("+ToString<int>(muki)+")");
+			ASSERT(muki == def::eMUKI_UP || muki == def::eMUKI_DOWN, "Skill_ブーメラン::Process wrong direction (" + ToString<int>(muki) + ")");
 			if( 1 <= atkPos.x&&atkPos.x < BattleField::FIELD_NUM_X - 1 ){
 				int val = ( atkPos.y == 0 ) ? -1 : 1;
 				if( muki == def::eMUKI_DOWN )// 下に向かっていく時なら
@@ -742,7 +771,7 @@ Skill_ヘルズローリング::Skill_ヘルズローリング(CPoint<int> atkPos, int damage, i
 	:count(0), SkillData(false, true, myCharType, damage), moveDirectLR(directLR), atkPos(atkPos)
 {
 	std::string msg = "Skill_ヘルズローリング wrong direction ";
-	ASSERT(directLR == def::eMUKI_RIGHT || directLR == def::eMUKI_LEFT,msg+"directLR = "+ToString<int>(directLR));
+	ASSERT(directLR == def::eMUKI_RIGHT || directLR == def::eMUKI_LEFT, msg + "directLR = " + ToString<int>(directLR));
 	ASSERT(directUD == def::eMUKI_UP || directUD == def::eMUKI_DOWN, msg + "directUD = " + ToString<int>(directUD));
 
 	int t[10];
@@ -1073,8 +1102,6 @@ void Skill_シューティングバスター::Draw(){
 }
 
 void Skill_シューティングバスター::Process(){
-	// doNext(ダメージデータ)
-
 	count++;
 	if( count == SKILL_DELAY * 1 ){
 		SkillData::damageList.push_back(DamageData(atkPos, damagePower, myCharType, true, 1, SkillData::id, true));
@@ -1083,4 +1110,80 @@ void Skill_シューティングバスター::Process(){
 	if( count >= SKILL_DELAY * 5 )
 		delFlag = true;
 	BattleFieldMgr::GetInst()->AddDrawHitArea(atkPos);
+}
+
+Skill_フレイムライン::Skill_フレイムライン(CPoint<int> charPos, int damage, def::charType myCharType)
+	:count(0), SkillData(false, true, myCharType, damage), charPos(charPos)
+{
+	std::string fname = def::SKILL_IMAGE_PATH + "フレイムライン_火柱.png";
+	LoadDivGraphWithCheckError(img_fire, fname, "Skill_フレイムライン", 5, 1, 72, 120);
+	if( myCharType == def::eCHAR_PLAYER ){// プレイヤーならbodyも描画
+		// 画像読み込み
+		fname = def::SKILL_IMAGE_PATH + "フレイムライン_body.png";
+		LoadDivGraphWithCheckError(img_body, fname, "Skill_フレイムライン", 4, 1, 64, 64);
+	} else{
+		for( int i = 0; i < 4; i++ )
+			img_body[i] = -1;
+	}
+}
+
+Skill_フレイムライン::~Skill_フレイムライン(){
+	for( int i = 0; i < 4; i++ )
+		DeleteGraph(img_body[i]);
+	for( int i = 0; i < 5; i++ )
+		DeleteGraph(img_fire[i]);
+}
+
+void Skill_フレイムライン::Draw(){
+	int ino = ( count / SKILL_DELAY );
+	if( ino > 4 )
+		ino = 4;
+	for( std::vector<CPoint<int>>::iterator it = atkPoses.begin(); it != atkPoses.end(); it++ ){
+		int x = BattleField::PANEL_SIZE.x*it->x + 7;
+		int y = BattleField::BATTLE_PANEL_TOP + BattleField::PANEL_SIZE.y*it->y -70;
+		DrawGraph(x, y, img_fire[ino], TRUE);
+	}
+
+	// bodyを描画するなら
+	if( img_body[0] != -1 ){
+		ino = ( count / BODY_DRAW_DELAY );
+		if( ino > 3 )
+			ino = 3;
+		int x = BattleField::PANEL_SIZE.x*charPos.x + 60;
+		int y = BattleField::BATTLE_PANEL_TOP + BattleField::PANEL_SIZE.y*charPos.y -60;
+		if( myCharType == def::eCHAR_PLAYER ){
+			// 攻撃ボディの描画
+			DrawGraph(x, y, img_body[ino], TRUE);
+		} else{
+			// todo(敵の攻撃時のオフセットを決める)
+			ASSERT(0);// 未実装
+		}
+	}
+}
+
+Skill_フレイムライン_固定::Skill_フレイムライン_固定(CPoint<int> charPos, int damage, def::charType myCharType)
+	:Skill_フレイムライン(charPos,damage,myCharType)
+{
+	CPoint<int> tp;
+	// 登録の順番(奥から手前に)
+	tp.x = ( myCharType == def::eCHAR_PLAYER ) ? charPos.x + 2 : charPos.x - 2;
+	if( charPos.y > 0 ){
+		tp.y = charPos.y - 1;
+		atkPoses.push_back(tp);
+	}
+	tp.y = charPos.y;
+	atkPoses.push_back(tp);
+	if( charPos.y < BattleField::FIELD_NUM_Y - 1 ){
+		tp.y = charPos.y + 1;
+		atkPoses.push_back(tp);
+	}
+}
+
+Skill_フレイムライン_固定::~Skill_フレイムライン_固定(){
+}
+
+void Skill_フレイムライン_固定::Process(){
+	count++;
+	if( count >= 40 )// debug
+		delFlag = true;
 }
