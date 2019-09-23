@@ -152,66 +152,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="source\aes.cpp" />
     <ClCompile Include="source\appLogger.cpp" />
     <ClCompile Include="source\battle.cpp" />
-    <ClCompile Include="source\battleBack.cpp" />
     <ClCompile Include="source\battleCharBase.cpp" />
-    <ClCompile Include="source\battleCharMgr.cpp" />
-    <ClCompile Include="source\battleField.cpp" />
-    <ClCompile Include="source\battleFieldMgr.cpp" />
-    <ClCompile Include="source\battleObject.cpp" />
-    <ClCompile Include="source\chip.cpp" />
-    <ClCompile Include="source\config.cpp" />
-    <ClCompile Include="source\csv.cpp" />
-    <ClCompile Include="source\drawCharacter.cpp" />
-    <ClCompile Include="source\effectMgr.cpp" />
-    <ClCompile Include="source\enemy.cpp" />
-    <ClCompile Include="source\fade.cpp" />
+    <ClCompile Include="source\battleMain.cpp" />
+    <ClCompile Include="source\keyConfig.cpp" />
     <ClCompile Include="source\fps.cpp" />
-    <ClCompile Include="source\idManager.cpp" />
     <ClCompile Include="source\main.cpp" />
-    <ClCompile Include="source\mosaic.cpp" />
-    <ClCompile Include="source\myInfo.cpp" />
-    <ClCompile Include="source\player.cpp" />
-    <ClCompile Include="source\selectMgr.cpp" />
-    <ClCompile Include="source\skill.cpp" />
+    <ClCompile Include="source\playerMgr.cpp" />
     <ClCompile Include="source\util.cpp" />
-    <ClCompile Include="source\utilDxLib.cpp" />
-    <ClCompile Include="source\winMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\aes.h" />
-    <ClInclude Include="source\animProcess.h" />
     <ClInclude Include="source\appLogger.h" />
     <ClInclude Include="source\battle.h" />
-    <ClInclude Include="source\battleBack.h" />
     <ClInclude Include="source\battleCharBase.h" />
-    <ClInclude Include="source\battleCharMgr.h" />
-    <ClInclude Include="source\battleField.h" />
-    <ClInclude Include="source\battleFieldMgr.h" />
-    <ClInclude Include="source\battleObject.h" />
-    <ClInclude Include="source\chip.h" />
-    <ClInclude Include="source\config.h" />
-    <ClInclude Include="source\csv.h" />
+    <ClInclude Include="source\battleMain.h" />
+    <ClInclude Include="source\keyConfig.h" />
     <ClInclude Include="source\define.h" />
-    <ClInclude Include="source\drawCharacter.h" />
-    <ClInclude Include="source\effectMgr.h" />
-    <ClInclude Include="source\enemy.h" />
-    <ClInclude Include="source\fade.h" />
     <ClInclude Include="source\fps.h" />
-    <ClInclude Include="source\idManager.h" />
     <ClInclude Include="source\include.h" />
-    <ClInclude Include="source\mosaic.h" />
-    <ClInclude Include="source\myInfo.h" />
-    <ClInclude Include="source\player.h" />
+    <ClInclude Include="source\main.h" />
+    <ClInclude Include="source\playerMgr.h" />
     <ClInclude Include="source\point.h" />
-    <ClInclude Include="source\selectMgr.h" />
-    <ClInclude Include="source\skill.h" />
     <ClInclude Include="source\state.h" />
     <ClInclude Include="source\util.h" />
-    <ClInclude Include="source\utilDxLib.h" />
-    <ClInclude Include="source\winMgr.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
