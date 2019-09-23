@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include "point.h"
 
 namespace def{
 	const int FMX = 480;
@@ -21,25 +20,8 @@ namespace def{
 		eMUKI_MAX
 	};
 
-	enum BattleEnemyKind{
-		eKIND_メットール1,
-		eKIND_メットール3,
-		eKIND_ビリー,
-		eKIND_メットール_ビリー,
-		eKIND_フォルテ,
-		eKIND_My情報,
 
-		eKIND_MAX
-	};
-
-	enum charType{
-		eCHAR_PLAYER = 0x1,
-		eCHAR_ENEMY = 0x2,
-		eCHAR_OBJECT = 0x4,
-
-		eCHAR_ALL = eCHAR_PLAYER | eCHAR_ENEMY | eCHAR_OBJECT,
-	};
-
+	//const std::string IMAGE_FILE_PATH = "data/image_private/";// for local development
 	const std::string IMAGE_FILE_PATH = "data/image_public/";
 	const std::string ENEMY_IMAGE_PATH = IMAGE_FILE_PATH + "敵関連/";
 	const std::string SKILL_IMAGE_PATH = IMAGE_FILE_PATH + "技関連/";

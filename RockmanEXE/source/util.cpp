@@ -3,20 +3,6 @@
 #include "fps.h"
 #include "appLogger.h"
 
-void CheckFileOpen(bool cnd, std::string position, std::string fileName){
-	if( !cnd ){
-		std::string message;
-		message += "ファイルが開けません。 ";
-		message += "場所: " + position + " ";
-		message += "ファイル名: " + fileName + "\n";
-		AppLogger::Log(AppLogger::eLOG_ERROR, message);
-	}
-}
-
-void CheckFileOpen(const FILE *fp, std::string position, std::string fileName){
-	CheckFileOpen(fp != NULL, position, fileName);
-}
-
 bool FileExist(std::string fname){
 	FILE *fp;
 	fopen_s(&fp, fname.c_str(), "r");
@@ -69,7 +55,7 @@ int GetStringByte(char str){
 		return 1;// 半角
 }
 
-std::string ChangeViewCount(unsigned long long count){
+std::string ConvertToViewCount(unsigned long long count){
 	int ms = ( int ) ( ( float ) ( count%Fps::FPS ) / Fps::FPS ) * 100;// ミリ秒(3桁)
 	count /= Fps::FPS;
 	int s = count % 60;

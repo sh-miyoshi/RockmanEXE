@@ -4,11 +4,9 @@
 
 #include "DxLib.h"
 #include "define.h"
-#include "util.h"
-#include "config.h"
 #include "appLogger.h"
-#include "utilDxLib.h"
-#include "idManager.h"
+#include "util.h"
+#include "keyConfig.h"
 
-extern bool g_exitFlag;
-extern unsigned long long g_count;
+extern bool gExitFlag;
+extern unsigned long long gGameCount;

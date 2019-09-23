@@ -8,10 +8,6 @@
 #include <algorithm>
 #include <list>
 
-// cndがfalseの時失敗(ファイルオープン用)
-void CheckFileOpen(bool cnd, std::string position, std::string fileName);
-void CheckFileOpen(const FILE *fp, std::string position, std::string fileName);
-
 int Split(std::string *buf, int max, std::string data, std::string splitStr);
 bool FileExist(std::string fname);
 
@@ -34,7 +30,7 @@ template<typename _T> void Shuffle(_T *data, int size){
 
 int GetStringByte(char str);
 
-std::string ChangeViewCount(unsigned long long count);
+std::string ConvertToViewCount(unsigned long long count);
 
 template<typename _T> bool find(const std::vector<_T> &data,_T val){
 	return ( data.end() != std::find(data.begin(), data.end(), val) );

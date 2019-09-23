@@ -1,6 +1,6 @@
 #include <fstream>
 #include "include.h"
-#include "config.h"
+#include "keyConfig.h"
 
 const std::string CKey::CONFIG_FILE_NAME = "data/text/config.dat";
 const std::string CKey::CODE_TABLE_FILE_NAME = "data/text/codeTable.txt";
@@ -8,7 +8,10 @@ const std::string CKey::CODE_TABLE_FILE_NAME = "data/text/codeTable.txt";
 CKey::CKey(){
 	// コード表の読み込み
 	std::ifstream ifs(CODE_TABLE_FILE_NAME);
-	ASSERT(ifs, "CKey " + CODE_TABLE_FILE_NAME + "がありません");
+	if( !ifs ) {
+		const std::string msg = ToString("Key Config File[%s]が開けませんでした", CODE_TABLE_FILE_NAME);
+		AppLogger::Error(msg);
+	}
 	std::string buf;
 	for( int i = 0; i < 256 && !std::getline(ifs, buf); i++ )
 		codeTable[i] = buf;

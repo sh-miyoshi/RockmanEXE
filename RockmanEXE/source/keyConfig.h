@@ -41,8 +41,3 @@ public:
 	std::string GetString(int handle)const{ return codeTable[keyInfo[handle]]; }
 	void SaveKeySetting();
 };
-
-// 定義はmain.cpp
-// ウィンドウ色
-// 文字色
-extern bool g_exitFlag;
