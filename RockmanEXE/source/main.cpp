@@ -3,6 +3,7 @@
 #include "state.h"
 #include "main.h"
 #include "battle.h"
+#include "playerMgr.h"
 
 bool gExitFlag = false;
 unsigned long long gGameCount = 0;
@@ -27,6 +28,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdS
 	SetDXArchiveKeyString(def::RESOURCE_PASSWORD.c_str());
 
 	// アプリケーション関係の初期化
+	PlayerMgr::GetInst()->InitPlayer();// TODO(タイトル画面で選択する)
 
 	Main main;
 	main.Process();

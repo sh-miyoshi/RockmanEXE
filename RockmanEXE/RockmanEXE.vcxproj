@@ -161,6 +161,7 @@
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\playerMgr.cpp" />
     <ClCompile Include="source\util.cpp" />
+    <ClCompile Include="source\utilDxLib.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\appLogger.h" />
@@ -176,6 +177,7 @@
     <ClInclude Include="source\point.h" />
     <ClInclude Include="source\state.h" />
     <ClInclude Include="source\util.h" />
+    <ClInclude Include="source\utilDxLib.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

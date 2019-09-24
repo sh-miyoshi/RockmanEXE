@@ -13,5 +13,5 @@ Log.txt
 *.log
 todo.txt
 save.dat
-image_local/
+image_private/
 private/*

@@ -6,6 +6,7 @@
 #include "define.h"
 #include "appLogger.h"
 #include "util.h"
+#include "utilDxLib.h"
 #include "keyConfig.h"
 
 extern bool gExitFlag;

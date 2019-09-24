@@ -25,21 +25,42 @@ enum CharType {
 	eCHAR_ALL = eCHAR_PLAYER | eCHAR_ENEMY | eCHAR_OBJECT,
 };
 
-typedef struct AnimData {
-	static const int ANIM_NUM_MAX = 50;
+//typedef struct AnimData {
+//	static const int ANIM_NUM_MAX = 50;
+//
+//	int image[ANIM_NUM_MAX];
+//	int imageNum;
+//	int imageDelay;
 
-	int image[ANIM_NUM_MAX];
-	int imageNum;
-	int imageDelay;
+//	// std::shared_ptr<AnimProcess> animProc;
 
-	// std::shared_ptr<AnimProcess> animProc;
-
-	AnimData();
-	AnimData(const AnimData& data);
-}AnimData;
+//	AnimData();
+//	AnimData(const AnimData& data);
+//}AnimData;
 
 class BattleCharBase {
 protected:
+	class AnimData {
+		static const int ANIM_NUM_MAX = 50;
+		
+		int count;
+		int image[ANIM_NUM_MAX];
+		int imageNum;
+		int imageDelay;
+		std::string imageFileName;
+	public:
+		AnimData();
+		AnimData(const AnimData& data);
+		~AnimData();
+
+		void ResetCount() { count = 0; }
+		void LoadData(std::string fname, CPoint<int> size, CPoint<int> num, int imageNum, int imageDelay=1);
+		void DeleteData();
+		void Draw(int x, int y);
+		// TODO(–¢ŽÀ‘•) AnimProcess();
+	};
+
+	int attachedAnimNo;
 	AnimData anim[ANIM_PTN_MAX];
 
 	std::string name;
@@ -50,7 +71,12 @@ public:
 	BattleCharBase(std::string name, int hp, int hpMax, CharType myCharType);
 	~BattleCharBase() {}
 
+	virtual void LoadAnim() = 0;
+	void DeleteAnim();
+
 	// virtual bool DamageProc(std::list<DamageData>& damageList);// TODO(–¢ŽÀ‘•)
 	void Draw();
 	virtual void Process();
+
+	void SetPos(int x, int y) { pos.x = x; pos.y = y; }
 };

@@ -1,12 +1,16 @@
 #pragma once
 
 #include <string>
+#include "point.h"
 
-namespace def{
+namespace def {
 	const int FMX = 480;
 	const int FMY = 320;
 
-	enum Muki{
+	const CPoint<int> BATTLE_PANEL_SIZE(80, 50);
+	const int BATTLE_PANEL_OFFSET_Y = def::FMY - ( BATTLE_PANEL_SIZE.y * 3 ) - 30;
+
+	enum Muki {
 		eMUKI_UP,
 		eMUKI_RIGHT,
 		eMUKI_DOWN,
@@ -20,9 +24,8 @@ namespace def{
 		eMUKI_MAX
 	};
 
-
-	//const std::string IMAGE_FILE_PATH = "data/image_private/";// for local development
-	const std::string IMAGE_FILE_PATH = "data/image_public/";
+	const std::string IMAGE_FILE_PATH = "data/image_private/";// for local development
+	//const std::string IMAGE_FILE_PATH = "data/image_public/";
 	const std::string ENEMY_IMAGE_PATH = IMAGE_FILE_PATH + "“GŠÖ˜A/";
 	const std::string SKILL_IMAGE_PATH = IMAGE_FILE_PATH + "‹ZŠÖ˜A/";
 	const std::string TEXT_FILE_PATH = "data/text/";

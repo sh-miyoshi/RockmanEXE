@@ -7,6 +7,8 @@ class BattlePlayer :public BattleCharBase {
 public:
 	BattlePlayer(std::string name, int hp, int hpMax);
 	~BattlePlayer();
+
+	virtual void LoadAnim();
 };
 
 class PlayerMgr {
@@ -25,4 +27,8 @@ public:
 
 	BattlePlayer* GetBattleChar() { return battlePlayer; }
 	void InitBattleChar();
+
+	void InitPlayer();
+	// TODO void LoadSaveFile();
+	// TODO Save()
 };
