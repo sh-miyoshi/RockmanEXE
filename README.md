@@ -1,5 +1,10 @@
 # RockmanEXE
 
+## Attention
+
+このブランチでは大きくソースコードをリファクタリングしています。  
+そのため動作しなかったり、機能が著しく少なかったりします。  
+
 ## Overview
 
 ゲームボーイアドバンスの不朽の名作「ロックマンエグゼ」を[DXライブラリ](http://dxlib.o.oo7.jp/index.html)を用いて再現してみました。  
@@ -33,6 +38,10 @@ RockmanEXEフォルダのRockmanEXE.exeをダブルクリックしてくださ�
 - 新チップの作成
 - マップ移動
 - ストーリーなど
+
+## Author
+
+Shunsuke Miyoshi
 
 ## License
 
