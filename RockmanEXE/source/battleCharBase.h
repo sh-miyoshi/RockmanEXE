@@ -1,21 +1,11 @@
 #pragma once
 
 #include <list>
+#include <vector>
+#include <memory>
+#include <queue>
 #include "define.h"
 #include "point.h"
-
-// オブジェクト固有のアニメーション
-enum AnimPtn {
-	ANIM_STAND,
-	ANIM_MOVE,
-	ANIM_ATK1,
-	ANIM_ATK2,
-	ANIM_ATK3,
-	ANIM_ATK4,
-	ANIM_DAMAGE,
-
-	ANIM_PTN_MAX
-};
 
 enum CharType {
 	eCHAR_PLAYER = 0x1,
@@ -25,58 +15,63 @@ enum CharType {
 	eCHAR_ALL = eCHAR_PLAYER | eCHAR_ENEMY | eCHAR_OBJECT,
 };
 
-//typedef struct AnimData {
-//	static const int ANIM_NUM_MAX = 50;
-//
-//	int image[ANIM_NUM_MAX];
-//	int imageNum;
-//	int imageDelay;
+class Animation {
+	static const unsigned int ANIM_NUM_MAX = 50;
 
-//	// std::shared_ptr<AnimProcess> animProc;
+	unsigned int count;
+	int image[ANIM_NUM_MAX];
+	unsigned int imageNum;
+	unsigned int imageDelay;
+	std::string imageFileName;
+public:
+	Animation();
+	Animation(const Animation& data);
+	~Animation();
 
-//	AnimData();
-//	AnimData(const AnimData& data);
-//}AnimData;
+	void LoadData(std::string fname, CPoint<unsigned int> size, CPoint<unsigned int> num, unsigned int imageDelay = 1);
+	void DeleteData();
+	
+	virtual void Begin() {}
+	virtual void End() {}
+	void Draw(int x, int y);
+	virtual void Process() {}
+};
 
 class BattleCharBase {
 protected:
-	class AnimData {
-		static const int ANIM_NUM_MAX = 50;
-		
-		int count;
-		int image[ANIM_NUM_MAX];
-		int imageNum;
-		int imageDelay;
-		std::string imageFileName;
-	public:
-		AnimData();
-		AnimData(const AnimData& data);
-		~AnimData();
-
-		void ResetCount() { count = 0; }
-		void LoadData(std::string fname, CPoint<int> size, CPoint<int> num, int imageNum, int imageDelay=1);
-		void DeleteData();
-		void Draw(int x, int y);
-		// TODO(未実装) AnimProcess();
-	};
-
-	int attachedAnimNo;
-	AnimData anim[ANIM_PTN_MAX];
-
 	std::string name;
-	int hp, hpMax;
+	unsigned int hp, hpMax;
 	CPoint<int> pos;
 	CharType myCharType;
+	std::vector<std::shared_ptr<Animation>> animData;
+	std::shared_ptr<Animation> defaultAnim;
+	std::queue<std::shared_ptr<Animation>> animQueue;
+
+	void AnimProcess();
 public:
-	BattleCharBase(std::string name, int hp, int hpMax, CharType myCharType);
+	BattleCharBase(std::string name, unsigned int hp, unsigned int hpMax, CharType myCharType, std::shared_ptr<Animation> defaultAnim);
 	~BattleCharBase() {}
 
-	virtual void LoadAnim() = 0;
-	void DeleteAnim();
+	unsigned int AddAnimDefine(std::shared_ptr<Animation> anim);
 
 	// virtual bool DamageProc(std::list<DamageData>& damageList);// TODO(未実装)
 	void Draw();
-	virtual void Process();
+	virtual void Process();// キャラの行動
 
 	void SetPos(int x, int y) { pos.x = x; pos.y = y; }
+	void AttachAnim(unsigned int animNo, bool forceRun = false);
 };
+
+/* TODO
+
+anim用queueを用意
+キーが押されたとき
+  通常行動ならキューに追加
+  割り込み行動ならキューを空にして現在実行しているのも中断
+
+キューから一つ取り出す
+実行状態にする
+実行終了ならキューからまた取り出す
+
+キューが空ならdefaultを実行(ANIM_STAND)
+*/

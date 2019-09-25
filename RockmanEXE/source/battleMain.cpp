@@ -14,4 +14,5 @@ void BattleMain::Draw() {
 }
 
 void BattleMain::Process() {
+	PlayerMgr::GetInst()->GetBattleChar()->Process();
 }

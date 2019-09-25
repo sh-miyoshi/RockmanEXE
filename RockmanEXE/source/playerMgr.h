@@ -5,10 +5,10 @@
 
 class BattlePlayer :public BattleCharBase {
 public:
-	BattlePlayer(std::string name, int hp, int hpMax);
+	BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, std::shared_ptr<Animation> defaultAnim);
 	~BattlePlayer();
 
-	virtual void LoadAnim();
+	virtual void Process();
 };
 
 class PlayerMgr {
