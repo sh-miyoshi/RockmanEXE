@@ -1,30 +1,31 @@
-def grep_with_line(file_name,keys)
-	result = Array.new
-	File.readlines(file_name).each_with_index do |line,index|
-		keys.each do |key|
-			if line.include?(key) then
-				result.push(index.to_s+": "+line)
-			end
-		end
-	end
-	return result
+# variables
+file_path = '../RockmanEXE/source'
+target = %w[todo doNext debug TODO]
+
+def grep_with_line(file_name, keys)
+  result = []
+  File.readlines(file_name).each_with_index do |line, index|
+    keys.each do |key|
+      result.push(index.to_s + ': ' + line) if line.include?(key)
+    end
+  end
+  result
 end
 
-file_path = "../RockmanEXE/source"
+# main process
 num = 0
-
-File.open("todo.txt","w") do |fp|
-	Dir.glob(file_path+"/*") do |f|
-		result = grep_with_line(f,["todo","doNext","debug"])
-		if !result.empty? then
-			fp.puts File.basename(f)
-			result.each do |v|
-				fp.puts v
-			end
-			fp.puts ""
-			num += result.length
-		end
-	end
+File.open('todo.txt', 'w') do |fp|
+  Dir.glob(file_path + '/*') do |f|
+    result = grep_with_line(f, target)
+    unless result.empty?
+      fp.puts File.basename(f)
+      result.each do |v|
+        fp.puts v
+      end
+      fp.puts ''
+      num += result.length
+    end
+  end
 end
 
-puts "未実装項目数: "+num.to_s
+puts '未実装項目数: ' + num.to_s
