@@ -16,6 +16,7 @@ enum CharType {
 };
 
 class Animation {
+protected:
 	static const unsigned int ANIM_NUM_MAX = 50;
 
 	unsigned int count;

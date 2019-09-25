@@ -13,7 +13,7 @@ public:
 
 class PlayerMgr {
 	std::string name;
-	int hp, hpMax;
+	unsigned int hp, hpMax;
 
 	BattlePlayer*battlePlayer;
 
