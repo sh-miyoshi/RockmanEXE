@@ -2,14 +2,14 @@
 #include "animation.h"
 
 
-Animation::Animation():imageNum(0), imageDelay(0), image(), count(0) {
+Animation::Animation():imageNum(0), imageDelay(0), image(), count(0), endCount(1){
 	for( int i = 0; i < ANIM_NUM_MAX; i++ ) {
 		image[i] = -1;
 	}
 }
 
 Animation::Animation(const Animation& data)
-	:imageNum(data.imageNum), imageDelay(data.imageDelay), image(), count(0) {
+	:imageNum(data.imageNum), imageDelay(data.imageDelay), image(), count(0), endCount(1) {
 	for( int i = 0; i < ANIM_NUM_MAX; i++ ) {
 		image[i] = data.image[i];
 	}
@@ -26,6 +26,7 @@ void Animation::LoadData(std::string fname, CPoint<unsigned int> size, CPoint<un
 
 	this->imageNum = num.x * num.y;
 	this->imageDelay = imageDelay;
+	this->endCount = this->imageNum * this->imageDelay;
 }
 
 void Animation::DeleteData() {
@@ -50,20 +51,16 @@ void Animation::Draw(int x, int y) {
 }
 
 bool Animation::Process() {
-	return true;// ‘¦I—¹
-}
+	if(count==0){
+		Begin();// ‰Šú‰»ˆ—‚ðŽÀs
+	}
 
-AnimMove::AnimMove():moveDirect(def::eMUKI_DOWN) {
-}
+	count++;
 
-AnimMove::~AnimMove() {
-}
-
-void AnimMove::SetMoveDirect(def::Muki direct) {
-	this->moveDirect = direct;
-}
-
-bool AnimMove::Process() {
-	printfDx("anim move: %d\n", moveDirect);
-	return true;
+	if(count>=endCount){
+		End();
+		count=0;
+		return true;
+	}
+	return false;
 }

@@ -8,6 +8,7 @@ protected:
 	static const unsigned int ANIM_NUM_MAX = 50;
 
 	unsigned int count;
+	unsigned int endCount;
 	int image[ANIM_NUM_MAX];
 	unsigned int imageNum;
 	unsigned int imageDelay;
@@ -19,21 +20,12 @@ public:
 
 	void LoadData(std::string fname, CPoint<unsigned int> size, CPoint<unsigned int> num, unsigned int imageDelay = 1);
 	void DeleteData();
+	void ResetCount(){ count=0; }
 
 	virtual void Begin() {}
 	virtual void End() {}
 	void Draw(int x, int y);
-	virtual bool Process();
-};
-
-class AnimMove: public Animation {
-	def::Muki moveDirect;
-public:
-	AnimMove();
-	~AnimMove();
-
-	void SetMoveDirect(def::Muki direct);
-	virtual bool Process();
+	bool Process();
 };
 
 //class PlayerAnimShot: public Animation {
