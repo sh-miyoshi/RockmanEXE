@@ -4,6 +4,7 @@
 #include "battleCharBase.h"
 
 class BattlePlayer :public BattleCharBase {
+	std::shared_ptr<AnimMove> animMove;
 public:
 	BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, std::shared_ptr<Animation> defaultAnim);
 	~BattlePlayer();

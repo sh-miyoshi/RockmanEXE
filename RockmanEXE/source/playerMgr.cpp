@@ -21,8 +21,6 @@ void PlayerMgr::InitBattleChar() {
 
 	battlePlayer = new BattlePlayer(name, hp, hpMax, animStand);
 	battlePlayer->SetPos(1, 1);// 初期位置のセット
-	
-	// TODO(アニメーションの設定)
 }
 
 void PlayerMgr::InitPlayer() {
@@ -32,12 +30,23 @@ void PlayerMgr::InitPlayer() {
 }
 
 BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, std::shared_ptr<Animation> defaultAnim)
-	: BattleCharBase(name, hp, hpMax, eCHAR_PLAYER,defaultAnim) {
+	: BattleCharBase(name, hp, hpMax, eCHAR_PLAYER, defaultAnim) {
+	// アニメーションの設定
+	std::string fname = def::IMAGE_FILE_PATH + "player_move.png";
+	animMove = std::shared_ptr<AnimMove>(new AnimMove());
+	animMove->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(4, 1));
 }
 
 BattlePlayer::~BattlePlayer() {
 }
 
 void BattlePlayer::Process() {
+	AnimProcess();
+
 	// TODO(キー入力)
+	// 移動処理
+	if( CKey::GetInst()->CheckKey(eKEY_DOWN) == 1 ) {
+		animMove->SetMoveDirect(def::eMUKI_DOWN);
+		this->AttachAnim(animMove);
+	}
 }
