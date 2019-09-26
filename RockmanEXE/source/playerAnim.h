@@ -11,3 +11,12 @@ public:
 	void SetMoveDirect(int direct);
 	virtual void Process();
 }
+
+class PlayerAnimShot: public Animation{
+public:
+	PlayerAnimShot();
+	~PlayerAnimShot();
+
+	// Run damage registe, ...
+	virtual void Process();
+}
