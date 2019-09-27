@@ -7,10 +7,6 @@ namespace def {
 	const int FMX = 480;
 	const int FMY = 320;
 
-	const CPoint<int> BATTLE_PANEL_SIZE(80, 50);
-	const CPoint<int> BATTLE_FIELD_NUM(6, 3);
-	const int BATTLE_PANEL_OFFSET_Y = def::FMY - ( BATTLE_PANEL_SIZE.y * 3 ) - 30;
-
 	enum Muki {
 		eMUKI_UP,
 		eMUKI_RIGHT,
@@ -27,8 +23,8 @@ namespace def {
 
 	const std::string IMAGE_FILE_PATH = "data/image_private/";// for local development
 	//const std::string IMAGE_FILE_PATH = "data/image_public/";
-	const std::string ENEMY_IMAGE_PATH = IMAGE_FILE_PATH + "?G??A/";
-	const std::string SKILL_IMAGE_PATH = IMAGE_FILE_PATH + "?Z??A/";
+	const std::string ENEMY_IMAGE_PATH = IMAGE_FILE_PATH + "“GŠÖ˜A/";
+	const std::string SKILL_IMAGE_PATH = IMAGE_FILE_PATH + "‹ZŠÖ˜A/";
 	const std::string TEXT_FILE_PATH = "data/text/";
 	const std::string BGM_FILE_PATH = "data/bgm/";
 

@@ -1,6 +1,7 @@
 #include "include.h"
 #include "battleCharBase.h"
 #include "animation.h"
+#include "battleField.h"
 
 void BattleCharBase::AnimProcess() {
 	if( animQueue.empty() ) {
@@ -20,12 +21,12 @@ void BattleCharBase::AnimProcess() {
 }
 
 // MoveCheck method return true if you can move to pos(x,y)
-bool BattleCharBase::MoveCheck(int x, int y){
-	if(x<0 || x>=def::BATTLE_FIELD_NUM.x){
+bool BattleCharBase::MoveCheck(int x, int y) {
+	if( x < 0 || x >= BattleField::FIELD_NUM_X ) {
 		return false;
 	}
 
-	if(y<0 || y>=def::BATTLE_FIELD_NUM.y){
+	if( y < 0 || y >= BattleField::FIELD_NUM_Y ) {
 		return false;
 	}
 
@@ -37,12 +38,12 @@ bool BattleCharBase::MoveCheck(int x, int y){
 }
 
 BattleCharBase::BattleCharBase(std::string name, unsigned int hp, unsigned int hpMax, CharType myCharType, std::shared_ptr<Animation> defaultAnim)
-	:name(name), hp(hp), hpMax(hpMax), myCharType(myCharType), defaultAnim(defaultAnim), animInitialized(false){
+	:name(name), hp(hp), hpMax(hpMax), myCharType(myCharType), defaultAnim(defaultAnim), animInitialized(false) {
 }
 
 void BattleCharBase::Draw() {
-	int x = def::BATTLE_PANEL_SIZE.x * pos.x + def::BATTLE_PANEL_SIZE.x / 2;
-	int y = def::BATTLE_PANEL_OFFSET_Y + def::BATTLE_PANEL_SIZE.y * pos.y - 10;// ‚Ó‚¿‚Ì•ª‚¾‚¯ã‚°‚é
+	int x = BattleField::PANEL_SIZE.x * pos.x + BattleField::PANEL_SIZE.x / 2;
+	int y = BattleField::BATTLE_PANEL_OFFSET_Y + BattleField::PANEL_SIZE.y * pos.y - 10;// ‚Ó‚¿‚Ì•ª‚¾‚¯ã‚°‚é
 
 	if( animQueue.empty() ) {
 		defaultAnim->Draw(x, y);

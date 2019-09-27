@@ -155,7 +155,10 @@
     <ClCompile Include="source\animation.cpp" />
     <ClCompile Include="source\appLogger.cpp" />
     <ClCompile Include="source\battle.cpp" />
+    <ClCompile Include="source\battleBack.cpp" />
     <ClCompile Include="source\battleCharBase.cpp" />
+    <ClCompile Include="source\battleField.cpp" />
+    <ClCompile Include="source\battleFieldMgr.cpp" />
     <ClCompile Include="source\battleMain.cpp" />
     <ClCompile Include="source\keyConfig.cpp" />
     <ClCompile Include="source\fps.cpp" />
@@ -168,7 +171,10 @@
     <ClInclude Include="source\animation.h" />
     <ClInclude Include="source\appLogger.h" />
     <ClInclude Include="source\battle.h" />
+    <ClInclude Include="source\battleBack.h" />
     <ClInclude Include="source\battleCharBase.h" />
+    <ClInclude Include="source\battleField.h" />
+    <ClInclude Include="source\battleFieldMgr.h" />
     <ClInclude Include="source\battleMain.h" />
     <ClInclude Include="source\keyConfig.h" />
     <ClInclude Include="source\define.h" />
