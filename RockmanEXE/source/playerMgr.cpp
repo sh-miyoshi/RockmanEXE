@@ -30,11 +30,15 @@ void PlayerMgr::InitPlayer() {
 }
 
 BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, std::shared_ptr<Animation> defaultAnim)
-	: BattleCharBase(name, hp, hpMax, eCHAR_PLAYER, defaultAnim) {
+	: BattleCharBase(name, hp, hpMax, eCHAR_PLAYER, defaultAnim), chargeCount(0){
 	// アニメーションの設定
 	std::string fname = def::IMAGE_FILE_PATH + "player_move.png";
 	animMove = std::shared_ptr<Animation>(new Animation());
 	animMove->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(4, 1));
+
+	fname = def::IMAGE_FILE_PATH + "player_shot.png";
+	animShot = std::shared_ptr<Animation>(new Animation());
+	animShot->LoadData(fname, CPoint<unsigned int>(180, 100), CPoint<unsigned int>(6, 1));
 }
 
 BattlePlayer::~BattlePlayer() {
@@ -53,8 +57,8 @@ void BattlePlayer::Process() {
 			this->AttachAnim(animMove);
 		}
 	} else if( CKey::GetInst()->CheckKey(eKEY_LEFT) == 1 ) {
-		if( MoveCheck(pos.x-1, pos.y) ) {
-			this->SetPos(pos.x-1, pos.y);
+		if( MoveCheck(pos.x - 1, pos.y) ) {
+			this->SetPos(pos.x - 1, pos.y);
 			this->AttachAnim(animMove);
 		}
 	} else if( CKey::GetInst()->CheckKey(eKEY_RIGHT) == 1 ) {
@@ -64,7 +68,16 @@ void BattlePlayer::Process() {
 		}
 	}
 
-	// TODO(チップを使う、バスター)
+	// ロックバスター関連
+	if( CKey::GetInst()->CheckKey(eKEY_CANCEL) != 0 )// キャンセルキーでショット
+		chargeCount++;
+	else if( chargeCount > 0 ) {
+		// TODO(チャージショット)
+		this->AttachAnim(animShot);
+		chargeCount = 0;
+	}
+
+	// TODO(チップを使う)
 
 	AnimProcess();
 }
