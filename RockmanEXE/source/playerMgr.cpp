@@ -43,17 +43,25 @@ BattlePlayer::~BattlePlayer() {
 void BattlePlayer::Process() {
 	// 移動処理
 	if( CKey::GetInst()->CheckKey(eKEY_DOWN) == 1 ) {
-		// TODO( if(pos.y < BattleField::FIELD_NUM_Y - 1 && MoveCheck(pos.x, pos.y + 1)) )
-		this->AttachAnim(animMove);
+		if( MoveCheck(pos.x, pos.y + 1) ) {
+			this->SetPos(pos.x, pos.y + 1);
+			this->AttachAnim(animMove);
+		}
 	} else if( CKey::GetInst()->CheckKey(eKEY_UP) == 1 ) {
-		// TODO( if(pos.y > 0 && MoveCheck(pos.x, pos.y - 1)) )
-		this->AttachAnim(animMove);
+		if( MoveCheck(pos.x, pos.y - 1) ) {
+			this->SetPos(pos.x, pos.y - 1);
+			this->AttachAnim(animMove);
+		}
 	} else if( CKey::GetInst()->CheckKey(eKEY_LEFT) == 1 ) {
-		// TODO( if(pos.x > 0 && MoveCheck(pos.x - 1, pos.y)) )
-		this->AttachAnim(animMove);
+		if( MoveCheck(pos.x-1, pos.y) ) {
+			this->SetPos(pos.x-1, pos.y);
+			this->AttachAnim(animMove);
+		}
 	} else if( CKey::GetInst()->CheckKey(eKEY_RIGHT) == 1 ) {
-		// TODO( if(pos.x < BattleField::FIELD_NUM_X - 1 && MoveCheck(pos.x + 1, pos.y)) )
-		this->AttachAnim(animMove);
+		if( MoveCheck(pos.x + 1, pos.y) ) {
+			this->SetPos(pos.x + 1, pos.y);
+			this->AttachAnim(animMove);
+		}
 	}
 
 	// TODO(チップを使う、バスター)

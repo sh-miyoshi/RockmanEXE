@@ -21,11 +21,11 @@ void BattleCharBase::AnimProcess() {
 
 // MoveCheck method return true if you can move to pos(x,y)
 bool BattleCharBase::MoveCheck(int x, int y){
-	if(x<0 || x>=def::BATTLE_FILED_NUM.x){
+	if(x<0 || x>=def::BATTLE_FIELD_NUM.x){
 		return false;
 	}
 
-	if(y<0 || x>=def::BATTLE_FILED_NUM.y){
+	if(y<0 || y>=def::BATTLE_FIELD_NUM.y){
 		return false;
 	}
 

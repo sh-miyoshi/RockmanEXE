@@ -8,7 +8,7 @@ namespace def {
 	const int FMY = 320;
 
 	const CPoint<int> BATTLE_PANEL_SIZE(80, 50);
-	const CPoint<int> BATTLE_FIELD_NUM(3, 3);
+	const CPoint<int> BATTLE_FIELD_NUM(6, 3);
 	const int BATTLE_PANEL_OFFSET_Y = def::FMY - ( BATTLE_PANEL_SIZE.y * 3 ) - 30;
 
 	enum Muki {
@@ -27,17 +27,17 @@ namespace def {
 
 	const std::string IMAGE_FILE_PATH = "data/image_private/";// for local development
 	//const std::string IMAGE_FILE_PATH = "data/image_public/";
-	const std::string ENEMY_IMAGE_PATH = IMAGE_FILE_PATH + "ÔøΩGÔøΩ÷òA/";
-	const std::string SKILL_IMAGE_PATH = IMAGE_FILE_PATH + "ÔøΩZÔøΩ÷òA/";
+	const std::string ENEMY_IMAGE_PATH = IMAGE_FILE_PATH + "?G??A/";
+	const std::string SKILL_IMAGE_PATH = IMAGE_FILE_PATH + "?Z??A/";
 	const std::string TEXT_FILE_PATH = "data/text/";
 	const std::string BGM_FILE_PATH = "data/bgm/";
 
-	const std::string RESOURCE_PASSWORD = "rockmanexepassword";// debug(ReleaseÔøΩÔøΩÔøΩ…ÇÕèÔøΩÔøΩÔøΩ)
+	const std::string RESOURCE_PASSWORD = "rockmanexepassword";// debug(ReleaseéûÇ…ÇÕçÌèú)
 }
 
-// ÔøΩFÔøΩÃíÔøΩ`
-#define WHITE		(0xFFFFFF)
-#define BLACK		(0x000000)
-#define YELLOW		(0xFFFF00)
-#define RED			(0xFF0000)
-#define LIGHTGREEN	(0x00FF60)
+// êFÇÃíËã`
+constexpr auto WHITE = 0xFFFFFF;
+constexpr auto BLACK = 0x000000;
+constexpr auto YELLOW = 0xFFFF00;
+constexpr auto RED = 0xFF0000;
+constexpr auto LIGHTGREEN = 0x00FF60;
