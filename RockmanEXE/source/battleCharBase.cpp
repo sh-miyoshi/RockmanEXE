@@ -19,6 +19,23 @@ void BattleCharBase::AnimProcess() {
 	}
 }
 
+// MoveCheck method return true if you can move to pos(x,y)
+bool BattleCharBase::MoveCheck(int x, int y){
+	if(x<0 || x>=def::BATTLE_FILED_NUM.x){
+		return false;
+	}
+
+	if(y<0 || x>=def::BATTLE_FILED_NUM.y){
+		return false;
+	}
+
+	// TODO(その他のチェック)
+	//   IsAnyChar?
+	//   移動先が自分のパネルかどうか
+
+	return true;// その場所に動ける
+}
+
 BattleCharBase::BattleCharBase(std::string name, unsigned int hp, unsigned int hpMax, CharType myCharType, std::shared_ptr<Animation> defaultAnim)
 	:name(name), hp(hp), hpMax(hpMax), myCharType(myCharType), defaultAnim(defaultAnim), animInitialized(false){
 }
