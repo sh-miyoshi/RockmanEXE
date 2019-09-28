@@ -39,5 +39,6 @@ public:
 	virtual void Process();// ƒLƒƒƒ‰‚Ìs“®
 
 	void SetPos(int x, int y) { pos.x = x; pos.y = y; }
+	CPoint<int> GetPos()const { return pos; }
 	void AttachAnim(std::shared_ptr<Animation> anim, bool forceRun = false);
 };

@@ -1,7 +1,7 @@
 #include "include.h"
 #include "battleMain.h"
 #include "battle.h"
-#include "playerMgr.h"
+#include "battleCharMgr.h"
 
 BattleMain::BattleMain(Battle* obj):obj(obj) {
 }
@@ -10,9 +10,9 @@ BattleMain::~BattleMain() {
 }
 
 void BattleMain::Draw() {
-	PlayerMgr::GetInst()->GetBattleChar()->Draw();
+	BattleCharMgr::GetInst()->Draw();
 }
 
 void BattleMain::Process() {
-	PlayerMgr::GetInst()->GetBattleChar()->Process();
+	BattleCharMgr::GetInst()->MainProcess();
 }

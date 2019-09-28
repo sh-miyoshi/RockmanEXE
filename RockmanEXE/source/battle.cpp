@@ -2,16 +2,17 @@
 #include "battle.h"
 #include "main.h"
 #include "battleMain.h"
-#include "playerMgr.h"
+#include "battleCharMgr.h"
 #include "battleFieldMgr.h"
 
 Battle::Battle(Main* obj) :obj(obj){
-	PlayerMgr::GetInst()->InitBattleChar();
-	stateMgr.ChangeNext(new BattleMain(this));
+	BattleCharMgr::GetInst()->BattleInit();
 	BattleFieldMgr::GetInst()->BattleInit();
+	stateMgr.ChangeNext(new BattleMain(this));// debug(Å‰‚Ìstate)
 }
 
 Battle::~Battle() {
+	BattleCharMgr::GetInst()->BattleEnd();
 	BattleFieldMgr::GetInst()->BattleEnd();
 }
 
