@@ -10,6 +10,9 @@ class BattlePlayer:public BattleCharBase {
 
 	std::shared_ptr<Animation> animMove;
 	std::shared_ptr<Animation> animShot;
+	std::shared_ptr<Animation> animCannon;
+	std::shared_ptr<Animation> animSword;
+	std::shared_ptr<Animation> animBomb;
 public:
 	BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax);
 	~BattlePlayer();

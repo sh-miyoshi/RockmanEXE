@@ -49,6 +49,18 @@ BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax
 	animShot = std::shared_ptr<Animation>(new Animation());
 	animShot->LoadData(fname, CPoint<unsigned int>(180, 100), CPoint<unsigned int>(6, 1));
 
+	fname = def::IMAGE_FILE_PATH + "player_cannon.png";
+	animCannon = std::shared_ptr<Animation>(new Animation());
+	animCannon->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(4, 1),5);
+
+	fname = def::IMAGE_FILE_PATH + "player_sword.png";
+	animSword = std::shared_ptr<Animation>(new Animation());
+	animSword->LoadData(fname, CPoint<unsigned int>(128, 128), CPoint<unsigned int>(7, 1), 3);
+
+	fname = def::IMAGE_FILE_PATH + "player_bomb.png";
+	animBomb = std::shared_ptr<Animation>(new Animation());
+	animBomb->LoadData(fname, CPoint<unsigned int>(100, 114), CPoint<unsigned int>(5, 1), 3);
+
 	// É`ÉÉÅ[ÉWâÊëúÇÃì«Ç›çûÇ›
 	fname = def::IMAGE_FILE_PATH + "charge.png";
 	LoadDivGraphWithErrorCheck(imgCharge, fname, "BattlePlayer::BattlePlayer", 8, 2, 158, 150);
