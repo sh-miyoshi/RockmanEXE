@@ -5,6 +5,9 @@
 
 void BattleCharBase::AnimProcess() {
 	if( animQueue.empty() ) {
+		if( !defaultAnim ) {
+			AppLogger::Error("Default AnimationÇ™ÉZÉbÉgÇ≥ÇÍÇƒÇ¢Ç‹ÇπÇÒ");
+		}
 		defaultAnim->Process();
 	} else {
 		auto anim = animQueue.front();
@@ -37,8 +40,8 @@ bool BattleCharBase::MoveCheck(int x, int y) {
 	return true;// ÇªÇÃèÍèäÇ…ìÆÇØÇÈ
 }
 
-BattleCharBase::BattleCharBase(std::string name, unsigned int hp, unsigned int hpMax, CharType myCharType, std::shared_ptr<Animation> defaultAnim)
-	:name(name), hp(hp), hpMax(hpMax), myCharType(myCharType), defaultAnim(defaultAnim), animInitialized(false) {
+BattleCharBase::BattleCharBase(std::string name, unsigned int hp, unsigned int hpMax, CharType myCharType)
+	:name(name), hp(hp), hpMax(hpMax), myCharType(myCharType), animInitialized(false), defaultAnim(nullptr){
 }
 
 void BattleCharBase::Draw() {

@@ -1,9 +1,12 @@
 #pragma once
 
+#include <memory>
+#include <list>
 #include "battleCharBase.h"
 
 class BattleCharMgr {
 	class BattlePlayer* player;
+	std::list< std::shared_ptr<BattleCharBase>> enemyList;
 
 	BattleCharMgr():player(nullptr) {}
 	~BattleCharMgr(){}
@@ -13,7 +16,7 @@ public:
 		return &inst;
 	}
 
-	void BattleInit();
+	void BattleInit(std::list< std::shared_ptr<BattleCharBase>> enemyList);
 	void BattleEnd();
 	void Draw();
 	void MainProcess();// TODO(ñﬂÇËílÇÕçlÇ¶ÇÈ)

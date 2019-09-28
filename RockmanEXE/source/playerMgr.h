@@ -11,7 +11,7 @@ class BattlePlayer:public BattleCharBase {
 	std::shared_ptr<Animation> animMove;
 	std::shared_ptr<Animation> animShot;
 public:
-	BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, std::shared_ptr<Animation> defaultAnim);
+	BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax);
 	~BattlePlayer();
 
 	virtual void Draw();

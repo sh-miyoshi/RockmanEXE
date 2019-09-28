@@ -26,7 +26,6 @@ class Enemy_メットール:public BattleCharBase {
 
 	unsigned int count;
 	unsigned int waveCount;
-	std::shared_ptr<Animation> animStand;
 	std::shared_ptr<AnimMove> animMove;
 public:
 	Enemy_メットール();
@@ -53,11 +52,14 @@ std::shared_ptr<BattleCharBase> EnemyMgr::GetData(int id) {
 // メットール
 //-------------------------------------------------------
 Enemy_メットール::Enemy_メットール()
-	:BattleCharBase("メットール", 40, 40, eCHAR_ENEMY, animStand), count(0), waveCount(0) {
+	:BattleCharBase("メットール", 40, 40, eCHAR_ENEMY), count(0), waveCount(0) {
 	std::string fname = def::ENEMY_IMAGE_PATH + "メットール_stand.png";
+	std::shared_ptr<Animation> animStand = std::shared_ptr<Animation>(new Animation());
 	animStand->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(1, 1));
+	BattleCharBase::SetDefaultAnim(animStand);
 
 	fname = def::ENEMY_IMAGE_PATH + "メットール_move.png";
+	animMove = std::shared_ptr<AnimMove>(new AnimMove(this));
 	animMove->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(1, 1));
 }
 

@@ -31,13 +31,14 @@ protected:
 	void AnimProcess();
 	bool MoveCheck(int x, int y);
 public:
-	BattleCharBase(std::string name, unsigned int hp, unsigned int hpMax, CharType myCharType, std::shared_ptr<Animation> defaultAnim);
+	BattleCharBase(std::string name, unsigned int hp, unsigned int hpMax, CharType myCharType);
 	~BattleCharBase() {}
 
 	// virtual bool DamageProc(std::list<DamageData>& damageList);// TODO(ñ¢é¿ëï)
 	virtual void Draw();
 	virtual void Process();// ÉLÉÉÉâÇÃçsìÆ
 
+	void SetDefaultAnim(std::shared_ptr<Animation> anim) { this->defaultAnim = anim; }
 	void SetPos(int x, int y) { pos.x = x; pos.y = y; }
 	CPoint<int> GetPos()const { return pos; }
 	void AttachAnim(std::shared_ptr<Animation> anim, bool forceRun = false);

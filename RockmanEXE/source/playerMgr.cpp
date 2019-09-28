@@ -20,11 +20,8 @@ void PlayerMgr::InitBattleChar() {
 	if( battlePlayer ) {
 		delete battlePlayer;
 	}
-	std::string fname = def::IMAGE_FILE_PATH + "player_stand.png";
-	std::shared_ptr<Animation> animStand = std::shared_ptr<Animation>(new Animation());
-	animStand->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(1, 1));
 
-	battlePlayer = new BattlePlayer(name, hp, hpMax, animStand);
+	battlePlayer = new BattlePlayer(name, hp, hpMax);
 	battlePlayer->SetPos(1, 1);// 初期位置のセット
 }
 
@@ -34,12 +31,17 @@ void PlayerMgr::InitPlayer() {
 	name = "ロックマン";
 }
 
-BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, std::shared_ptr<Animation> defaultAnim)
-	: BattleCharBase(name, hp, hpMax, eCHAR_PLAYER, defaultAnim), chargeCount(0),chargeMaxTime(DEFAULT_CHARGE_TIME){
+BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax)
+	: BattleCharBase(name, hp, hpMax, eCHAR_PLAYER), chargeCount(0),chargeMaxTime(DEFAULT_CHARGE_TIME){
 	// TODO(chargeMaxTimeを変えられるようにする)
 
 	// アニメーションの設定
-	std::string fname = def::IMAGE_FILE_PATH + "player_move.png";
+	std::string fname = def::IMAGE_FILE_PATH + "player_stand.png";
+	std::shared_ptr<Animation> animStand = std::shared_ptr<Animation>(new Animation());
+	animStand->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(1, 1));
+	BattleCharBase::SetDefaultAnim(animStand);
+
+	fname = def::IMAGE_FILE_PATH + "player_move.png";
 	animMove = std::shared_ptr<Animation>(new Animation());
 	animMove->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(4, 1));
 

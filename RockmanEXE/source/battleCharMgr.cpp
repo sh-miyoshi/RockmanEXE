@@ -3,9 +3,11 @@
 #include "playerMgr.h"
 #include "battleField.h"
 
-void BattleCharMgr::BattleInit() {
+void BattleCharMgr::BattleInit(std::list< std::shared_ptr<BattleCharBase>> enemyList) {
 	PlayerMgr::GetInst()->InitBattleChar();
 	player = PlayerMgr::GetInst()->GetBattleChar();
+
+	this->enemyList = enemyList;
 }
 
 void BattleCharMgr::BattleEnd() {
@@ -13,10 +15,18 @@ void BattleCharMgr::BattleEnd() {
 
 void BattleCharMgr::Draw() {
 	player->Draw();
+
+	for( auto enemy : enemyList ) {
+		enemy->Draw();
+	}
 }
 
 void BattleCharMgr::MainProcess() {
 	player->Process();
+
+	for( auto enemy : enemyList ) {
+		enemy->Process();
+	}
 }
 
 CPoint<int> BattleCharMgr::GetClosestCharPos(CPoint<int> myPos, CharType charType) {
