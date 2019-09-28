@@ -35,7 +35,7 @@ public:
 	~BattleCharBase() {}
 
 	// virtual bool DamageProc(std::list<DamageData>& damageList);// TODO(–¢À‘•)
-	void Draw();
+	virtual void Draw();
 	virtual void Process();// ƒLƒƒƒ‰‚Ìs“®
 
 	void SetPos(int x, int y) { pos.x = x; pos.y = y; }

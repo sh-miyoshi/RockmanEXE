@@ -3,14 +3,18 @@
 #include <string>
 #include "battleCharBase.h"
 
-class BattlePlayer :public BattleCharBase {
+class BattlePlayer:public BattleCharBase {
 	unsigned int chargeCount;
+	unsigned int chargeMaxTime;
+	int imgCharge[16];
+
 	std::shared_ptr<Animation> animMove;
 	std::shared_ptr<Animation> animShot;
 public:
 	BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, std::shared_ptr<Animation> defaultAnim);
 	~BattlePlayer();
 
+	virtual void Draw();
 	virtual void Process();
 };
 
@@ -18,7 +22,7 @@ class PlayerMgr {
 	std::string name;
 	unsigned int hp, hpMax;
 
-	BattlePlayer*battlePlayer;
+	BattlePlayer* battlePlayer;
 
 	PlayerMgr();
 	~PlayerMgr();
