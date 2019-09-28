@@ -48,11 +48,19 @@ CPoint<int> BattleCharMgr::GetClosestCharPos(CPoint<int> myPos, CharType charTyp
 		}
 	}
 	if( charType & eCHAR_ENEMY ) {
-		AppLogger::Error("–¢ŽÀ‘•");
-		exit(1);
+		for( auto enemy : enemyList ) {
+			CPoint<int> pos = enemy->GetPos();
+			int d = ( pos.x - myPos.x ) * ( pos.x - myPos.x ) + ( pos.y - myPos.y ) * ( pos.y - myPos.y );
+			if( distance > d ) {
+				resPos.x = pos.x;
+				resPos.y = pos.y;
+				distance = d;
+			}
+		}
 	}
 	if( charType & eCHAR_OBJECT ) {
-		AppLogger::Error("–¢ŽÀ‘•");
+		AppLogger::Error("–¢ŽÀ‘•");// TODO
+		exit(1);
 	}
 	return resPos;
 }

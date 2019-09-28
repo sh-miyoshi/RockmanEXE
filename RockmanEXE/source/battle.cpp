@@ -1,17 +1,18 @@
 #include "include.h"
 #include "battle.h"
 #include "main.h"
-#include "battleMain.h"
 #include "battleCharMgr.h"
 #include "battleFieldMgr.h"
 #include "enemy.h"
+#include "battleMain.h"
+//#include "battleChipSelect.h"
 
-Battle::Battle(Main* obj) :obj(obj){
+Battle::Battle(Main* obj):obj(obj) {
 	// TODO(引数でenemyListを取得する)
 	std::list< std::shared_ptr<BattleCharBase>> enemyList;
-	std::shared_ptr<BattleCharBase> enemy1 = EnemyMgr::GetData(EnemyMgr::ID_メットール);
-	enemy1->SetPos(3,1);
-	enemyList.push_back(enemy1);
+	/*std::shared_ptr<BattleCharBase> enemy1 = EnemyMgr::GetData(EnemyMgr::ID_メットール);
+	enemy1->SetPos(3, 1);
+	enemyList.push_back(enemy1);*/
 
 	BattleCharMgr::GetInst()->BattleInit(enemyList);
 	BattleFieldMgr::GetInst()->BattleInit();
