@@ -1,6 +1,7 @@
 #include "include.h"
 #include "playerMgr.h"
 #include "battleField.h"
+#include "battleSkillMgr.h"
 
 namespace {
 	const unsigned int DEFAULT_CHARGE_TIME = 2 * 60;// 2[second]
@@ -112,7 +113,12 @@ void BattlePlayer::Process() {
 	if( CKey::GetInst()->CheckKey(eKEY_CANCEL) != 0 )// キャンセルキーでショット
 		chargeCount++;
 	else if( chargeCount > 0 ) {
-		// TODO(チャージショット)
+		// チャージショット
+		SkillArg arg; 
+		arg.charPos = pos;
+		arg.power = 1;// debug
+		arg.targetType = eCHAR_ENEMY | eCHAR_OBJECT;
+		BattleSkillMgr::GetInst()->Register(SkillMgr::GetData(SkillMgr::eID_バスター,arg));
 		this->AttachAnim(animShot);
 		chargeCount = 0;
 	}

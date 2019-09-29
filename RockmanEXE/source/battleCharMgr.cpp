@@ -29,7 +29,7 @@ void BattleCharMgr::MainProcess() {
 	}
 }
 
-CPoint<int> BattleCharMgr::GetClosestCharPos(CPoint<int> myPos, CharType charType) {
+CPoint<int> BattleCharMgr::GetClosestCharPos(CPoint<int> myPos, int charType) {
 	// ç≈ëÂãóó£(x*x+y*y)+1
 	static const int DIST_MAX
 		= BattleField::FIELD_NUM_X * BattleField::FIELD_NUM_X
@@ -58,9 +58,29 @@ CPoint<int> BattleCharMgr::GetClosestCharPos(CPoint<int> myPos, CharType charTyp
 			}
 		}
 	}
-	if( charType & eCHAR_OBJECT ) {
-		AppLogger::Error("ñ¢é¿ëï");// TODO
-		exit(1);
-	}
+
+	// TODO(ñ¢é¿ëï)
+	//if( charType & eCHAR_OBJECT ) {
+	//	AppLogger::Error("BattleCharMgr::GetClosestCharPos ñ¢é¿ëï");
+	//	exit(1);
+	//}
 	return resPos;
+}
+
+std::vector<CPoint<int>> BattleCharMgr::GetAllCharPos(int charType) {
+	std::vector<CPoint<int>> res;
+	if( charType & eCHAR_PLAYER ) {
+		res.push_back(player->GetPos());
+	}
+	if( charType & eCHAR_ENEMY ) {
+		for( auto enemy : enemyList ) {
+			res.push_back(enemy->GetPos());
+		}
+	}
+	// TODO(ñ¢é¿ëï)
+	//if( charType & eCHAR_OBJECT ) {
+	//	AppLogger::Error("BattleCharMgr::GetAllCharPos ñ¢é¿ëï");
+	//	exit(1);
+	//}
+	return res;
 }

@@ -162,11 +162,13 @@
     <ClCompile Include="source\battleField.cpp" />
     <ClCompile Include="source\battleFieldMgr.cpp" />
     <ClCompile Include="source\battleMain.cpp" />
+    <ClCompile Include="source\battleSkillMgr.cpp" />
     <ClCompile Include="source\enemy.cpp" />
     <ClCompile Include="source\keyConfig.cpp" />
     <ClCompile Include="source\fps.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\playerMgr.cpp" />
+    <ClCompile Include="source\skill.cpp" />
     <ClCompile Include="source\util.cpp" />
     <ClCompile Include="source\utilDxLib.cpp" />
   </ItemGroup>
@@ -181,6 +183,7 @@
     <ClInclude Include="source\battleField.h" />
     <ClInclude Include="source\battleFieldMgr.h" />
     <ClInclude Include="source\battleMain.h" />
+    <ClInclude Include="source\battleSkillMgr.h" />
     <ClInclude Include="source\enemy.h" />
     <ClInclude Include="source\keyConfig.h" />
     <ClInclude Include="source\define.h" />
@@ -189,6 +192,7 @@
     <ClInclude Include="source\main.h" />
     <ClInclude Include="source\playerMgr.h" />
     <ClInclude Include="source\point.h" />
+    <ClInclude Include="source\skill.h" />
     <ClInclude Include="source\state.h" />
     <ClInclude Include="source\util.h" />
     <ClInclude Include="source\utilDxLib.h" />

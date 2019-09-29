@@ -21,5 +21,6 @@ public:
 	void Draw();
 	void MainProcess();// TODO(ñﬂÇËílÇÕçlÇ¶ÇÈ)
 
-	CPoint<int> GetClosestCharPos(CPoint<int> myPos, CharType charType);
+	CPoint<int> GetClosestCharPos(CPoint<int> myPos, int charType);
+	std::vector<CPoint<int>> GetAllCharPos(int charType);
 };
