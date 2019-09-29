@@ -1,8 +1,26 @@
 #include "include.h"
 #include "enemy.h"
 #include "battleCharMgr.h"
+#include "battleField.h"
 
-class Enemy_メットール:public BattleCharBase {
+class EnemyBase:public BattleCharBase {
+protected:
+	unsigned int count;
+	int imgNumber[10];
+public:
+	EnemyBase(std::string name, unsigned int hp);
+	~EnemyBase();
+
+	virtual void Draw();
+};
+
+class Enemy_的:public EnemyBase {
+public:
+	Enemy_的();
+	~Enemy_的();
+};
+
+class Enemy_メットール:public EnemyBase {
 	static const int Power_ショックウェーブ = 10;// debug(固定？)
 
 	class AnimMove:public Animation {
@@ -24,7 +42,6 @@ class Enemy_メットール:public BattleCharBase {
 		}
 	};
 
-	unsigned int count;
 	unsigned int waveCount;
 	std::shared_ptr<AnimMove> animMove;
 public:
@@ -39,6 +56,8 @@ public:
 //-------------------------------------------------------
 std::shared_ptr<BattleCharBase> EnemyMgr::GetData(int id) {
 	switch( id ) {
+	case ID_的:
+		return std::shared_ptr<Enemy_的>(new Enemy_的());
 	case ID_メットール:
 		return std::shared_ptr<Enemy_メットール>(new Enemy_メットール());
 	default:
@@ -49,10 +68,58 @@ std::shared_ptr<BattleCharBase> EnemyMgr::GetData(int id) {
 }
 
 //-------------------------------------------------------
+// 敵関連の基底クラス
+//-------------------------------------------------------
+EnemyBase::EnemyBase(std::string name, unsigned int hp)
+	:count(0), BattleCharBase(name, hp, hp, eCHAR_ENEMY), imgNumber() {
+	std::string fname = def::IMAGE_FILE_PATH + "number_2.png";
+	LoadDivGraphWithErrorCheck(imgNumber, fname, "EnemyBase::EnemyBase", 10, 1, 15, 20);
+}
+
+EnemyBase::~EnemyBase() {
+	for( auto i = 0; i < 10; i++ ) {
+		DeleteGraph(imgNumber[i]);
+	}
+}
+
+void EnemyBase::Draw() {
+	BattleCharBase::Draw();
+
+	// HPの描画
+	int x = BattleField::PANEL_SIZE.x * pos.x + BattleField::PANEL_SIZE.x / 2;
+	int y = BattleField::BATTLE_PANEL_OFFSET_Y + BattleField::PANEL_SIZE.y * pos.y * 2 - 10;
+	std::list<unsigned int> hpList;
+	for( unsigned int h = this->hp; h > 0; h /= 10 ) {
+		hpList.push_front(h % 10);
+	}
+	const int numSize = 15;
+	x = x - numSize * hpList.size() / 2 + 7;
+	for( auto h : hpList ) {
+		unsigned pointer = ( h == 0 ) ? 9 : h - 1;
+		DrawRotaGraph(x, y, 1, 0, imgNumber[pointer], TRUE);
+		x += numSize;
+	}
+}
+
+
+//-------------------------------------------------------
+// テスト用の的
+//-------------------------------------------------------
+Enemy_的::Enemy_的():EnemyBase("的", 1000) {
+	std::string fname = def::ENEMY_IMAGE_PATH + "的.png";
+	std::shared_ptr<Animation> animStand = std::shared_ptr<Animation>(new Animation());
+	animStand->LoadData(fname, CPoint<unsigned int>(100, 117), CPoint<unsigned int>(1, 1));
+	BattleCharBase::SetDefaultAnim(animStand);
+}
+
+Enemy_的::~Enemy_的() {
+}
+
+//-------------------------------------------------------
 // メットール
 //-------------------------------------------------------
 Enemy_メットール::Enemy_メットール()
-	:BattleCharBase("メットール", 40, 40, eCHAR_ENEMY), count(0), waveCount(0) {
+	:EnemyBase("メットール", 40), waveCount(0) {
 	std::string fname = def::ENEMY_IMAGE_PATH + "メットール_stand.png";
 	std::shared_ptr<Animation> animStand = std::shared_ptr<Animation>(new Animation());
 	animStand->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(1, 1));

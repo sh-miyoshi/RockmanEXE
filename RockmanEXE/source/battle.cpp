@@ -10,6 +10,10 @@
 Battle::Battle(Main* obj):obj(obj) {
 	// TODO(引数でenemyListを取得する)
 	std::list< std::shared_ptr<BattleCharBase>> enemyList;
+
+	std::shared_ptr<BattleCharBase> enemy1 = EnemyMgr::GetData(EnemyMgr::ID_的);
+	enemy1->SetPos(4, 1);
+	enemyList.push_back(enemy1);
 	/*std::shared_ptr<BattleCharBase> enemy1 = EnemyMgr::GetData(EnemyMgr::ID_メットール);
 	enemy1->SetPos(3, 1);
 	enemyList.push_back(enemy1);*/

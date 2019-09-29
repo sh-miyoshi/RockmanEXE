@@ -6,6 +6,7 @@
 class EnemyMgr {
 public:
 	enum EnemyID {
+		ID_的,
 		ID_メットール,
 
 		ID_MAX
