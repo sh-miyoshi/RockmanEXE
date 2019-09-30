@@ -182,6 +182,7 @@
     <ClInclude Include="source\battleStateChipSelect.h" />
     <ClInclude Include="source\battleField.h" />
     <ClInclude Include="source\battleFieldMgr.h" />
+    <ClInclude Include="source\battleStateWin.h" />
     <ClInclude Include="source\battleStateMain.h" />
     <ClInclude Include="source\battleSkillMgr.h" />
     <ClInclude Include="source\enemy.h" />
