@@ -41,8 +41,8 @@ Skill_バスター::Skill_バスター(CPoint<int> charPos, int damage, int targetType) 
 	}
 
 	if( damagePos.x > 0 ) {// 攻撃がヒットする位置に対象がいたら
-		printfDx("%d, %d\n",damagePos.x,damagePos.y);
-		// TODO(ダメージデータの登録)
+		// ダメージデータの登録
+		BattleCharMgr::GetInst()->RegisterDamage(DamageData(damagePos,damage,targetType));
 	}
 }
 

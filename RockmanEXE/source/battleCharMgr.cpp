@@ -3,6 +3,16 @@
 #include "playerMgr.h"
 #include "battleField.h"
 
+DamageData::DamageData():power(0), targetType(0) {
+}
+
+DamageData::DamageData(CPoint<int> pos, int power, int targetType)
+	: pos(pos), power(power), targetType(targetType) {
+}
+
+DamageData::~DamageData() {
+}
+
 void BattleCharMgr::BattleInit(std::list< std::shared_ptr<BattleCharBase>> enemyList) {
 	PlayerMgr::GetInst()->InitBattleChar();
 	player = PlayerMgr::GetInst()->GetBattleChar();
@@ -27,6 +37,27 @@ void BattleCharMgr::MainProcess() {
 	for( auto enemy : enemyList ) {
 		enemy->Process();
 	}
+
+	// ダメージ処理
+	for( auto damage : damageList ) {
+		if( damage.targetType & eCHAR_PLAYER ) {
+			if( damage.pos == player->GetPos() ) {
+				printfDx("Player damaged %d\n", damage.power);
+			}
+		}
+		if( damage.targetType & eCHAR_ENEMY ) {
+			for( auto enemy : enemyList ) {
+				if( damage.pos == enemy->GetPos() ) {
+					printfDx("Enemy damaged %d\n", damage.power);
+				}
+			}
+		}
+		// TODO(未実装)
+		//if( damage.targetType & eCHAR_OBJECT ) {
+
+		//}
+	}
+	damageList.clear();// 処理が終わればすべてクリア
 }
 
 CPoint<int> BattleCharMgr::GetClosestCharPos(CPoint<int> myPos, int charType) {
@@ -83,4 +114,8 @@ std::vector<CPoint<int>> BattleCharMgr::GetAllCharPos(int charType) {
 	//	exit(1);
 	//}
 	return res;
+}
+
+void BattleCharMgr::RegisterDamage(DamageData data) {
+	damageList.push_back(data);
 }
