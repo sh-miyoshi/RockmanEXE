@@ -1,6 +1,6 @@
 #include "include.h"
 #include "battle.h"
-#include "battleChipSelect.h"
+#include "battleStateChipSelect.h"
 #include "battleCharMgr.h"
 
 BattleChipSelect::BattleChipSelect(Battle* obj) :obj(obj), imgSelectFrame(-1){

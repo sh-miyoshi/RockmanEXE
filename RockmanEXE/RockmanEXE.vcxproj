@@ -158,10 +158,10 @@
     <ClCompile Include="source\battleBack.cpp" />
     <ClCompile Include="source\battleCharBase.cpp" />
     <ClCompile Include="source\battleCharMgr.cpp" />
-    <ClCompile Include="source\battleChipSelect.cpp" />
+    <ClCompile Include="source\battleStateChipSelect.cpp" />
     <ClCompile Include="source\battleField.cpp" />
     <ClCompile Include="source\battleFieldMgr.cpp" />
-    <ClCompile Include="source\battleMain.cpp" />
+    <ClCompile Include="source\battleStateMain.cpp" />
     <ClCompile Include="source\battleSkillMgr.cpp" />
     <ClCompile Include="source\enemy.cpp" />
     <ClCompile Include="source\keyConfig.cpp" />
@@ -179,10 +179,10 @@
     <ClInclude Include="source\battleBack.h" />
     <ClInclude Include="source\battleCharBase.h" />
     <ClInclude Include="source\battleCharMgr.h" />
-    <ClInclude Include="source\battleChipSelect.h" />
+    <ClInclude Include="source\battleStateChipSelect.h" />
     <ClInclude Include="source\battleField.h" />
     <ClInclude Include="source\battleFieldMgr.h" />
-    <ClInclude Include="source\battleMain.h" />
+    <ClInclude Include="source\battleStateMain.h" />
     <ClInclude Include="source\battleSkillMgr.h" />
     <ClInclude Include="source\enemy.h" />
     <ClInclude Include="source\keyConfig.h" />

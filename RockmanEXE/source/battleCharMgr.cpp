@@ -31,7 +31,7 @@ void BattleCharMgr::Draw() {
 	}
 }
 
-void BattleCharMgr::MainProcess() {
+BattleCharMgr::RtnCode BattleCharMgr::MainProcess() {
 	player->Process();
 
 	for( auto enemy : enemyList ) {
@@ -42,13 +42,21 @@ void BattleCharMgr::MainProcess() {
 	for( auto damage : damageList ) {
 		if( damage.targetType & eCHAR_PLAYER ) {
 			if( damage.pos == player->GetPos() ) {
-				printfDx("Player damaged %d\n", damage.power);
+				int hp = ( int ) player->GetHP() - damage.power;
+				player->SetHP(hp);
+				if( hp <= 0 ) {
+					return eRTN_LOSE;// 敗北
+				}
 			}
 		}
 		if( damage.targetType & eCHAR_ENEMY ) {
 			for( auto enemy : enemyList ) {
 				if( damage.pos == enemy->GetPos() ) {
-					printfDx("Enemy damaged %d\n", damage.power);
+					int hp = ( int ) enemy->GetHP() - damage.power;
+					enemy->SetHP(hp);
+					if( hp <= 0 ) {
+						// TODO(デリート処理)
+					}
 				}
 			}
 		}
@@ -58,6 +66,19 @@ void BattleCharMgr::MainProcess() {
 		//}
 	}
 	damageList.clear();// 処理が終わればすべてクリア
+
+	// 終了判定
+	bool enemyDeleted = true;
+	for( auto enemy : enemyList ) {
+		if( enemy->GetHP() > 0 ) {
+			enemyDeleted = false;
+			break;
+		}
+	}
+	if( enemyDeleted ) {
+		return eRTN_WIN;// 勝利
+	}
+	return eRTN_CONTINUE;
 }
 
 CPoint<int> BattleCharMgr::GetClosestCharPos(CPoint<int> myPos, int charType) {
@@ -67,7 +88,7 @@ CPoint<int> BattleCharMgr::GetClosestCharPos(CPoint<int> myPos, int charType) {
 		+ BattleField::FIELD_NUM_Y * BattleField::FIELD_NUM_Y
 		+ 1;
 
-	CPoint<int> resPos(BattleField::FIELD_NUM_X+1, BattleField::FIELD_NUM_Y+1);
+	CPoint<int> resPos(BattleField::FIELD_NUM_X + 1, BattleField::FIELD_NUM_Y + 1);
 	int distance = DIST_MAX;
 	if( charType & eCHAR_PLAYER ) {
 		CPoint<int> pos = player->GetPos();

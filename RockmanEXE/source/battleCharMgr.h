@@ -23,6 +23,12 @@ class BattleCharMgr {
 	BattleCharMgr():player(nullptr) {}
 	~BattleCharMgr(){}
 public:
+	enum RtnCode {
+		eRTN_CONTINUE,
+		eRTN_WIN,
+		eRTN_LOSE
+	};
+
 	static BattleCharMgr* GetInst() {
 		static BattleCharMgr inst;
 		return &inst;
@@ -32,7 +38,7 @@ public:
 	void BattleEnd();
 
 	void Draw();
-	void MainProcess();// TODO(ñﬂÇËílÇÕçlÇ¶ÇÈ)
+	RtnCode MainProcess();
 
 	CPoint<int> GetClosestCharPos(CPoint<int> myPos, int charType);
 	std::vector<CPoint<int>> GetAllCharPos(int charType);

@@ -4,8 +4,8 @@
 #include "battleCharMgr.h"
 #include "battleFieldMgr.h"
 #include "enemy.h"
-#include "battleMain.h"
-//#include "battleChipSelect.h"
+#include "battleStateMain.h"
+//#include "battleStateChipSelect.h"
 
 Battle::Battle(Main* obj):obj(obj) {
 	// TODO(ˆø”‚ÅenemyList‚ğæ“¾‚·‚é)

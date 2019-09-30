@@ -1,5 +1,5 @@
 #include "include.h"
-#include "battleMain.h"
+#include "battleStateMain.h"
 #include "battle.h"
 #include "battleCharMgr.h"
 #include "battleSkillMgr.h"
@@ -16,6 +16,13 @@ void BattleMain::Draw() {
 }
 
 void BattleMain::Process() {
-	BattleCharMgr::GetInst()->MainProcess();
+	switch( BattleCharMgr::GetInst()->MainProcess() ) {
+	case BattleCharMgr::eRTN_WIN:
+		AppLogger::Error("–¢ŽÀ‘•");// TODO
+		return;
+	case BattleCharMgr::eRTN_LOSE:
+		AppLogger::Error("–¢ŽÀ‘•");// TODO
+		return;
+	}
 	BattleSkillMgr::GetInst()->Process();
 }
