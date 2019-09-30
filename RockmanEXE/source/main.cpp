@@ -13,6 +13,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdS
 	srand(( unsigned int ) time(NULL));
 	AppLogger::CleanupLogFile();
 
+	// TODO(バージョン情報の設定)
+
 	std::string fname = def::TEXT_FILE_PATH + "font.ttf";
 	if( AddFontResourceEx(fname.c_str(), FR_PRIVATE, NULL) <= 0 ){
 		// フォント読み込み失敗
