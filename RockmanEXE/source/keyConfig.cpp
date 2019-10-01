@@ -9,8 +9,7 @@ CKey::CKey(){
 	// コード表の読み込み
 	std::ifstream ifs(CODE_TABLE_FILE_NAME);
 	if( !ifs ) {
-		const std::string msg = ToString("Key Config File[%s]が開けませんでした", CODE_TABLE_FILE_NAME);
-		AppLogger::Error(msg);
+		AppLogger::Error("Key Config File[%s]が開けませんでした", CODE_TABLE_FILE_NAME);
 	}
 	std::string buf;
 	for( int i = 0; i < 256 && !std::getline(ifs, buf); i++ )

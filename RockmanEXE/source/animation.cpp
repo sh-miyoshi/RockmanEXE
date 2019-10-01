@@ -22,7 +22,7 @@ Animation::~Animation() {
 void Animation::LoadData(std::string fname, CPoint<unsigned int> size, CPoint<unsigned int> num, unsigned int imageDelay) {
 	LoadDivGraphWithErrorCheck(image, fname, "BattleCharBase::AnimData::LoadImage", num.x, num.y, size.x, size.y);
 	imageFileName = fname;
-	AppLogger::Debug(ToString("Success to load image: %s", imageFileName.c_str()));
+	AppLogger::Info("Success to load image: %s", imageFileName.c_str());
 
 	this->imageNum = num.x * num.y;
 	this->imageDelay = imageDelay;
@@ -39,7 +39,7 @@ void Animation::DeleteData() {
 		}
 	}
 	if( deleted ) {
-		AppLogger::Debug(ToString("Finished deleting images: %s", imageFileName.c_str()));
+		AppLogger::Info("Finished deleting images: %s", imageFileName.c_str());
 	}
 }
 

@@ -8,7 +8,7 @@ int LoadGraphWithErrorCheck(std::string fileName, std::string position){
 		message += "LoadGraphエラー発生。 ";
 		message += "場所: " + position + " ";
 		message += "ファイル名: " + fileName + "\n";
-		AppLogger::Log(AppLogger::eLOG_ERROR, message);
+		AppLogger::Error(message.c_str());
 	}
 	return handle;
 }
@@ -20,7 +20,7 @@ void LoadDivGraphWithErrorCheck(int * handle, std::string fileName, std::string 
 		message += "LoadDivGraphエラー発生。 ";
 		message += "場所: " + position + " ";
 		message += "ファイル名: " + fileName + "\n";
-		AppLogger::Log(AppLogger::eLOG_ERROR, message);
+		AppLogger::Error(message.c_str());
 	}
 }
 
@@ -31,7 +31,7 @@ int LoadSoundMemWithErrorCheck(std::string fileName, std::string position){
 		message += "LoadSoundMemエラー発生。 ";
 		message += "場所: " + position + " ";
 		message += "ファイル名: " + fileName + "\n";
-		AppLogger::Log(AppLogger::eLOG_ERROR, message);
+		AppLogger::Error(message.c_str());
 	}
 	return handle;
 }

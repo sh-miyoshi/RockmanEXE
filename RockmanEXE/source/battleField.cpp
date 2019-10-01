@@ -52,8 +52,7 @@ void BattleField::Draw() {
 
 void BattleField::GetPanelInfo(int result[LAYER_MAX], int x, int y) {
 	if( x < 0 || x >= FIELD_NUM_X || y < 0 || y >= FIELD_NUM_Y ) {
-		std::string msg = ToString("BattleField::GetPanelInfo invalied field position x: %d, y: %d)", x, y);
-		AppLogger::Error(msg);
+		AppLogger::Error("BattleField::GetPanelInfo invalied field position x: %d, y: %d)", x, y);
 		exit(1);
 	}
 

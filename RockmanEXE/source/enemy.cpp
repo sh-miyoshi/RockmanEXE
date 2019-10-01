@@ -61,7 +61,7 @@ std::shared_ptr<BattleCharBase> EnemyMgr::GetData(int id) {
 	case ID_メットール:
 		return std::shared_ptr<Enemy_メットール>(new Enemy_メットール());
 	default:
-		AppLogger::Error(ToString("EnemyMgr::GetData wrong char id (%d)", id));
+		AppLogger::Error("EnemyMgr::GetData wrong char id (%d)", id);
 		exit(1);
 	}
 	return std::shared_ptr<BattleCharBase>();

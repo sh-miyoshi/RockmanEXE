@@ -20,7 +20,7 @@ std::shared_ptr<SkillData> SkillMgr::GetData(int id, SkillArg args) {
 	case eID_バスター:
 		return std::shared_ptr<Skill_バスター>(new Skill_バスター(args.charPos, args.power, args.targetType));
 	default:
-		AppLogger::Error(ToString("SkillMgr::GetData wrong skill id (%d)", id));
+		AppLogger::Error("SkillMgr::GetData wrong skill id (%d)", id);
 		exit(1);
 	}
 	return std::shared_ptr<SkillData>();

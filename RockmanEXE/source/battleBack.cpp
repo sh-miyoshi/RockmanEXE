@@ -51,7 +51,7 @@ void BattleBack::Draw(Type type){
 	}
 
 	if( data[type].size.x <= 0 || data[type].size.y <= 0 ) {
-		AppLogger::Error(ToString("BattleBack::Draw invalied position (%d,%d)", data[type].size.x, data[type].size.y));
+		AppLogger::Error("BattleBack::Draw invalied position (%d,%d)", data[type].size.x, data[type].size.y);
 		exit(1);
 	}
 

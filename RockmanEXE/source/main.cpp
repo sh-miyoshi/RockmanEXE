@@ -8,7 +8,7 @@
 bool gExitFlag = false;
 unsigned long long gGameCount = 0;
 
-int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdShow){
+int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdShow) {
 	// システム関係の初期化
 	srand(( unsigned int ) time(NULL));
 	AppLogger::CleanupLogFile();
@@ -16,9 +16,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdS
 	// TODO(バージョン情報の設定)
 
 	std::string fname = def::TEXT_FILE_PATH + "font.ttf";
-	if( AddFontResourceEx(fname.c_str(), FR_PRIVATE, NULL) <= 0 ){
+	if( AddFontResourceEx(fname.c_str(), FR_PRIVATE, NULL) <= 0 ) {
 		// フォント読み込み失敗
-		AppLogger::Error("failed to read font file: " + fname);
+		AppLogger::Error("failed to read font file: %s", fname);
 	}
 
 	// DxLib関係の初期化
@@ -41,15 +41,15 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdS
 	return 0;
 }
 
-Main::Main(void){
+Main::Main(void) {
 	stateMgr.ChangeNext(new Battle(this));
 }
 
-Main::~Main(void){
+Main::~Main(void) {
 }
 
-void Main::Process(){
-	while( ScreenFlip() == 0 && ProcessMessage() == 0 && ClearDrawScreen() == 0 ){
+void Main::Process() {
+	while( ScreenFlip() == 0 && ProcessMessage() == 0 && ClearDrawScreen() == 0 ) {
 		// メイン処理
 		stateMgr.Process();
 
