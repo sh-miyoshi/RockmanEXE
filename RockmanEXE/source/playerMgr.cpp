@@ -7,7 +7,8 @@ namespace {
 	const unsigned int DEFAULT_CHARGE_TIME = 2 * 60;// 2[second]
 }
 
-PlayerMgr::PlayerMgr():name("ロックマン"), hp(0), hpMax(0), battlePlayer(nullptr) {
+PlayerMgr::PlayerMgr()
+	:name("ロックマン"), hp(0), hpMax(0), battlePlayer(nullptr), busterPower(1) {
 }
 
 PlayerMgr::~PlayerMgr() {
@@ -22,7 +23,7 @@ void PlayerMgr::InitBattleChar() {
 		delete battlePlayer;
 	}
 
-	battlePlayer = new BattlePlayer(name, hp, hpMax);
+	battlePlayer = new BattlePlayer(name, hp, hpMax, busterPower);
 	battlePlayer->SetPos(1, 1);// 初期位置のセット
 }
 
@@ -30,10 +31,13 @@ void PlayerMgr::InitPlayer() {
 	// 初期データをセット
 	hp = hpMax = 100;
 	name = "ロックマン";
+	busterPower = 1;
 }
 
-BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax)
-	: BattleCharBase(name, hp, hpMax, eCHAR_PLAYER), chargeCount(0),chargeMaxTime(DEFAULT_CHARGE_TIME){
+BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, unsigned int busterPower)
+	: BattleCharBase(name, hp, hpMax, eCHAR_PLAYER), chargeCount(0), chargeMaxTime(DEFAULT_CHARGE_TIME),
+	busterPower(busterPower) {
+
 	// TODO(chargeMaxTimeを変えられるようにする)
 
 	// アニメーションの設定
@@ -52,7 +56,7 @@ BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax
 
 	fname = def::IMAGE_FILE_PATH + "player_cannon.png";
 	animCannon = std::shared_ptr<Animation>(new Animation());
-	animCannon->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(4, 1),5);
+	animCannon->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(4, 1), 5);
 
 	fname = def::IMAGE_FILE_PATH + "player_sword.png";
 	animSword = std::shared_ptr<Animation>(new Animation());
@@ -114,11 +118,14 @@ void BattlePlayer::Process() {
 		chargeCount++;
 	else if( chargeCount > 0 ) {
 		// チャージショット
-		SkillArg arg; 
+		SkillArg arg;
 		arg.charPos = pos;
-		arg.power = 1;// debug
+		arg.power = busterPower;
+		if( chargeCount >= chargeMaxTime ) {
+			arg.power *= 10;
+		}
 		arg.targetType = eCHAR_ENEMY | eCHAR_OBJECT;
-		BattleSkillMgr::GetInst()->Register(SkillMgr::GetData(SkillMgr::eID_バスター,arg));
+		BattleSkillMgr::GetInst()->Register(SkillMgr::GetData(SkillMgr::eID_バスター, arg));
 		this->AttachAnim(animShot);
 		chargeCount = 0;
 	}

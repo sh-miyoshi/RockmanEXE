@@ -6,6 +6,7 @@
 class BattlePlayer:public BattleCharBase {
 	unsigned int chargeCount;
 	unsigned int chargeMaxTime;
+	unsigned int busterPower;
 	int imgCharge[16];
 
 	std::shared_ptr<Animation> animMove;
@@ -14,7 +15,7 @@ class BattlePlayer:public BattleCharBase {
 	std::shared_ptr<Animation> animSword;
 	std::shared_ptr<Animation> animBomb;
 public:
-	BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax);
+	BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, unsigned int busterPower);
 	~BattlePlayer();
 
 	virtual void Draw();
@@ -24,6 +25,7 @@ public:
 class PlayerMgr {
 	std::string name;
 	unsigned int hp, hpMax;
+	unsigned int busterPower;
 
 	BattlePlayer* battlePlayer;
 
