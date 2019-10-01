@@ -36,14 +36,16 @@ int Split(std::string *buf, int max, std::string data, std::string splitStr){
 }
 
 std::string ToString(const char *format, ...){
-	char buf[256];
+	std::string res;
 
-	va_list argptr;
-	va_start(argptr, format);
-	vsprintf_s(buf, format, argptr);
-	va_end(argptr);
-
-	return buf;
+	va_list args;
+	va_start(args, format);
+	int len = _vscprintf(format, args) + 1;
+	char* buf = new char[len];
+	vsprintf_s(buf, len, format, args);
+	res = buf;
+	delete[] buf;
+	return res;
 }
 
 int GetStringByte(char str){
