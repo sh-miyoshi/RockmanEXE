@@ -2,46 +2,64 @@
 
 #include "state.h"
 
-class Battle{
-	class BattleChipSelect: public StateBase {
-		int imgSelectFrame;
-		class Battle* obj;
-	public:
-		BattleChipSelect(class Battle* obj);
-		~BattleChipSelect();
-
-		void Draw();
-		void Process();
-	};
-
-	class BattleMain: public StateBase {
-		class Battle* obj;
-	public:
-		BattleMain(class Battle* obj);
-		~BattleMain();
-
-		void Draw();
-		void Process();
-	};
-
-	class BattleWin: public StateBase {
-		class Battle* obj;
-	public:
-		BattleWin(class Battle* obj);
-		~BattleWin();
-
-		void Draw();
-		void Process();
-	};
-
-	StateMgr stateMgr;
+class Battle {
 public:
 	enum RtnCode {
 		eRTN_CONTINUE,
 		eRTN_WIN,
 		eRTN_LOSE
 	};
+private:
+	class StateBegin: public StateBase {
+		static const int BEGIN_COUNTUP_VALUE = 256 / 30;// 30カウントでキャラ描画完了
 
+		unsigned int drawNo;
+		unsigned int count;
+		Battle* obj;
+	public:
+		StateBegin(Battle* obj);
+		~StateBegin();
+
+		void Draw();
+		void Process();
+	};
+
+	class StateChipSelect: public StateBase {
+		int imgSelectFrame;
+		Battle* obj;
+	public:
+		StateChipSelect(Battle* obj);
+		~StateChipSelect();
+
+		void Draw();
+		void Process();
+	};
+
+	class StateMain: public StateBase {
+		Battle* obj;
+	public:
+		StateMain(Battle* obj);
+		~StateMain();
+
+		void Draw();
+		void Process();
+	};
+
+	class StateWin: public StateBase {
+		unsigned int count;
+		int imgResultFrame;
+		Battle* obj;
+	public:
+		StateWin(Battle* obj);
+		~StateWin();
+
+		void Draw();
+		void Process();
+	};
+
+	RtnCode rtnCode;
+	StateMgr stateMgr;
+public:
 	Battle();
 	~Battle();
 

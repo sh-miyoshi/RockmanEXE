@@ -31,6 +31,21 @@ void BattleCharMgr::Draw() {
 	}
 }
 
+void BattleCharMgr::DrawAppearScene(unsigned int nowCharNo, unsigned int count) {
+	player->Draw();// 自分自身は描画
+
+	unsigned int i = 0;
+	for( auto enemy : enemyList ) {
+		if( i < nowCharNo ) {// すでに登場済みのキャラクター
+			enemy->Draw();
+		} else if( i == nowCharNo ) {
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, count);
+			enemy->Draw();
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		}
+	}
+}
+
 BattleCharMgr::RtnCode BattleCharMgr::MainProcess() {
 	player->Process();
 

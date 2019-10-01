@@ -3,21 +3,21 @@
 #include "battleCharMgr.h"
 #include "battleSkillMgr.h"
 
-Battle::BattleMain::BattleMain(Battle* obj):obj(obj) {
+Battle::StateMain::StateMain(Battle* obj):obj(obj) {
 }
 
-Battle::BattleMain::~BattleMain() {
+Battle::StateMain::~StateMain() {
 }
 
-void Battle::BattleMain::Draw() {
+void Battle::StateMain::Draw() {
 	BattleCharMgr::GetInst()->Draw();
 	BattleSkillMgr::GetInst()->Draw();
 }
 
-void Battle::BattleMain::Process() {
+void Battle::StateMain::Process() {
 	switch( BattleCharMgr::GetInst()->MainProcess() ) {
 	case BattleCharMgr::eRTN_WIN:
-		obj->stateMgr.ChangeNext(new BattleWin(obj));
+		obj->stateMgr.ChangeNext(new StateWin(obj));
 		return;
 	case BattleCharMgr::eRTN_LOSE:
 		AppLogger::Error("–¢ŽÀ‘•");// TODO

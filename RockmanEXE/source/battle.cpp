@@ -4,7 +4,7 @@
 #include "battleFieldMgr.h"
 #include "enemy.h"
 
-Battle::Battle() {
+Battle::Battle():rtnCode(eRTN_CONTINUE){
 	// TODO(ˆø”‚ÅenemyList‚ğæ“¾‚·‚é)
 	std::list< std::shared_ptr<BattleCharBase>> enemyList;
 
@@ -18,7 +18,7 @@ Battle::Battle() {
 	BattleCharMgr::GetInst()->BattleInit(enemyList);
 	BattleFieldMgr::GetInst()->BattleInit();
 
-	stateMgr.ChangeNext(new BattleMain(this));// debug(Å‰‚Ìstate)
+	stateMgr.ChangeNext(new StateBegin(this));// debug(Å‰‚Ìstate)
 }
 
 Battle::~Battle() {
@@ -34,7 +34,5 @@ void Battle::Draw() {
 Battle::RtnCode Battle::Process() {
 	BattleFieldMgr::GetInst()->Process();
 	stateMgr.Process();
-	// TODO(WIN, LOSEˆ—)
-	return eRTN_CONTINUE;
-
+	return rtnCode;
 }

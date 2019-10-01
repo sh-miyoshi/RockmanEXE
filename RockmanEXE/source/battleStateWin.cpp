@@ -1,15 +1,23 @@
 #include "include.h"
 #include "battle.h"
 
-Battle::BattleWin::BattleWin(Battle* obj):obj(obj) {
+Battle::StateWin::StateWin(Battle* obj):obj(obj), imgResultFrame(-1), count(0){
+	std::string fname = def::IMAGE_FILE_PATH + "battle_result_frame.png";
+	imgResultFrame = LoadGraphWithErrorCheck(fname, "Battle::StateWin::StateWin");
 }
 
-Battle::BattleWin::~BattleWin() {
+Battle::StateWin::~StateWin() {
+	DeleteGraph(imgResultFrame);
 }
 
-void Battle::BattleWin::Draw() {
-	DrawString(0,0,"You win",RED);
+void Battle::StateWin::Draw() {
+	// ‰¡‚©‚çƒtƒŒ[ƒ€‚ªo‚Ä‚­‚é
+	int x = count * 5;
+	if( x > 40 )
+		x = 40;
+	DrawGraph(x, 45, imgResultFrame, TRUE);
 }
 
-void Battle::BattleWin::Process() {
+void Battle::StateWin::Process() {
+	count++;
 }

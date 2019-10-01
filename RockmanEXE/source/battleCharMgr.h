@@ -38,10 +38,12 @@ public:
 	void BattleEnd();
 
 	void Draw();
+	void DrawAppearScene(unsigned int nowCharNo, unsigned int count);
 	RtnCode MainProcess();
 
 	CPoint<int> GetClosestCharPos(CPoint<int> myPos, int charType);
 	std::vector<CPoint<int>> GetAllCharPos(int charType);
+	unsigned int GetEnemyNum()const { return enemyList.size(); }
 
 	void RegisterDamage(DamageData data);
 };
