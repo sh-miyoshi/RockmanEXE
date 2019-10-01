@@ -1,24 +1,23 @@
 #include "include.h"
-#include "battleStateMain.h"
 #include "battle.h"
 #include "battleCharMgr.h"
 #include "battleSkillMgr.h"
 
-BattleMain::BattleMain(Battle* obj):obj(obj) {
+Battle::BattleMain::BattleMain(Battle* obj):obj(obj) {
 }
 
-BattleMain::~BattleMain() {
+Battle::BattleMain::~BattleMain() {
 }
 
-void BattleMain::Draw() {
+void Battle::BattleMain::Draw() {
 	BattleCharMgr::GetInst()->Draw();
 	BattleSkillMgr::GetInst()->Draw();
 }
 
-void BattleMain::Process() {
+void Battle::BattleMain::Process() {
 	switch( BattleCharMgr::GetInst()->MainProcess() ) {
 	case BattleCharMgr::eRTN_WIN:
-		AppLogger::Error("–¢ŽÀ‘•");// TODO
+		obj->stateMgr.ChangeNext(new BattleWin(obj));
 		return;
 	case BattleCharMgr::eRTN_LOSE:
 		AppLogger::Error("–¢ŽÀ‘•");// TODO

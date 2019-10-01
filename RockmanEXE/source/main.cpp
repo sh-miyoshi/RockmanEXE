@@ -1,12 +1,34 @@
 #include <time.h>
 #include "include.h"
 #include "state.h"
-#include "main.h"
 #include "battle.h"
 #include "playerMgr.h"
+#include "fps.h"
 
 bool gExitFlag = false;
 unsigned long long gGameCount = 0;
+
+class Main {
+	class StateBattle :public StateBase{
+		Main* obj;
+		Battle battle;
+	public:
+		StateBattle(Main* obj);
+		~StateBattle();
+
+		void Draw();
+		void Process();
+	};
+
+	Fps fps;
+	StateMgr stateMgr;
+public:
+	Main();
+	~Main();
+
+	void Process();
+};
+
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdShow) {
 	// ÉVÉXÉeÉÄä÷åWÇÃèâä˙âª
@@ -42,7 +64,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdS
 }
 
 Main::Main(void) {
-	stateMgr.ChangeNext(new Battle(this));
+	stateMgr.ChangeNext(new StateBattle(this));
 }
 
 Main::~Main(void) {
@@ -67,5 +89,24 @@ void Main::Process() {
 			break;
 
 		gGameCount++;
+	}
+}
+
+Main::StateBattle::StateBattle(Main* obj):obj(obj) {
+}
+
+Main::StateBattle::~StateBattle() {
+}
+
+void Main::StateBattle::Draw() {
+	battle.Draw();
+}
+
+void Main::StateBattle::Process() {
+	switch( battle.Process() ) {
+	case Battle::eRTN_WIN:
+		break;
+	case Battle::eRTN_LOSE:
+		break;
 	}
 }

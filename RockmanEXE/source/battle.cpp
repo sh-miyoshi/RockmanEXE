@@ -1,13 +1,10 @@
 #include "include.h"
 #include "battle.h"
-#include "main.h"
 #include "battleCharMgr.h"
 #include "battleFieldMgr.h"
 #include "enemy.h"
-#include "battleStateMain.h"
-//#include "battleStateChipSelect.h"
 
-Battle::Battle(Main* obj):obj(obj) {
+Battle::Battle() {
 	// TODO(ˆø”‚ÅenemyList‚ğæ“¾‚·‚é)
 	std::list< std::shared_ptr<BattleCharBase>> enemyList;
 
@@ -20,6 +17,7 @@ Battle::Battle(Main* obj):obj(obj) {
 
 	BattleCharMgr::GetInst()->BattleInit(enemyList);
 	BattleFieldMgr::GetInst()->BattleInit();
+
 	stateMgr.ChangeNext(new BattleMain(this));// debug(Å‰‚Ìstate)
 }
 
@@ -33,7 +31,10 @@ void Battle::Draw() {
 	stateMgr.Draw();
 }
 
-void Battle::Process() {
+Battle::RtnCode Battle::Process() {
 	BattleFieldMgr::GetInst()->Process();
 	stateMgr.Process();
+	// TODO(WIN, LOSEˆ—)
+	return eRTN_CONTINUE;
+
 }

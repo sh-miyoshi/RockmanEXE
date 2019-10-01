@@ -2,13 +2,49 @@
 
 #include "state.h"
 
-class Battle :public StateBase{
-	class Main* obj;
+class Battle{
+	class BattleChipSelect: public StateBase {
+		int imgSelectFrame;
+		class Battle* obj;
+	public:
+		BattleChipSelect(class Battle* obj);
+		~BattleChipSelect();
+
+		void Draw();
+		void Process();
+	};
+
+	class BattleMain: public StateBase {
+		class Battle* obj;
+	public:
+		BattleMain(class Battle* obj);
+		~BattleMain();
+
+		void Draw();
+		void Process();
+	};
+
+	class BattleWin: public StateBase {
+		class Battle* obj;
+	public:
+		BattleWin(class Battle* obj);
+		~BattleWin();
+
+		void Draw();
+		void Process();
+	};
+
 	StateMgr stateMgr;
 public:
-	Battle(class Main *obj);
+	enum RtnCode {
+		eRTN_CONTINUE,
+		eRTN_WIN,
+		eRTN_LOSE
+	};
+
+	Battle();
 	~Battle();
 
 	void Draw();
-	void Process();
+	RtnCode Process();
 };

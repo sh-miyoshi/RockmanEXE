@@ -163,6 +163,7 @@
     <ClCompile Include="source\battleFieldMgr.cpp" />
     <ClCompile Include="source\battleStateMain.cpp" />
     <ClCompile Include="source\battleSkillMgr.cpp" />
+    <ClCompile Include="source\battleStateWin.cpp" />
     <ClCompile Include="source\enemy.cpp" />
     <ClCompile Include="source\keyConfig.cpp" />
     <ClCompile Include="source\fps.cpp" />
@@ -179,18 +180,14 @@
     <ClInclude Include="source\battleBack.h" />
     <ClInclude Include="source\battleCharBase.h" />
     <ClInclude Include="source\battleCharMgr.h" />
-    <ClInclude Include="source\battleStateChipSelect.h" />
     <ClInclude Include="source\battleField.h" />
     <ClInclude Include="source\battleFieldMgr.h" />
-    <ClInclude Include="source\battleStateWin.h" />
-    <ClInclude Include="source\battleStateMain.h" />
     <ClInclude Include="source\battleSkillMgr.h" />
     <ClInclude Include="source\enemy.h" />
     <ClInclude Include="source\keyConfig.h" />
     <ClInclude Include="source\define.h" />
     <ClInclude Include="source\fps.h" />
     <ClInclude Include="source\include.h" />
-    <ClInclude Include="source\main.h" />
     <ClInclude Include="source\playerMgr.h" />
     <ClInclude Include="source\point.h" />
     <ClInclude Include="source\skill.h" />
