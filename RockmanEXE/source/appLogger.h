@@ -4,6 +4,8 @@
 
 /*
  * TODO(new logger example)
+ * ref: http://doi-t.hatenablog.com/entry/2013/12/10/094837
+ * ref: msdn.microsoft.com/ja-jp/windows/xa1a1a6z(v=vs.85)
  * namespace AppLogger{
  *     void Log(const char *fname, const char *function, int lineNo, const char *type, const char *message){
  *             std::cout << fname << " " << function << " " << lineNo << " " << type << " " << message << std::endl;
