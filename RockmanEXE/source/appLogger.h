@@ -2,6 +2,17 @@
 
 #include <string>
 
+/*
+ * TODO(new logger example)
+ * namespace AppLogger{
+ *     void Log(const char *fname, const char *function, int lineNo, const char *type, const char *message){
+ *             std::cout << fname << " " << function << " " << lineNo << " " << type << " " << message << std::endl;
+ *                 }
+ *
+ *                     #define Info(msg) Log(__FILE__, __func__, __LINE__, "[INFO]", msg)
+ *                     };
+*/
+
 class AppLogger{
 public:
 	// log level (light to heavy,the final is nothing)
