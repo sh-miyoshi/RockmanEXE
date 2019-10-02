@@ -21,6 +21,7 @@ CKey::CKey(){
 	if( ifs ){
 		for( int i = 0; i < eKEY_MAX; i++ )
 			ifs.read(( char * ) &keyInfo[i], sizeof(int));
+		AppLogger::Info("%sファイルからキー情報を正常に設定しました", CONFIG_FILE_NAME)
 	} else{
 		// デフォルト値を設定
 		keyInfo[eKEY_ENTER] = KEY_INPUT_Z;
@@ -33,6 +34,8 @@ CKey::CKey(){
 		keyInfo[eKEY_START] = KEY_INPUT_ESCAPE;
 		keyInfo[eKEY_DEV_L] = KEY_INPUT_A;
 		keyInfo[eKEY_DEV_R] = KEY_INPUT_S;
+
+		AppLogger::Info("デフォルト値でキー情報を設定しました")
 	}
 }
 
@@ -66,12 +69,16 @@ void CKey::Change(int handle, int code){
 		if( keyInfo[i] == code )
 			return;
 	keyInfo[handle] = code;
+	AppLogger::Info("%dキーを%dに変更しました", handle, code);
 }
 
 void CKey::SaveKeySetting(){
 	// データの保存
 	std::ofstream ofs(CONFIG_FILE_NAME, std::ios::binary);
-	if( ofs )
-		for( int i = 0; i < eKEY_MAX; i++ )
+	if( ofs ){
+		for( int i = 0; i < eKEY_MAX; i++ ){
 			ofs.write(( char * ) &keyInfo[i], sizeof(int));
+		}
+		AppLogger::Info("%sファイルにキー情報を保存しました", CONFIG_FILE_NAME);
+	}
 }
