@@ -19,6 +19,8 @@ void BattleField::LoadImages() {
 
 	fname = def::IMAGE_FILE_PATH + "battle_panel_enemy.png";
 	imgPanel[USER_ENEMY] = LoadGraphWithErrorCheck(fname, position);
+
+	AppLogger::Info("Successfully loaded battle field images");
 }
 
 void BattleField::DeleteImages() {
