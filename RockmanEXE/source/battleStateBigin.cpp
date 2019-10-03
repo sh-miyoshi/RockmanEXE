@@ -20,6 +20,7 @@ void Battle::StateBegin::Process() {
 		count = 0;
 		drawNo++;
 		if( drawNo > BattleCharMgr::GetInst()->GetEnemyNum() ) {
+			AppLogger::Info("Change Battle State to Chip Select");
 			obj->stateMgr.ChangeNext(new Battle::StateChipSelect(obj));
 		}
 	}

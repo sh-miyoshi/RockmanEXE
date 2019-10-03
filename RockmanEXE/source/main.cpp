@@ -67,6 +67,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdS
 }
 
 Main::Main(void) {
+	AppLogger::Info("Change Main State to StateBattle");
 	stateMgr.ChangeNext(new StateBattle(this));
 }
 

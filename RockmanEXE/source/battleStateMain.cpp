@@ -17,6 +17,7 @@ void Battle::StateMain::Draw() {
 void Battle::StateMain::Process() {
 	switch( BattleCharMgr::GetInst()->MainProcess() ) {
 	case BattleCharMgr::eRTN_WIN:
+		AppLogger::Info("Change Battle State to StateWin");
 		obj->stateMgr.ChangeNext(new StateWin(obj));
 		return;
 	case BattleCharMgr::eRTN_LOSE:
