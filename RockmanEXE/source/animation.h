@@ -12,7 +12,6 @@ protected:
 	int image[ANIM_NUM_MAX];
 	unsigned int imageNum;
 	unsigned int imageDelay;
-	std::string imageFileName;
 public:
 	Animation();
 	Animation(const Animation& data);

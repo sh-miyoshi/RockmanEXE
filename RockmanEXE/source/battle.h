@@ -25,6 +25,8 @@ private:
 	};
 
 	class StateChipSelect: public StateBase {
+		static const int BT_SEND_NO = 11;// ‘—MƒL[”Ô†
+
 		int imgSelectFrame;
 		Battle* obj;
 	public:

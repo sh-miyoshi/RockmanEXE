@@ -2,7 +2,7 @@
 #include "animation.h"
 
 
-Animation::Animation():imageNum(0), imageDelay(0), image(), count(0), endCount(1){
+Animation::Animation():imageNum(0), imageDelay(0), image(), count(0), endCount(1) {
 	for( int i = 0; i < ANIM_NUM_MAX; i++ ) {
 		image[i] = -1;
 	}
@@ -21,8 +21,6 @@ Animation::~Animation() {
 
 void Animation::LoadData(std::string fname, CPoint<unsigned int> size, CPoint<unsigned int> num, unsigned int imageDelay) {
 	LoadDivGraphWithErrorCheck(image, fname, "BattleCharBase::AnimData::LoadImage", num.x, num.y, size.x, size.y);
-	imageFileName = fname;
-	AppLogger::Info("Success to load image: %s", imageFileName.c_str());
 
 	this->imageNum = num.x * num.y;
 	this->imageDelay = imageDelay;
@@ -38,9 +36,6 @@ void Animation::DeleteData() {
 			deleted = true;
 		}
 	}
-	if( deleted ) {
-		AppLogger::Info("Finished deleting images: %s", imageFileName.c_str());
-	}
 }
 
 void Animation::Draw(int x, int y) {
@@ -51,15 +46,15 @@ void Animation::Draw(int x, int y) {
 }
 
 bool Animation::Process() {
-	if(count==0){
+	if( count == 0 ) {
 		Begin();// ‰Šú‰»ˆ—‚ðŽÀs
 	}
 
 	count++;
 
-	if(count>=endCount){
+	if( count >= endCount ) {
 		End();
-		count=0;
+		count = 0;
 		return true;
 	}
 	return false;
