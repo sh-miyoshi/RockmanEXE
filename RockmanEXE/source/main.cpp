@@ -4,6 +4,7 @@
 #include "battle.h"
 #include "playerMgr.h"
 #include "fps.h"
+#include "chip.h"
 
 bool gExitFlag = false;
 unsigned long long gGameCount = 0;
@@ -52,12 +53,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdS
 	SetDXArchiveKeyString(def::RESOURCE_PASSWORD.c_str());
 
 	// アプリケーション関係の初期化
+	ChipMgr::GetInst()->LoadData();
 	PlayerMgr::GetInst()->InitPlayer();// TODO(タイトル画面で選択する)
 
 	Main main;
 	main.Process();
 
 	// アプリケーション関係の終了処理
+	ChipMgr::GetInst()->DeleteData();
 
 	DxLib_End();
 	return 0;
