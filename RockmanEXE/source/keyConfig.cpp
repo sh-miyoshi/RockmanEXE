@@ -21,7 +21,7 @@ CKey::CKey(){
 	if( ifs ){
 		for( int i = 0; i < eKEY_MAX; i++ )
 			ifs.read(( char * ) &keyInfo[i], sizeof(int));
-		AppLogger::Info("%sファイルからキー情報を正常に設定しました", CONFIG_FILE_NAME)
+		AppLogger::Info("%sファイルからキー情報を正常に設定しました", CONFIG_FILE_NAME);
 	} else{
 		// デフォルト値を設定
 		keyInfo[eKEY_ENTER] = KEY_INPUT_Z;
@@ -35,7 +35,7 @@ CKey::CKey(){
 		keyInfo[eKEY_DEV_L] = KEY_INPUT_A;
 		keyInfo[eKEY_DEV_R] = KEY_INPUT_S;
 
-		AppLogger::Info("デフォルト値でキー情報を設定しました")
+		AppLogger::Info("デフォルト値でキー情報を設定しました");
 	}
 }
 

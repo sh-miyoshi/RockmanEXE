@@ -19,7 +19,7 @@ Battle::Battle():rtnCode(eRTN_CONTINUE){
 	for(auto e : enemyList) {
 		infoMsg += ToString("%s, ", e->GetName());
 	}
-	infoMsg += "]"
+	infoMsg += "]";
 	AppLogger::Info("Battle In with Enemy List: %s", infoMsg.c_str());
 
 	BattleCharMgr::GetInst()->BattleInit(enemyList);
