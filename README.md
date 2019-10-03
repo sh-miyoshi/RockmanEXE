@@ -21,9 +21,9 @@ RockmanEXEフォルダのRockmanEXE.exeをダブルクリックしてくださ�
 このプログラムには下記のサイトのお力を拝借しています。  
 本当にありがとうございます。
 
-- ライブラリ: DXライブラリ(http://dxlib.o.oo7.jp/index.html)
+- ライブラリ: DXライブラリ([http://dxlib.o.oo7.jp/index.html](http://dxlib.o.oo7.jp/index.html))
 - 画像: Sprites INC
-- フォント: k8x12(http://www.geocities.jp/littlimi/k8x12.htm)
+- フォント: k8x12([http://www.geocities.jp/littlimi/k8x12.htm](http://www.geocities.jp/littlimi/k8x12.htm))
 
 ## Contribution
 
