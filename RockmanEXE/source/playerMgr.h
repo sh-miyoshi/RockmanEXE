@@ -2,12 +2,14 @@
 
 #include <string>
 #include "battleCharBase.h"
+#include "chip.h"
 
 class BattlePlayer:public BattleCharBase {
 	unsigned int chargeCount;
 	unsigned int chargeMaxTime;
 	unsigned int busterPower;
 	int imgCharge[16];
+	std::vector<ChipInfo> chipFolder;
 
 	std::shared_ptr<Animation> animMove;
 	std::shared_ptr<Animation> animShot;
@@ -15,7 +17,7 @@ class BattlePlayer:public BattleCharBase {
 	std::shared_ptr<Animation> animSword;
 	std::shared_ptr<Animation> animBomb;
 public:
-	BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, unsigned int busterPower);
+	BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, unsigned int busterPower, std::vector<ChipInfo> chipFolder);
 	~BattlePlayer();
 
 	virtual void Draw();
@@ -23,9 +25,12 @@ public:
 };
 
 class PlayerMgr {
+	static const int FOLDER_NUM = 30;
+
 	std::string name;
 	unsigned int hp, hpMax;
 	unsigned int busterPower;
+	std::vector<ChipInfo> chipFolder;
 
 	BattlePlayer* battlePlayer;
 

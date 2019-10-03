@@ -23,7 +23,7 @@ void PlayerMgr::InitBattleChar() {
 		delete battlePlayer;
 	}
 
-	battlePlayer = new BattlePlayer(name, hp, hpMax, busterPower);
+	battlePlayer = new BattlePlayer(name, hp, hpMax, busterPower, chipFolder);
 	battlePlayer->SetPos(1, 1);// 初期位置のセット
 }
 
@@ -32,11 +32,47 @@ void PlayerMgr::InitPlayer() {
 	hp = hpMax = 100;
 	name = "ロックマン";
 	busterPower = 1;
+
+	// 初期フォルダーの設定
+	ChipInfo f[FOLDER_NUM] = {
+		// id,code
+		{ ChipMgr::eID_キャノン,'A' },
+		{ ChipMgr::eID_キャノン,'A' },
+		{ ChipMgr::eID_キャノン,'B' },
+		{ ChipMgr::eID_キャノン,'B' },
+		{ ChipMgr::eID_ハイキャノン,'D' },
+
+		{ ChipMgr::eID_ハイキャノン,'D' },
+		{ ChipMgr::eID_ハイキャノン,'E' },
+		{ ChipMgr::eID_ハイキャノン,'E' },
+		{ ChipMgr::eID_ハイキャノン,'*' },
+		{ ChipMgr::eID_ハイキャノン,'*' },
+
+		{ ChipMgr::eID_キャノン,'A' },
+		{ ChipMgr::eID_キャノン,'A' },
+		{ ChipMgr::eID_キャノン,'A' },
+		{ ChipMgr::eID_キャノン,'F' },
+		{ ChipMgr::eID_キャノン,'F' },
+
+		{ ChipMgr::eID_キャノン,'F' },
+		{ ChipMgr::eID_キャノン,'Y' },
+		{ ChipMgr::eID_キャノン,'Y' },
+		{ ChipMgr::eID_キャノン,'Y' },
+		{ ChipMgr::eID_キャノン,'Y' },
+
+		{ ChipMgr::eID_キャノン,'*' },
+		{ ChipMgr::eID_キャノン,'*' },
+		{ ChipMgr::eID_キャノン,'*' },
+		{ ChipMgr::eID_キャノン,'*' },
+		{ ChipMgr::eID_キャノン,'*' },
+	};
+	for( int i = 0; i < FOLDER_NUM; i++ )
+		chipFolder.push_back(f[i]);
 }
 
-BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, unsigned int busterPower)
+BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, unsigned int busterPower, std::vector<ChipInfo> chipFolder)
 	: BattleCharBase(name, hp, hpMax, eCHAR_PLAYER), chargeCount(0), chargeMaxTime(DEFAULT_CHARGE_TIME),
-	busterPower(busterPower) {
+	busterPower(busterPower), chipFolder(chipFolder) {
 
 	// TODO(chargeMaxTimeを変えられるようにする)
 

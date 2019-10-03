@@ -2,6 +2,19 @@
 
 #include <string>
 
+class ChipInfo {
+public:
+	int id;
+	char code;
+
+	ChipInfo():id(0), code('*') {}
+	ChipInfo(int id, char code):id(id), code(code) {}
+
+	bool operator<(const ChipInfo& right) const {
+		return id < right.id;
+	}
+};
+
 // ˆ—‚Ískill‚É”C‚¹‚é
 class ChipData {
 public:
@@ -81,4 +94,5 @@ public:
 
 	TypeData GetTypeData(int typeNo);
 	ChipData GetChipData(int id, char code = '*');
+	ChipData GetChipData(ChipInfo c) { return GetChipData(c.id, c.code); }
 };
