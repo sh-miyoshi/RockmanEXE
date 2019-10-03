@@ -15,6 +15,13 @@ Battle::Battle():rtnCode(eRTN_CONTINUE){
 	enemy1->SetPos(3, 1);
 	enemyList.push_back(enemy1);*/
 
+	std::string infoMsg = "[ ";
+	for(auto e : enemyList) {
+		infoMsg += ToString("%s, ", e->GetName());
+	}
+	infoMsg += "]"
+	AppLogger::Info("Battle In with Enemy List: %s", infoMsg.c_str());
+
 	BattleCharMgr::GetInst()->BattleInit(enemyList);
 	BattleFieldMgr::GetInst()->BattleInit();
 

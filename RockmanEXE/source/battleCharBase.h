@@ -45,4 +45,6 @@ public:
 
 	unsigned int GetHP()const { return hp; }
 	void SetHP(int hp);// 自身のHPをセットする(ただしマイナスの場合は0にする)
+
+	std::string GetName() const { return name; }
 };
