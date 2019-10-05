@@ -126,47 +126,56 @@ void BattlePlayer::Draw() {
 }
 
 void BattlePlayer::Process() {
-	// 移動処理
-	if( CKey::GetInst()->CheckKey(eKEY_DOWN) == 1 ) {
-		if( MoveCheck(pos.x, pos.y + 1) ) {
-			this->SetPos(pos.x, pos.y + 1);
-			this->AttachAnim(animMove);
+	if( AnimProcess() ) {
+		// 移動処理
+		if( CKey::GetInst()->CheckKey(eKEY_DOWN) == 1 ) {
+			if( MoveCheck(pos.x, pos.y + 1) ) {
+				this->SetPos(pos.x, pos.y + 1);
+				this->AttachAnim(animMove);
+			}
+		} else if( CKey::GetInst()->CheckKey(eKEY_UP) == 1 ) {
+			if( MoveCheck(pos.x, pos.y - 1) ) {
+				this->SetPos(pos.x, pos.y - 1);
+				this->AttachAnim(animMove);
+			}
+		} else if( CKey::GetInst()->CheckKey(eKEY_LEFT) == 1 ) {
+			if( MoveCheck(pos.x - 1, pos.y) ) {
+				this->SetPos(pos.x - 1, pos.y);
+				this->AttachAnim(animMove);
+			}
+		} else if( CKey::GetInst()->CheckKey(eKEY_RIGHT) == 1 ) {
+			if( MoveCheck(pos.x + 1, pos.y) ) {
+				this->SetPos(pos.x + 1, pos.y);
+				this->AttachAnim(animMove);
+			}
 		}
-	} else if( CKey::GetInst()->CheckKey(eKEY_UP) == 1 ) {
-		if( MoveCheck(pos.x, pos.y - 1) ) {
-			this->SetPos(pos.x, pos.y - 1);
-			this->AttachAnim(animMove);
+
+		// ロックバスター関連
+		if( CKey::GetInst()->CheckKey(eKEY_CANCEL) != 0 )// キャンセルキーでショット
+			chargeCount++;
+		else if( chargeCount > 0 ) {
+			// チャージショット
+			SkillArg arg;
+			arg.charPos = pos;
+			arg.power = busterPower;
+			if( chargeCount >= chargeMaxTime ) {
+				arg.power *= 10;
+			}
+			arg.myCharType = eCHAR_PLAYER;
+			BattleSkillMgr::GetInst()->Register(SkillMgr::GetData(SkillMgr::eID_バスター, arg));
+			this->AttachAnim(animShot);
+			chargeCount = 0;
 		}
-	} else if( CKey::GetInst()->CheckKey(eKEY_LEFT) == 1 ) {
-		if( MoveCheck(pos.x - 1, pos.y) ) {
-			this->SetPos(pos.x - 1, pos.y);
-			this->AttachAnim(animMove);
-		}
-	} else if( CKey::GetInst()->CheckKey(eKEY_RIGHT) == 1 ) {
-		if( MoveCheck(pos.x + 1, pos.y) ) {
-			this->SetPos(pos.x + 1, pos.y);
-			this->AttachAnim(animMove);
+
+		// チップを使う
+		if( CKey::GetInst()->CheckKey(eKEY_ENTER) == 1 ) {
+			// debug(とりあえず今はキャノンを無限打ちする)
+			SkillArg arg;
+			arg.charPos = pos;
+			arg.power = 40;
+			arg.myCharType = eCHAR_PLAYER;
+			BattleSkillMgr::GetInst()->Register(SkillMgr::GetData(SkillMgr::eID_キャノン, arg));
+			this->AttachAnim(animCannon);
 		}
 	}
-
-	// ロックバスター関連
-	if( CKey::GetInst()->CheckKey(eKEY_CANCEL) != 0 )// キャンセルキーでショット
-		chargeCount++;
-	else if( chargeCount > 0 ) {
-		// チャージショット
-		SkillArg arg;
-		arg.charPos = pos;
-		arg.power = busterPower;
-		if( chargeCount >= chargeMaxTime ) {
-			arg.power *= 10;
-		}
-		arg.targetType = eCHAR_ENEMY | eCHAR_OBJECT;
-		BattleSkillMgr::GetInst()->Register(SkillMgr::GetData(SkillMgr::eID_バスター, arg));
-		this->AttachAnim(animShot);
-		chargeCount = 0;
-	}
-
-	// TODO(チップを使う)
-
-	AnimProcess();
 }

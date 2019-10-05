@@ -30,11 +30,13 @@ class Enemy_メットール:public EnemyBase {
 
 		void Begin() {
 			int y = BattleCharMgr::GetInst()->GetClosestCharPos(obj->pos, eCHAR_PLAYER).y;
-			if( y < obj->pos.y ) {// ロックマンが上にいるなら
+			if( y < 0 ) {// ロックマンが見つからなかった
+				// 何もしない
+			} else if( y < obj->pos.y ) {// ロックマンが上にいるなら
 				if( obj->MoveCheck(obj->pos.x, obj->pos.y - 1) ) {
 					obj->SetPos(obj->pos.x, obj->pos.y - 1);
 				}
-			} else if( y > obj->pos.y ) {
+			} else {
 				if( obj->MoveCheck(obj->pos.x, obj->pos.y + 1) ) {
 					obj->SetPos(obj->pos.x, obj->pos.y + 1);
 				}
@@ -105,7 +107,7 @@ void EnemyBase::Draw() {
 //-------------------------------------------------------
 // テスト用の的
 //-------------------------------------------------------
-Enemy_的::Enemy_的():EnemyBase("的", 10) {
+Enemy_的::Enemy_的():EnemyBase("的", 1000) {
 	std::string fname = def::ENEMY_IMAGE_PATH + "的.png";
 	std::shared_ptr<Animation> animStand = std::shared_ptr<Animation>(new Animation());
 	animStand->LoadData(fname, CPoint<unsigned int>(100, 117), CPoint<unsigned int>(1, 1));
@@ -150,22 +152,22 @@ void Enemy_メットール::Process() {
 	//	if y座標が同じ&一定時間
 	//		攻撃登録
 	//-------------------------------
-	if( count >= WAIT_COUNT ) {
-		int y = BattleCharMgr::GetInst()->GetClosestCharPos(pos, eCHAR_PLAYER).y;// ロックマンの位置
-		if( pos.y == y )
-			waveCount++;
-		else
-			waveCount = 0;
+	if( AnimProcess() ) {
+		if( count >= WAIT_COUNT ) {
+			int y = BattleCharMgr::GetInst()->GetClosestCharPos(pos, eCHAR_PLAYER).y;// ロックマンの位置
+			if( pos.y == y )
+				waveCount++;
+			else
+				waveCount = 0;
 
-		if( waveCount >= SHOCK_WAVE_COUNT ) {
-			// TODO(ショックウェーブを打つ)
-			waveCount = 0;
-			count = 0;
-		} else if( count % MOVE_COUNT == 0 ) {
-			this->AttachAnim(animMove);
+			if( waveCount >= SHOCK_WAVE_COUNT ) {
+				// TODO(ショックウェーブを打つ)
+				waveCount = 0;
+				count = 0;
+			} else if( count % MOVE_COUNT == 0 ) {
+				this->AttachAnim(animMove);
+			}
 		}
+		count++;
 	}
-	count++;
-
-	AnimProcess();
 }

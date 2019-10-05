@@ -7,7 +7,7 @@ class SkillArg {
 public:
 	CPoint<int> charPos;
 	int power;
-	int targetType;
+	CharType myCharType;
 };
 
 class SkillData {
@@ -23,6 +23,8 @@ class SkillMgr {
 public:
 	enum SkillID {
 		eID_バスター,
+		eID_キャノン,
+		eID_ハイキャノン,
 
 		eID_MAX
 	};

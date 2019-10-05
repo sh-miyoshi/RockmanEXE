@@ -103,7 +103,7 @@ CPoint<int> BattleCharMgr::GetClosestCharPos(CPoint<int> myPos, int charType) {
 		+ BattleField::FIELD_NUM_Y * BattleField::FIELD_NUM_Y
 		+ 1;
 
-	CPoint<int> resPos(BattleField::FIELD_NUM_X + 1, BattleField::FIELD_NUM_Y + 1);
+	CPoint<int> resPos(-1, -1);
 	int distance = DIST_MAX;
 	if( charType & eCHAR_PLAYER ) {
 		CPoint<int> pos = player->GetPos();
@@ -131,6 +131,48 @@ CPoint<int> BattleCharMgr::GetClosestCharPos(CPoint<int> myPos, int charType) {
 	//	AppLogger::Error("BattleCharMgr::GetClosestCharPos –¢ŽÀ‘•");
 	//	exit(1);
 	//}
+
+	if( resPos.x < 0 ) {
+		AppLogger::Warn("CharType %d‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B", charType);
+	}
+
+	return resPos;
+}
+
+CPoint<int> BattleCharMgr::GetClosestCharPosWithSameLine(CPoint<int> myPos, int charType) {
+	CPoint<int> resPos(-1, -1);
+	int distance = ( BattleField::FIELD_NUM_X + 1 ) * ( BattleField::FIELD_NUM_X + 1 );
+	for( auto target : GetAllCharPos(charType) ) {
+		if( charType & eCHAR_PLAYER ) {
+			CPoint<int> pos = player->GetPos();
+			if( pos.y == myPos.y ) {
+				int d = ( pos.x - myPos.x ) * ( pos.x - myPos.x );
+				if( distance > d ) {
+					resPos.x = pos.x;
+					resPos.y = pos.y;
+					distance = d;
+				}
+			}
+		}
+		if( charType & eCHAR_ENEMY ) {
+			for( auto enemy : enemyList ) {
+				CPoint<int> pos = enemy->GetPos();
+				if( pos.y == myPos.y ) {
+					int d = ( pos.x - myPos.x ) * ( pos.x - myPos.x );
+					if( distance > d ) {
+						resPos.x = pos.x;
+						resPos.y = pos.y;
+						distance = d;
+					}
+				}
+			}
+		}
+	}
+
+	if( resPos.x < 0 ) {
+		AppLogger::Warn("CharType %d‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B", charType);
+	}
+
 	return resPos;
 }
 

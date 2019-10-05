@@ -25,7 +25,8 @@ Battle::Battle():rtnCode(eRTN_CONTINUE){
 	BattleCharMgr::GetInst()->BattleInit(enemyList);
 	BattleFieldMgr::GetInst()->BattleInit();
 
-	stateMgr.ChangeNext(new StateBegin(this));// debug(Å‰‚Ìstate)
+	stateMgr.ChangeNext(new StateMain(this));// debug(Å‰‚Ìstate)
+//	stateMgr.ChangeNext(new StateBegin(this));
 }
 
 Battle::~Battle() {

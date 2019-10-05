@@ -3,7 +3,7 @@
 #include "animation.h"
 #include "battleField.h"
 
-void BattleCharBase::AnimProcess() {
+bool BattleCharBase::AnimProcess() {
 	if( animQueue.empty() ) {
 		if( !defaultAnim ) {
 			AppLogger::Error("Default Animationがセットされていません");
@@ -19,8 +19,11 @@ void BattleCharBase::AnimProcess() {
 			anim->End();
 			animQueue.pop();
 			animInitialized = false;
+			return true;// 行動できる
 		}
+		return false;// アニメーション中は行動できない
 	}
+	return true;// 行動できる
 }
 
 // MoveCheck method return true if you can move to pos(x,y)

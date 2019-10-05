@@ -28,7 +28,7 @@ protected:
 	std::shared_ptr<Animation> defaultAnim;
 	std::queue<std::shared_ptr<Animation>> animQueue;
 
-	void AnimProcess();
+	bool AnimProcess();
 	bool MoveCheck(int x, int y);
 public:
 	BattleCharBase(std::string name, unsigned int hp, unsigned int hpMax, CharType myCharType);

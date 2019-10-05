@@ -42,6 +42,7 @@ public:
 	RtnCode MainProcess();
 
 	CPoint<int> GetClosestCharPos(CPoint<int> myPos, int charType);
+	CPoint<int> GetClosestCharPosWithSameLine(CPoint<int> myPos, int charType);
 	std::vector<CPoint<int>> GetAllCharPos(int charType);
 	unsigned int GetEnemyNum()const { return enemyList.size(); }
 
