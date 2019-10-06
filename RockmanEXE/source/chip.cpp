@@ -37,7 +37,7 @@ void ChipMgr::LoadData() {
 	chipData[eID_ストーンキューブ] = ChipData(125, "ストーンキューブ", 0, 0, -1, true);
 
 	// チップアイコン画像の読み込みと設定
-	std::string fname = def::IMAGE_FILE_PATH + "chip_icon.png";
+	std::string fname = def::IMAGE_FILE_PATH + "battle/chip_icon.png";
 	int t1[240], t2[240];
 	LoadDivGraphWithErrorCheck(t1, fname, position, 30, 8, 28, 28);
 	LoadDivGraph(fname.c_str(), 240, 30, 8, 28, 28, t2);// 同じファイルからなので読み込めるのは確定
@@ -63,7 +63,7 @@ void ChipMgr::LoadData() {
 	}
 
 	// チップ詳細画像
-	std::string fdir = def::IMAGE_FILE_PATH + "infoImage/";
+	std::string fdir = def::IMAGE_FILE_PATH + "chipInfo/詳細/";
 	fname = fdir + "s1.png";
 	chipData[eID_キャノン].imgInfo = LoadGraphWithErrorCheck(fname, position);
 	fname = fdir + "s2.png";
@@ -88,7 +88,7 @@ void ChipMgr::LoadData() {
 	chipData[eID_ワイドソード].imgInfo = LoadGraphWithErrorCheck(fname, position);
 
 	// チップタイプ画像
-	fname = def::IMAGE_FILE_PATH + "chip_type.png";
+	fname = def::IMAGE_FILE_PATH + "chipInfo/chip_type.png";
 	LoadDivGraphWithErrorCheck(imgType, fname, position, 7, 2, 28, 28);
 
 	// 属性情報

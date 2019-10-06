@@ -5,7 +5,7 @@
 Battle::StateChipSelect::StateChipSelect(Battle* obj) :obj(obj), imgSelectFrame(-1){
 	const std::string position = "Battle::StateChipSelect::StateChipSelect";
 
-	std::string fname = def::IMAGE_FILE_PATH + "battle_chip_select.png";
+	std::string fname = def::IMAGE_FILE_PATH + "battle/ÉtÉåÅ[ÉÄ/battle_chip_select.png";
 	imgSelectFrame = LoadGraphWithErrorCheck(fname, position);
 }
 

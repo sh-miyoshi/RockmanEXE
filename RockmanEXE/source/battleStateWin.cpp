@@ -2,7 +2,7 @@
 #include "battle.h"
 
 Battle::StateWin::StateWin(Battle* obj):obj(obj), imgResultFrame(-1), count(0){
-	std::string fname = def::IMAGE_FILE_PATH + "battle_result_frame.png";
+	std::string fname = def::IMAGE_FILE_PATH + "battle/ÉtÉåÅ[ÉÄ/battle_result_frame.png";
 	imgResultFrame = LoadGraphWithErrorCheck(fname, "Battle::StateWin::StateWin");
 }
 

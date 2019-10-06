@@ -23,8 +23,8 @@ namespace def {
 
 	const std::string IMAGE_FILE_PATH = "data/image_private/";// for local development
 	//const std::string IMAGE_FILE_PATH = "data/image_public/";
-	const std::string ENEMY_IMAGE_PATH = IMAGE_FILE_PATH + "“GŠÖ˜A/";
-	const std::string SKILL_IMAGE_PATH = IMAGE_FILE_PATH + "‹ZŠÖ˜A/";
+	const std::string CHARACTER_IMAGE_PATH = IMAGE_FILE_PATH + "battle/character/";
+	const std::string SKILL_IMAGE_PATH = IMAGE_FILE_PATH + "battle/‹ZŠÖ˜A/";
 	const std::string TEXT_FILE_PATH = "data/text/";
 	const std::string BGM_FILE_PATH = "data/bgm/";
 

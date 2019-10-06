@@ -14,10 +14,10 @@ void BattleField::LoadImages() {
 	// データの読み込み
 	const std::string position = "BattleField::LoadImages";
 
-	std::string fname = def::IMAGE_FILE_PATH + "battle_panel_plyr.png";
+	std::string fname = def::IMAGE_FILE_PATH + "battle/フレーム/battle_panel_plyr.png";
 	imgPanel[USER_PLAYER] = LoadGraphWithErrorCheck(fname, position);
 
-	fname = def::IMAGE_FILE_PATH + "battle_panel_enemy.png";
+	fname = def::IMAGE_FILE_PATH + "battle/フレーム/battle_panel_enemy.png";
 	imgPanel[USER_ENEMY] = LoadGraphWithErrorCheck(fname, position);
 
 	AppLogger::Info("Successfully loaded battle field images");

@@ -74,7 +74,7 @@ std::shared_ptr<BattleCharBase> EnemyMgr::GetData(int id) {
 //-------------------------------------------------------
 EnemyBase::EnemyBase(std::string name, unsigned int hp)
 	:count(0), BattleCharBase(name, hp, hp, eCHAR_ENEMY), imgNumber() {
-	std::string fname = def::IMAGE_FILE_PATH + "number_2.png";
+	std::string fname = def::IMAGE_FILE_PATH + "その他/number_2.png";
 	LoadDivGraphWithErrorCheck(imgNumber, fname, "EnemyBase::EnemyBase", 10, 1, 15, 20);
 }
 
@@ -108,7 +108,7 @@ void EnemyBase::Draw() {
 // テスト用の的
 //-------------------------------------------------------
 Enemy_的::Enemy_的():EnemyBase("的", 1000) {
-	std::string fname = def::ENEMY_IMAGE_PATH + "的.png";
+	std::string fname = def::CHARACTER_IMAGE_PATH + "的.png";
 	std::shared_ptr<Animation> animStand = std::shared_ptr<Animation>(new Animation());
 	animStand->LoadData(fname, CPoint<unsigned int>(100, 117), CPoint<unsigned int>(1, 1));
 	BattleCharBase::SetDefaultAnim(animStand);
@@ -122,12 +122,12 @@ Enemy_的::~Enemy_的() {
 //-------------------------------------------------------
 Enemy_メットール::Enemy_メットール()
 	:EnemyBase("メットール", 40), waveCount(0) {
-	std::string fname = def::ENEMY_IMAGE_PATH + "メットール_stand.png";
+	std::string fname = def::CHARACTER_IMAGE_PATH + "メットール_stand.png";
 	std::shared_ptr<Animation> animStand = std::shared_ptr<Animation>(new Animation());
 	animStand->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(1, 1));
 	BattleCharBase::SetDefaultAnim(animStand);
 
-	fname = def::ENEMY_IMAGE_PATH + "メットール_move.png";
+	fname = def::CHARACTER_IMAGE_PATH + "メットール_move.png";
 	animMove = std::shared_ptr<AnimMove>(new AnimMove(this));
 	animMove->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(1, 1));
 }

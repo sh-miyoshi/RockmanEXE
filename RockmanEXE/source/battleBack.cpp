@@ -12,7 +12,7 @@ void BattleBack::LoadImages(){
 
 	for( int i = 0; i < eTYPE_MAX; i++ ){
 		std::string position = "BattleBackMgr::LoadImages";
-		std::string fname = def::IMAGE_FILE_PATH + "back_image_";
+		std::string fname = def::IMAGE_FILE_PATH + "battle/”wŒi/back_image_";
 		switch( i ){
 		case eTYPE_HŒ´’¬:
 			fname += "HŒ´’¬.png";
