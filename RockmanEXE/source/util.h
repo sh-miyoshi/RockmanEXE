@@ -18,16 +18,6 @@ template<typename _T> inline std::string ToString(_T x){
 	return ss.str();
 }
 
-template<typename _T> void Shuffle(_T *data, int size){
-	// ƒ‰ƒ“ƒ_ƒ€”Ô–Ú‚ÆŒðŠ·
-	for( int i = 0; i < size; i++ ){
-		int j = rand() % size;
-		_T temp = data[i];
-		data[i] = data[j];
-		data[j] = temp;
-	}
-}
-
 int GetStringByte(char str);
 
 std::string ConvertToViewCount(unsigned long long count);

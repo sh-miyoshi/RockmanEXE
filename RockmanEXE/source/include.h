@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <random>
 
 #include "DxLib.h"
 #include "define.h"
@@ -11,3 +12,4 @@
 
 extern bool gExitFlag;
 extern unsigned long long gGameCount;
+extern std::mt19937_64 rnd_generator;

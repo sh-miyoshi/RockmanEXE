@@ -1,4 +1,5 @@
-#include <time.h>
+#include <random>
+#include <algorithm>
 #include "include.h"
 #include "state.h"
 #include "battle.h"
@@ -9,6 +10,7 @@
 
 bool gExitFlag = false;
 unsigned long long gGameCount = 0;
+std::mt19937_64 rnd_generator;
 
 class Main {
 	class StateBattle :public StateBase{
@@ -34,8 +36,9 @@ public:
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdShow) {
 	// システム関係の初期化
-	srand(( unsigned int ) time(NULL));
 	AppLogger::CleanupLogFile();
+	std::random_device rnd;
+	rnd_generator.seed(rnd());
 
 	// TODO(バージョン情報の設定)
 

@@ -84,8 +84,8 @@ EffectHit::EffectHit(CPoint<int> centerPos, unsigned int rndSize, std::vector<in
 
 	// •`‰æˆÊ’u‚ÌŒˆ’è
 	drawPos = centerPos;
-	int rndX = rand() % (rndSize*2);
-	int rndY = rand() % ( rndSize * 2 );
+	int rndX = rnd_generator() % ( rndSize * 2 );
+	int rndY = rnd_generator() % ( rndSize * 2 );
 	drawPos.x = drawPos.x - rndSize + rndX;
 	drawPos.y = drawPos.y - rndSize + rndY;
 }

@@ -1,3 +1,4 @@
+#include <random>
 #include "include.h"
 #include "playerMgr.h"
 #include "battleField.h"
@@ -107,6 +108,9 @@ BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax
 	// チャージ画像の読み込み
 	fname = def::SKILL_IMAGE_PATH + "ロックバスター_charge.png";
 	LoadDivGraphWithErrorCheck(imgCharge, fname, "BattlePlayer::BattlePlayer", 8, 2, 158, 150);
+
+	// フォルダーのセットアップ
+	std::shuffle(chipFolder.begin(),chipFolder.end(), rnd_generator);
 }
 
 BattlePlayer::~BattlePlayer() {
