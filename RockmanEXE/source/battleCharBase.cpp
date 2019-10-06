@@ -48,14 +48,13 @@ BattleCharBase::BattleCharBase(std::string name, unsigned int hp, unsigned int h
 }
 
 void BattleCharBase::Draw() {
-	int x = BattleField::PANEL_SIZE.x * pos.x + BattleField::PANEL_SIZE.x / 2;
-	int y = BattleField::BATTLE_PANEL_OFFSET_Y + BattleField::PANEL_SIZE.y * pos.y - 10;// Ç”ÇøÇÃï™ÇæÇØè„Ç∞ÇÈ
+	CPoint<int> t = BattleField::GetPixelPos(pos);
 
 	if( animQueue.empty() ) {
-		defaultAnim->Draw(x, y);
+		defaultAnim->Draw(t.x, t.y);
 	} else {
 		std::shared_ptr<Animation> anim = animQueue.front();
-		anim->Draw(x, y);
+		anim->Draw(t.x, t.y);
 	}
 }
 

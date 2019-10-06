@@ -3,6 +3,7 @@
 #include "battleCharMgr.h"
 #include "battleFieldMgr.h"
 #include "enemy.h"
+#include "effectMgr.h"
 
 Battle::Battle():rtnCode(eRTN_CONTINUE){
 	// TODO(ˆø”‚ÅenemyList‚ðŽæ“¾‚·‚é)
@@ -37,10 +38,12 @@ Battle::~Battle() {
 void Battle::Draw() {
 	BattleFieldMgr::GetInst()->Draw();
 	stateMgr.Draw();
+	EffectMgr::GetInst()->Draw();
 }
 
 Battle::RtnCode Battle::Process() {
 	BattleFieldMgr::GetInst()->Process();
 	stateMgr.Process();
+	EffectMgr::GetInst()->Process();
 	return rtnCode;
 }

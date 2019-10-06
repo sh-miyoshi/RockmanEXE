@@ -27,6 +27,8 @@ public:
 	static const unsigned int FIELD_NUM_Y=3;
 	static const CPoint<unsigned int> PANEL_SIZE;
 	static const int BATTLE_PANEL_OFFSET_Y;// ƒpƒlƒ‹‚ÌÅ‰‚ÌˆÊ’u
+
+	static CPoint<int> GetPixelPos(CPoint<int> pos);
 private:
 	int imgPanel[2];
 	int panelInfo[LAYER_MAX][FIELD_NUM_X][FIELD_NUM_Y];

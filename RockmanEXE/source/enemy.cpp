@@ -88,18 +88,17 @@ void EnemyBase::Draw() {
 	BattleCharBase::Draw();
 
 	// HP‚Ì•`‰æ
-	int x = BattleField::PANEL_SIZE.x * pos.x + BattleField::PANEL_SIZE.x / 2;
-	int y = BattleField::BATTLE_PANEL_OFFSET_Y + BattleField::PANEL_SIZE.y * pos.y * 2 - 10;
+	CPoint<int> t = BattleField::GetPixelPos(CPoint<int>(pos.x, pos.y + 1));
 	std::list<unsigned int> hpList;
 	for( unsigned int h = this->hp; h > 0; h /= 10 ) {
 		hpList.push_front(h % 10);
 	}
 	const int numSize = 15;
-	x = x - numSize * hpList.size() / 2 + 7;
+	t.x = t.x - numSize * hpList.size() / 2 + 7;
 	for( auto h : hpList ) {
 		unsigned pointer = ( h == 0 ) ? 9 : h - 1;
-		DrawRotaGraph(x, y, 1, 0, imgNumber[pointer], TRUE);
-		x += numSize;
+		DrawRotaGraph(t.x, t.y, 1, 0, imgNumber[pointer], TRUE);
+		t.x += numSize;
 	}
 }
 

@@ -5,6 +5,7 @@
 #include "playerMgr.h"
 #include "fps.h"
 #include "chip.h"
+#include "effectMgr.h"
 
 bool gExitFlag = false;
 unsigned long long gGameCount = 0;
@@ -54,12 +55,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdS
 
 	// アプリケーション関係の初期化
 	ChipMgr::GetInst()->LoadData();
+	EffectMgr::GetInst()->LoadImages();
 	PlayerMgr::GetInst()->InitPlayer();// TODO(タイトル画面で選択する)
 
 	Main main;
 	main.Process();
 
 	// アプリケーション関係の終了処理
+	EffectMgr::GetInst()->DeleteImages();
 	ChipMgr::GetInst()->DeleteData();
 
 	DxLib_End();
@@ -78,7 +81,6 @@ void Main::Process() {
 	while( ScreenFlip() == 0 && ProcessMessage() == 0 && ClearDrawScreen() == 0 ) {
 		// メイン処理
 		stateMgr.Process();
-
 		stateMgr.Draw();
 
 		CKey::GetInst()->Update();

@@ -4,6 +4,13 @@
 const CPoint<unsigned int> BattleField::PANEL_SIZE = CPoint<unsigned int>(80, 50);
 const int BattleField::BATTLE_PANEL_OFFSET_Y = def::FMY - ( PANEL_SIZE.y * 3 ) - 30;
 
+CPoint<int> BattleField::GetPixelPos(CPoint<int> pos) {
+	CPoint<int> res;
+	res.x = BattleField::PANEL_SIZE.x * pos.x + BattleField::PANEL_SIZE.x / 2;
+	res.y = BattleField::BATTLE_PANEL_OFFSET_Y + BattleField::PANEL_SIZE.y * pos.y - 10;// Ç”ÇøÇÃï™ÇæÇØè„Ç∞ÇÈ
+	return res;
+}
+
 BattleField::BattleField():imgPanel(), panelInfo(){
 }
 

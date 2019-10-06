@@ -2,6 +2,7 @@
 #include "skill.h"
 #include "battleCharMgr.h"
 #include "battleField.h"
+#include "effectMgr.h"
 
 // TODO(敵にヒット時のエフェクト)
 
@@ -66,6 +67,10 @@ Skill_バスター::Skill_バスター(CPoint<int> charPos, int damage, CharType myCharT
 	if( damagePos.x > 0 ) {// 攻撃がヒットする位置に対象がいたら
 		// ダメージデータの登録
 		BattleCharMgr::GetInst()->RegisterDamage(DamageData(damagePos, damage, targetType));
+		EffectArg args;
+		args.pos = BattleField::GetPixelPos(damagePos);
+		args.rndSize = 10;
+		EffectMgr::GetInst()->Register(EffectMgr::eID_ロックバスター_HIT, args);
 	}
 }
 
@@ -107,10 +112,9 @@ void Skill_キャノン系::Draw() {
 	int ino = ( count / 5 ) - 1;
 	if( ino >= 0 ) {
 		if( ino > 2 )ino = 2;
-		int dx = ( myCharType == eCHAR_PLAYER ) ? 65 : -10;
-		int x = BattleField::PANEL_SIZE.x * charPos.x + dx;
-		int y = BattleField::BATTLE_PANEL_OFFSET_Y + BattleField::PANEL_SIZE.y * charPos.y - 45;
-		DrawGraph(x, y, imgBody[ino], TRUE);
+		int dx = ( myCharType == eCHAR_PLAYER ) ? 40 : -10;// TODO(敵offsetの調整)
+		CPoint<int> t = BattleField::GetPixelPos(charPos);
+		DrawRotaGraph(t.x+dx, t.y-10,1,0, imgBody[ino], TRUE);
 	}
 }
 

@@ -117,10 +117,9 @@ void BattlePlayer::Draw() {
 
 	if( chargeCount > 20 ) {
 		int no = ( chargeCount < chargeMaxTime ) ? 0 : 8;
-		int x = BattleField::PANEL_SIZE.x * pos.x + BattleField::PANEL_SIZE.x / 2;
-		int y = BattleField::BATTLE_PANEL_OFFSET_Y + BattleField::PANEL_SIZE.y * pos.y;
+		CPoint<int> t = BattleField::GetPixelPos(pos);
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 196);// “§‚¯‚é•\Ž¦
-		DrawRotaGraph(x, y, 1, 0, imgCharge[no + ( chargeCount / 3 ) % 8], TRUE);
+		DrawRotaGraph(t.x, t.y, 1, 0, imgCharge[no + ( chargeCount / 3 ) % 8], TRUE);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 }
