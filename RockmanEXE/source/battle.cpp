@@ -17,7 +17,7 @@ Battle::Battle():rtnCode(eRTN_CONTINUE){
 
 	std::string infoMsg = "[ ";
 	for(auto e : enemyList) {
-		infoMsg += ToString("%s, ", e->GetName());
+		infoMsg += ToString("%s, ", e->GetName().c_str());
 	}
 	infoMsg += "]";
 	AppLogger::Info("Battle In with Enemy List: %s", infoMsg.c_str());
