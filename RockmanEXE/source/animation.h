@@ -27,11 +27,13 @@ public:
 	bool Process();
 };
 
-//class PlayerAnimShot: public Animation {
-//public:
-//	PlayerAnimShot();
-//	~PlayerAnimShot();
-//
-//	// Run damage register, ...
-//	virtual void Process();
-//};
+enum PlayerAnimType {
+	eANIM_NONE,
+	eANIM_MOVE,
+	eANIM_SHOT,
+	eANIM_CANNON,
+	eANIM_SWORD,
+	eANIM_BOMB,
+
+	eANIM_MAX
+};

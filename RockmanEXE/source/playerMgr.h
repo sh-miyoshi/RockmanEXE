@@ -3,6 +3,7 @@
 #include <string>
 #include "battleCharBase.h"
 #include "chip.h"
+#include "animation.h"
 
 class BattlePlayer:public BattleCharBase {
 	unsigned int chargeCount;
@@ -11,11 +12,7 @@ class BattlePlayer:public BattleCharBase {
 	int imgCharge[16];
 	std::vector<ChipInfo> chipFolder;
 
-	std::shared_ptr<Animation> animMove;
-	std::shared_ptr<Animation> animShot;
-	std::shared_ptr<Animation> animCannon;
-	std::shared_ptr<Animation> animSword;
-	std::shared_ptr<Animation> animBomb;
+	std::shared_ptr<Animation> anim[eANIM_MAX];
 public:
 	BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, unsigned int busterPower, std::vector<ChipInfo> chipFolder);
 	~BattlePlayer();

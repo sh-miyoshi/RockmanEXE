@@ -5,11 +5,11 @@
 #include "chip.h"
 
 ChipData::ChipData()
-	:id(0), type(0), power(0), playerAct(0), isPrevMotion(false),
+	:id(0), type(0), power(0), playerAct(eANIM_MOVE), isPrevMotion(false),
 	imgIcon(-1), imgIconMono(-1), imgInfo(-1), code('*') {
 }
 
-ChipData::ChipData(unsigned int id, std::string name, unsigned int type, unsigned int power, unsigned int playerAct, bool isPrevMotion)
+ChipData::ChipData(unsigned int id, std::string name, unsigned int type, unsigned int power, PlayerAnimType playerAct, bool isPrevMotion)
 	: id(id), name(name), type(type), power(power), playerAct(playerAct), isPrevMotion(isPrevMotion),
 	imgIcon(-1), imgIconMono(-1), imgInfo(-1), code('*') {
 }
@@ -24,17 +24,17 @@ void ChipMgr::LoadData() {
 	}
 
 	// チップ情報の設定
-	chipData[eID_キャノン] = ChipData(0, "キャノン", 0, 40, 2, false);
-	chipData[eID_ハイキャノン] = ChipData(1, "ハイキャノン", 0, 80, 2, false);
-	chipData[eID_サンダーボール] = ChipData(14, "サンダーボール", 0, 40, -1, false);
-	chipData[eID_フレイムライン] = ChipData(20, "フレイムライン", 0, 80, 2, false);
-	chipData[eID_ミニボム] = ChipData(43, "ミニボム", 0, 50, 4, false);
-	chipData[eID_ソード] = ChipData(53, "ソード", 0, 80, 3, false);
-	chipData[eID_ワイドソード] = ChipData(54, "ワイドソード", 0, 80, 3, false);
-	chipData[eID_ブーメラン] = ChipData(68, "ブーメラン", 0, 60, -1, false);
-	chipData[eID_リカバリー10] = ChipData(108, "リカバリー10", 0, 10, -1, false);
-	chipData[eID_リカバリー30] = ChipData(109, "リカバリー30", 0, 30, -1, false);
-	chipData[eID_ストーンキューブ] = ChipData(125, "ストーンキューブ", 0, 0, -1, true);
+	chipData[eID_キャノン] = ChipData(0, "キャノン", 0, 40, eANIM_CANNON, false);
+	chipData[eID_ハイキャノン] = ChipData(1, "ハイキャノン", 0, 80, eANIM_CANNON, false);
+	chipData[eID_サンダーボール] = ChipData(14, "サンダーボール", 0, 40, eANIM_NONE, false);
+	chipData[eID_フレイムライン] = ChipData(20, "フレイムライン", 0, 80, eANIM_CANNON, false);
+	chipData[eID_ミニボム] = ChipData(43, "ミニボム", 0, 50, eANIM_BOMB, false);
+	chipData[eID_ソード] = ChipData(53, "ソード", 0, 80, eANIM_SWORD, false);
+	chipData[eID_ワイドソード] = ChipData(54, "ワイドソード", 0, 80, eANIM_SWORD, false);
+	chipData[eID_ブーメラン] = ChipData(68, "ブーメラン", 0, 60, eANIM_NONE, false);
+	chipData[eID_リカバリー10] = ChipData(108, "リカバリー10", 0, 10, eANIM_NONE, false);
+	chipData[eID_リカバリー30] = ChipData(109, "リカバリー30", 0, 30, eANIM_NONE, false);
+	chipData[eID_ストーンキューブ] = ChipData(125, "ストーンキューブ", 0, 0, eANIM_NONE, true);
 
 	// チップアイコン画像の読み込みと設定
 	std::string fname = def::IMAGE_FILE_PATH + "battle/chip_icon.png";

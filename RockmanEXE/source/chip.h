@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "animation.h"
 
 class ChipInfo {
 public:
@@ -26,11 +27,11 @@ public:
 	char code;
 	unsigned int type;// 属性
 	unsigned int power;
-	unsigned int playerAct;// プレイヤーの行動画像はどれか
+	PlayerAnimType playerAct;// プレイヤーの行動画像はどれか
 	bool isPrevMotion;// チップ使用時に暗転などの前処理があるか
 
 	ChipData();
-	ChipData(unsigned int id, std::string name, unsigned int type, unsigned int power, unsigned int playerAct, bool isPrevMotion);
+	ChipData(unsigned int id, std::string name, unsigned int type, unsigned int power, PlayerAnimType playerAct, bool isPrevMotion);
 	~ChipData() {}
 };
 

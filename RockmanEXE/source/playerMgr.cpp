@@ -82,25 +82,27 @@ BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax
 	animStand->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(1, 1));
 	BattleCharBase::SetDefaultAnim(animStand);
 
+	anim[eANIM_NONE] = std::shared_ptr<Animation>(new Animation());
+
 	fname = def::CHARACTER_IMAGE_PATH + "player_move.png";
-	animMove = std::shared_ptr<Animation>(new Animation());
-	animMove->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(4, 1));
+	anim[eANIM_MOVE] = std::shared_ptr<Animation>(new Animation());
+	anim[eANIM_MOVE]->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(4, 1));
 
 	fname = def::CHARACTER_IMAGE_PATH + "player_shot.png";
-	animShot = std::shared_ptr<Animation>(new Animation());
-	animShot->LoadData(fname, CPoint<unsigned int>(180, 100), CPoint<unsigned int>(6, 1));
+	anim[eANIM_SHOT] = std::shared_ptr<Animation>(new Animation());
+	anim[eANIM_SHOT]->LoadData(fname, CPoint<unsigned int>(180, 100), CPoint<unsigned int>(6, 1));
 
 	fname = def::CHARACTER_IMAGE_PATH + "player_cannon.png";
-	animCannon = std::shared_ptr<Animation>(new Animation());
-	animCannon->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(4, 1), 5);
+	anim[eANIM_CANNON] = std::shared_ptr<Animation>(new Animation());
+	anim[eANIM_CANNON]->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(4, 1), 5);
 
 	fname = def::CHARACTER_IMAGE_PATH + "player_sword.png";
-	animSword = std::shared_ptr<Animation>(new Animation());
-	animSword->LoadData(fname, CPoint<unsigned int>(128, 128), CPoint<unsigned int>(7, 1), 3);
+	anim[eANIM_SWORD] = std::shared_ptr<Animation>(new Animation());
+	anim[eANIM_SWORD]->LoadData(fname, CPoint<unsigned int>(128, 128), CPoint<unsigned int>(7, 1), 3);
 
 	fname = def::CHARACTER_IMAGE_PATH + "player_bomb.png";
-	animBomb = std::shared_ptr<Animation>(new Animation());
-	animBomb->LoadData(fname, CPoint<unsigned int>(100, 114), CPoint<unsigned int>(5, 1), 3);
+	anim[eANIM_BOMB] = std::shared_ptr<Animation>(new Animation());
+	anim[eANIM_BOMB]->LoadData(fname, CPoint<unsigned int>(100, 114), CPoint<unsigned int>(5, 1), 3);
 
 	// チャージ画像の読み込み
 	fname = def::SKILL_IMAGE_PATH + "ロックバスター_charge.png";
@@ -130,22 +132,22 @@ void BattlePlayer::Process() {
 		if( CKey::GetInst()->CheckKey(eKEY_DOWN) == 1 ) {
 			if( MoveCheck(pos.x, pos.y + 1) ) {
 				this->SetPos(pos.x, pos.y + 1);
-				this->AttachAnim(animMove);
+				this->AttachAnim(anim[eANIM_MOVE]);
 			}
 		} else if( CKey::GetInst()->CheckKey(eKEY_UP) == 1 ) {
 			if( MoveCheck(pos.x, pos.y - 1) ) {
 				this->SetPos(pos.x, pos.y - 1);
-				this->AttachAnim(animMove);
+				this->AttachAnim(anim[eANIM_MOVE]);
 			}
 		} else if( CKey::GetInst()->CheckKey(eKEY_LEFT) == 1 ) {
 			if( MoveCheck(pos.x - 1, pos.y) ) {
 				this->SetPos(pos.x - 1, pos.y);
-				this->AttachAnim(animMove);
+				this->AttachAnim(anim[eANIM_MOVE]);
 			}
 		} else if( CKey::GetInst()->CheckKey(eKEY_RIGHT) == 1 ) {
 			if( MoveCheck(pos.x + 1, pos.y) ) {
 				this->SetPos(pos.x + 1, pos.y);
-				this->AttachAnim(animMove);
+				this->AttachAnim(anim[eANIM_MOVE]);
 			}
 		}
 
@@ -162,7 +164,7 @@ void BattlePlayer::Process() {
 			}
 			arg.myCharType = eCHAR_PLAYER;
 			BattleSkillMgr::GetInst()->Register(SkillMgr::GetData(SkillMgr::eID_バスター, arg));
-			this->AttachAnim(animShot);
+			this->AttachAnim(anim[eANIM_SHOT]);
 			chargeCount = 0;
 		}
 
@@ -174,7 +176,7 @@ void BattlePlayer::Process() {
 			arg.power = 40;
 			arg.myCharType = eCHAR_PLAYER;
 			BattleSkillMgr::GetInst()->Register(SkillMgr::GetData(SkillMgr::eID_キャノン, arg));
-			this->AttachAnim(animCannon);
+			this->AttachAnim(anim[eANIM_CANNON]);
 		}
 	}
 }
