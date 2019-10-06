@@ -1,0 +1,9 @@
+battle
+	chipSelect
+	chipUse
+	battleBegin
+	battleResult
+menu
+	全部
+title
+	全部
