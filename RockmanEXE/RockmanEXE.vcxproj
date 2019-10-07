@@ -166,6 +166,7 @@
     <ClCompile Include="source\battleSkillMgr.cpp" />
     <ClCompile Include="source\battleStateWin.cpp" />
     <ClCompile Include="source\chip.cpp" />
+    <ClCompile Include="source\drawCharacter.cpp" />
     <ClCompile Include="source\effectMgr.cpp" />
     <ClCompile Include="source\enemy.cpp" />
     <ClCompile Include="source\keyConfig.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="source\battleFieldMgr.h" />
     <ClInclude Include="source\battleSkillMgr.h" />
     <ClInclude Include="source\chip.h" />
+    <ClInclude Include="source\drawCharacter.h" />
     <ClInclude Include="source\effectMgr.h" />
     <ClInclude Include="source\enemy.h" />
     <ClInclude Include="source\keyConfig.h" />

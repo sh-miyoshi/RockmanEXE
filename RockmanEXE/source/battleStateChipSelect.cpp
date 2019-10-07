@@ -3,6 +3,7 @@
 #include "battle.h"
 #include "battleCharMgr.h"
 #include "playerMgr.h"
+#include "drawCharacter.h"
 
 bool Battle::StateChipSelect::PlayerHandMgr::CanSelect(unsigned int no) {
 	if( selectedIndexes.size() < 1 ) {// まだ何も選択されてないなら
@@ -78,8 +79,8 @@ void Battle::StateChipSelect::PlayerHandMgr::Draw() {
 			} else {
 				DrawGraph(x, 210, c.imgIconMono, TRUE);// 選択できないものには灰色で
 			}
-			// TODO(チップコードの描画)
-			//DrawCharacter::GetInst()->DrawChipCode(x + 10, 240, c.code, 50);
+			// チップコードの描画
+			DrawCharacter::GetInst()->DrawChipCode(x + 10, 240, c.code, 50);
 		}
 	}
 
