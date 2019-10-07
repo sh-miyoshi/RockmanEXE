@@ -1,6 +1,8 @@
 #pragma once
 
+#include <vector>
 #include "state.h"
+#include "chip.h"
 
 class Battle {
 public:
@@ -27,8 +29,26 @@ private:
 	class StateChipSelect: public StateBase {
 		static const int BT_SEND_NO = 11;// ëóêMÉLÅ[î‘çÜ
 
+		class PlayerHandMgr {
+			std::vector<ChipInfo> handValue;
+			std::vector<int> selectedIndexes;
+
+			bool CanSelect(unsigned int no);
+		public:
+			PlayerHandMgr() {}
+			~PlayerHandMgr() {}
+
+			void Init(std::vector<ChipInfo> handValue);
+			bool Select(unsigned int no);
+			void Draw();
+		};
+
 		int imgSelectFrame;
+		int imgPointer[2];
 		Battle* obj;
+		unsigned int drawCount;
+		unsigned int pointer;
+		PlayerHandMgr playerHand;
 	public:
 		StateChipSelect(Battle* obj);
 		~StateChipSelect();

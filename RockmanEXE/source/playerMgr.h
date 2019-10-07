@@ -19,6 +19,8 @@ public:
 
 	virtual void Draw();
 	virtual void Process();
+
+	std::vector<ChipInfo> GetHandData(unsigned max);
 };
 
 class PlayerMgr {

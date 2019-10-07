@@ -184,3 +184,14 @@ void BattlePlayer::Process() {
 		}
 	}
 }
+
+std::vector<ChipInfo> BattlePlayer::GetHandData(unsigned max) {
+	std::vector<ChipInfo> result;
+	if( max > chipFolder.size() )
+		max = chipFolder.size();
+	for( unsigned i = 0; i < max; i++ ) {
+		// ‚±‚ÌŽž“_‚Å‚Ífolder‚©‚çíœ‚Í‚µ‚È‚¢(íœ‚ÍŽÀÛ‚ÉŽg‚Á‚½Žž‚¾‚¯)
+		result.push_back(chipFolder[i]);
+	}
+	return result;
+}
