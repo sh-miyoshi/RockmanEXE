@@ -195,3 +195,13 @@ std::vector<ChipInfo> BattlePlayer::GetHandData(unsigned max) {
 	}
 	return result;
 }
+
+void BattlePlayer::SetSendChipList(std::list<ChipInfo> chipList) {
+	std::string msg = "[ ";
+	for( auto c : chipList ) {
+		msg += ToString( "( %d, %c ), ", c.id, c.code);
+	}
+	msg += "]";
+	AppLogger::Info("Send Chips %s to BattleStateMain", msg.c_str());
+	this->sendChipList = chipList; 
+}

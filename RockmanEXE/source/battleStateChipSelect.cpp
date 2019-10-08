@@ -16,13 +16,11 @@ bool Battle::StateChipSelect::PlayerHandMgr::CanSelect(unsigned int no) {
 	}
 
 	// すべての名前が一致なら選択できる
-	std::string name;
+	std::string name = ChipMgr::GetInst()->GetChipData(handValue[no]).name;
 	bool isSameName = true;
 	for( auto i : selectedIndexes ) {
 		ChipData c = ChipMgr::GetInst()->GetChipData(handValue[i]);
-		if( name.empty() ) {
-			name = c.name;
-		} else if( name != c.name ) {
+		if( name != c.name ) {
 			isSameName = false;
 			break;
 		}
@@ -32,7 +30,7 @@ bool Battle::StateChipSelect::PlayerHandMgr::CanSelect(unsigned int no) {
 	}
 
 	// コードが一致していれば選択できる
-	char code = '*';
+	char code = handValue[no].code;
 	bool isSameCode = true;
 	for( auto i : selectedIndexes ) {
 		char c = handValue[i].code;
@@ -98,6 +96,20 @@ ChipData Battle::StateChipSelect::PlayerHandMgr::GetChipData(unsigned int no){
 	return ChipMgr::GetInst()->GetChipData(handValue[no]);
 }
 
+void Battle::StateChipSelect::PlayerHandMgr::EraseLastSelect() {
+	if( !selectedIndexes.empty() ) {
+		selectedIndexes.pop_back();
+	}
+}
+
+void Battle::StateChipSelect::PlayerHandMgr::SetSendChipList() {
+	std::list<ChipInfo> chipList;
+	for( auto si : selectedIndexes ) {
+		chipList.push_back(handValue[si]);
+	}
+	PlayerMgr::GetInst()->GetBattleChar()->SetSendChipList(chipList);
+}
+
 Battle::StateChipSelect::StateChipSelect(Battle* obj)
 	:obj(obj), imgSelectFrame(-1), pointer(0), imgPointer(), drawCount(0) {
 
@@ -149,7 +161,7 @@ void Battle::StateChipSelect::Draw() {
 	}
 
 	// チップ詳細情報の表示
-	if( 0<=pointer && pointer < playerHand.GethandNum() ){
+	if( 0<=pointer && pointer < playerHand.GetHandNum() ){
 		ChipData c = playerHand.GetChipData(pointer);
 		DrawGraph(31, 64, c.imgInfo, TRUE);
 		DrawGraph(52, 161, ChipMgr::GetInst()->GetTypeData(c.type).image, TRUE);
@@ -163,6 +175,36 @@ void Battle::StateChipSelect::Draw() {
 }
 
 void Battle::StateChipSelect::Process() {
-	// TODO(pointerの移動、決定)
+	if( CKey::GetInst()->CheckKey(eKEY_ENTER) == 1 ) {
+		if( pointer == BT_SEND_NO ) {// チップ選択完了
+			playerHand.SetSendChipList();// 選んだチップをBattleStatemainへ引き渡す
+			obj->stateMgr.ChangeNext(new Battle::StateMain(obj));
+		} else {
+			playerHand.Select(pointer);
+		}
+	} else if( CKey::GetInst()->CheckKey(eKEY_CANCEL) == 1 ) {
+		// 選択しているチップの最後の値を削除する
+		playerHand.EraseLastSelect();
+	}else if( playerHand.GetHandNum() > 0 ) {
+		// カーソル移動処理
+		if( CKey::GetInst()->CheckKey(eKEY_LEFT) == 1 ) {
+			if( pointer == BT_SEND_NO )
+				pointer = ( playerHand.GetHandNum() > 5 ) ? 4 : playerHand.GetHandNum() - 1;
+			else if( ( pointer % 5 ) == 0 )
+				pointer = BT_SEND_NO;
+			else
+				pointer--;
+		} else if( CKey::GetInst()->CheckKey(eKEY_RIGHT) == 1 ) {
+			if( pointer == BT_SEND_NO )
+				pointer = 0;
+			else if( pointer == playerHand.GetHandNum() - 1 )
+				pointer = BT_SEND_NO;
+			else if( playerHand.GetHandNum() > 5 && pointer == 4 )
+				pointer = BT_SEND_NO;
+			else
+				pointer++;
+		}
+	}
+
 	drawCount++;
 }

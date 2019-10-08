@@ -11,6 +11,7 @@ class BattlePlayer:public BattleCharBase {
 	unsigned int busterPower;
 	int imgCharge[16];
 	std::vector<ChipInfo> chipFolder;
+	std::list<ChipInfo> sendChipList;
 
 	std::shared_ptr<Animation> anim[eANIM_MAX];
 public:
@@ -21,6 +22,7 @@ public:
 	virtual void Process();
 
 	std::vector<ChipInfo> GetHandData(unsigned max);
+	void SetSendChipList(std::list<ChipInfo> chipList);
 };
 
 class PlayerMgr {

@@ -43,6 +43,8 @@ private:
 			void Draw();
 			const unsigned int GetHandNum() const { return handValue.size(); }
 			ChipData GetChipData(unsigned int no);
+			void EraseLastSelect();
+			void SetSendChipList();
 		};
 
 		int imgSelectFrame;
