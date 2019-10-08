@@ -41,6 +41,8 @@ private:
 			void Init(std::vector<ChipInfo> handValue);
 			bool Select(unsigned int no);
 			void Draw();
+			const unsigned int GetHandNum() const { return handValue.size(); }
+			ChipData GetChipData(unsigned int no);
 		};
 
 		int imgSelectFrame;

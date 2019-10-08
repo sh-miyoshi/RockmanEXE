@@ -91,6 +91,13 @@ void Battle::StateChipSelect::PlayerHandMgr::Draw() {
 	}
 }
 
+ChipData Battle::StateChipSelect::PlayerHandMgr::GetChipData(unsigned int no){
+	if(no>=handValue.size()){
+		AppLogger::Error("選択しようとしている場所が異常です. size: %d, no: %d", handValue.size(), no);
+	}
+	return ChipMgr::GetInst()->GetChipData(handValue[no]);
+}
+
 Battle::StateChipSelect::StateChipSelect(Battle* obj)
 	:obj(obj), imgSelectFrame(-1), pointer(0), imgPointer(), drawCount(0) {
 
@@ -141,7 +148,18 @@ void Battle::StateChipSelect::Draw() {
 		}
 	}
 
-	// TODO(チップ詳細情報の表示)
+	// チップ詳細情報の表示
+	if( 0<=pointer && pointer < playerHand.GethandNum() ){
+		ChipData c = playerHand.GetChipData(pointer);
+		DrawGraph(31, 64, c.imgInfo, TRUE);
+		DrawGraph(52, 161, ChipMgr::GetInst()->GetTypeData(c.type).image, TRUE);
+		DrawCharacter::GetInst()->DrawChipCode(30, 163, c.code);
+		DrawCharacter::GetInst()->DrawString(20, 25, c.name, BLACK);
+		if( c.power > 0 ){
+			// 攻撃力も描画
+			DrawCharacter::GetInst()->DrawNumber(100, 163, c.power, DrawCharacter::COL_WHITE, 3);
+		}
+	}
 }
 
 void Battle::StateChipSelect::Process() {
