@@ -103,11 +103,7 @@ void Battle::StateChipSelect::PlayerHandMgr::EraseLastSelect() {
 }
 
 void Battle::StateChipSelect::PlayerHandMgr::SetSendChipList() {
-	std::list<ChipInfo> chipList;
-	for( auto si : selectedIndexes ) {
-		chipList.push_back(handValue[si]);
-	}
-	PlayerMgr::GetInst()->GetBattleChar()->SetSendChipList(chipList);
+	PlayerMgr::GetInst()->GetBattleChar()->SetSendChipList(selectedIndexes);
 }
 
 Battle::StateChipSelect::StateChipSelect(Battle* obj)

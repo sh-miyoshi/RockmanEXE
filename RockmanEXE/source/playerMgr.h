@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include "battleCharBase.h"
 #include "chip.h"
 #include "animation.h"
@@ -22,7 +23,7 @@ public:
 	virtual void Process();
 
 	std::vector<ChipInfo> GetHandData(unsigned max);
-	void SetSendChipList(std::list<ChipInfo> chipList);
+	void SetSendChipList(std::vector<int> selectedIndexes);
 };
 
 class PlayerMgr {

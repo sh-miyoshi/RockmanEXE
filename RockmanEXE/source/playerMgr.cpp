@@ -196,7 +196,12 @@ std::vector<ChipInfo> BattlePlayer::GetHandData(unsigned max) {
 	return result;
 }
 
-void BattlePlayer::SetSendChipList(std::list<ChipInfo> chipList) {
+void BattlePlayer::SetSendChipList(std::vector<int> selectedIndexes) {
+	std::list<ChipInfo> chipList;
+	for( auto si : selectedIndexes ) {
+		chipList.push_back(chipFolder[si]);
+	}
+
 	std::string msg = "[ ";
 	for( auto c : chipList ) {
 		msg += ToString( "( %d, %c ), ", c.id, c.code);
@@ -204,11 +209,11 @@ void BattlePlayer::SetSendChipList(std::list<ChipInfo> chipList) {
 	msg += "]";
 	AppLogger::Info("Send Chips %s to BattleStateMain", msg.c_str());
 	this->sendChipList = chipList; 
-}
 
-/*
-	TODO(使用チップの削除について)
-		BattleMainで使ったチップは削除
-		BattleMainからChipSelectに移った際も削除
-		ただし、sendChipListの中身は新しく上書きするまでそのまま
-*/
+	// ここで選択したチップは削除する
+	// chipFolderから適切にindexで削除するために後ろから順に削除する
+	std::sort(selectedIndexes.begin(), selectedIndexes.end(), std::greater<int>());//降順ソート
+	for( auto si : selectedIndexes ) {
+		chipFolder.erase(chipFolder.begin()+si);
+	}
+}
