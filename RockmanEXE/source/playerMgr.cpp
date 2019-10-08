@@ -205,3 +205,10 @@ void BattlePlayer::SetSendChipList(std::list<ChipInfo> chipList) {
 	AppLogger::Info("Send Chips %s to BattleStateMain", msg.c_str());
 	this->sendChipList = chipList; 
 }
+
+/*
+	TODO(使用チップの削除について)
+		BattleMainで使ったチップは削除
+		BattleMainからChipSelectに移った際も削除
+		ただし、sendChipListの中身は新しく上書きするまでそのまま
+*/
