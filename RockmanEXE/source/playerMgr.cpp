@@ -205,6 +205,7 @@ void BattlePlayer::Process() {
 			if( !sendChipList.empty() ) {
 				auto it = sendChipList.begin();
 				ChipData c = ChipMgr::GetInst()->GetChipData(it->id);
+				// TODO(ˆÃ“]ˆ—)
 				SkillArg arg;
 				arg.charPos = pos;
 				arg.power = c.power;
