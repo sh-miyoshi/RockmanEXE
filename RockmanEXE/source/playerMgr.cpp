@@ -3,6 +3,7 @@
 #include "playerMgr.h"
 #include "battleField.h"
 #include "battleSkillMgr.h"
+#include "drawCharacter.h"
 
 namespace {
 	const unsigned int DEFAULT_CHARGE_TIME = 2 * 60;// 2[second]
@@ -128,6 +129,33 @@ void BattlePlayer::Draw() {
 		DrawRotaGraph(t.x, t.y, 1, 0, imgCharge[no + ( chargeCount / 3 ) % 8], TRUE);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
+
+	// ƒ`ƒbƒv‚Ì•`‰æ
+	if( !sendChipList.empty() ) {
+		auto it = sendChipList.begin();
+		ChipData c = ChipMgr::GetInst()->GetChipData(it->id);
+		DrawCharacter::GetInst()->DrawString(10, def::FMY - 25, c.name, WHITE, BLACK);
+		int size = GetDrawStringWidth(c.name.c_str(), ( int ) c.name.size());
+		DrawCharacter::GetInst()->DrawNumber(size + 20, def::FMY - 25,  c.power, DrawCharacter::COL_RED);
+
+		const unsigned int px = 3;
+		const unsigned int max = sendChipList.size() * px;
+		auto rit = sendChipList.rbegin();
+		for( unsigned int i = 0; i < sendChipList.size(); i++ ) {
+			if( rit == sendChipList.rend() ) {
+				AppLogger::Warn("SendChip‚ð‚·‚×‚Ä•`‰æ‚Å‚«‚Ä‚¢‚Ü‚¹‚ñ i: %d, max: %d", i, sendChipList.size());
+				break;
+			}
+			CPoint<int> tpos = BattleField::GetPixelPos(pos);
+			tpos.x+= ( i * px ) - 2 - max;
+			tpos.y+=  ( i * px ) - 81 - max;
+			DrawBox(tpos.x - 1, tpos.y - 1, tpos.x + 29, tpos.y + 29, BLACK, FALSE);
+			// Œã‚ë‚©‚ç‡‚É•`‰æ
+			c = ChipMgr::GetInst()->GetChipData(rit->id);
+			DrawGraph(tpos.x, tpos.y, c.imgIcon, TRUE);
+			rit++;
+		}
+	}
 }
 
 void BattlePlayer::Process() {
@@ -174,13 +202,19 @@ void BattlePlayer::Process() {
 
 		// ƒ`ƒbƒv‚ðŽg‚¤
 		if( CKey::GetInst()->CheckKey(eKEY_ENTER) == 1 ) {
-			// debug(‚Æ‚è‚ ‚¦‚¸¡‚ÍƒLƒƒƒmƒ“‚ð–³ŒÀ‘Å‚¿‚·‚é)
-			SkillArg arg;
-			arg.charPos = pos;
-			arg.power = 40;
-			arg.myCharType = eCHAR_PLAYER;
-			BattleSkillMgr::GetInst()->Register(SkillMgr::GetData(SkillMgr::eID_ƒLƒƒƒmƒ“, arg));
-			this->AttachAnim(anim[eANIM_CANNON]);
+			if( !sendChipList.empty() ) {
+				auto it = sendChipList.begin();
+				ChipData c = ChipMgr::GetInst()->GetChipData(it->id);
+				SkillArg arg;
+				arg.charPos = pos;
+				arg.power = c.power;
+				arg.myCharType = eCHAR_PLAYER;
+				BattleSkillMgr::GetInst()->Register(SkillMgr::GetData(c, arg));
+				if( c.playerAct != eANIM_NONE ) {
+					this->AttachAnim(anim[c.playerAct]);
+				}
+				sendChipList.pop_front();
+			}
 		}
 	}
 }

@@ -58,6 +58,31 @@ std::shared_ptr<SkillData> SkillMgr::GetData(int id, SkillArg args) {
 	return std::shared_ptr<SkillData>();
 }
 
+std::shared_ptr<SkillData> SkillMgr::GetData(ChipData c, SkillArg args) {
+	int id = -1;
+	switch( c.id ) {
+	case ChipMgr::eID_キャノン:
+		id = eID_キャノン;
+		break;
+	case ChipMgr::eID_ハイキャノン:
+		id = eID_ハイキャノン;
+		break;
+	case ChipMgr::eID_ストーンキューブ:
+	case ChipMgr::eID_サンダーボール:
+	case ChipMgr::eID_ソード:
+	case ChipMgr::eID_フレイムライン:
+	case ChipMgr::eID_リカバリー10:
+	case ChipMgr::eID_リカバリー30:
+	case ChipMgr::eID_ブーメラン:
+	case ChipMgr::eID_ミニボム:
+	case ChipMgr::eID_ワイドソード:
+	default:
+		AppLogger::Error("Chip %dに対するスキルは未実装です", c.id);
+		exit(1);
+	}
+	return GetData(id, args);
+}
+
 //-------------------------------------------------------
 // バスター
 //-------------------------------------------------------

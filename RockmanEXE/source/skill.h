@@ -2,6 +2,7 @@
 
 #include "point.h"
 #include "battleCharBase.h"
+#include "chip.h"
 
 class SkillArg {
 public:
@@ -30,5 +31,5 @@ public:
 	};
 
 	static std::shared_ptr<SkillData> GetData(int id, SkillArg args);
-	//	static std::shared_ptr<SkillData> GetData(ChipData c, SkillArg args);// TODO(Chipî•ñ‚©‚ç‹Z‚ğæ“¾)
+	static std::shared_ptr<SkillData> GetData(ChipData c, SkillArg args);// Chipî•ñ‚©‚ç‹Z‚ğæ“¾
 };

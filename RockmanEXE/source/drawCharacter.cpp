@@ -32,7 +32,7 @@ void DrawCharacter::LoadImages(){
 	fname = def::IMAGE_FILE_PATH + "‚»‚Ì‘¼/chip_code.png";
 	LoadDivGraphWithErrorCheck(imgCode, fname, position, 9, 3, 20, 26);
 
-	fontStr = CreateFontToHandle("k8x12", 22, 7);
+	fontStr = CreateFontToHandle("k8x12", 26, 9);
 }
 
 void DrawCharacter::DeleteImages(){
