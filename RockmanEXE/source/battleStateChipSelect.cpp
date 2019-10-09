@@ -4,6 +4,7 @@
 #include "battleCharMgr.h"
 #include "playerMgr.h"
 #include "drawCharacter.h"
+#include "battleFieldMgr.h"
 
 bool Battle::StateChipSelect::PlayerHandMgr::CanSelect(unsigned int no) {
 	if( selectedIndexes.size() < 1 ) {// ‚Ü‚¾‰½‚à‘I‘ð‚³‚ê‚Ä‚È‚¢‚È‚ç
@@ -62,6 +63,8 @@ bool Battle::StateChipSelect::PlayerHandMgr::Select(unsigned int no) {
 }
 
 void Battle::StateChipSelect::PlayerHandMgr::Draw() {
+	BattleFieldMgr::GetInst()->DrawBaseFrame(BattleFieldMgr::eSTATE_CHIP_SELECT);
+
 	if( handValue.size() > 5 ) {
 		AppLogger::Error("[–¢ŽÀ‘•]Hand” %d‚Í•`‰æ‚ðl—¶‚Å‚«‚Ä‚È‚¢", handValue.size());// TODO
 		exit(1);
@@ -162,7 +165,7 @@ void Battle::StateChipSelect::Draw() {
 		DrawGraph(31, 64, c.imgInfo, TRUE);
 		DrawGraph(52, 161, ChipMgr::GetInst()->GetTypeData(c.type).image, TRUE);
 		DrawCharacter::GetInst()->DrawChipCode(30, 163, c.code);
-		DrawCharacter::GetInst()->DrawString(20, 25, c.name, BLACK);
+		DrawCharacter::GetInst()->DrawString(20, 20, c.name, BLACK);
 		if( c.power > 0 ){
 			// UŒ‚—Í‚à•`‰æ
 			DrawCharacter::GetInst()->DrawNumber(100, 163, c.power, DrawCharacter::COL_WHITE, 3);

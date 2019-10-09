@@ -44,6 +44,7 @@ public:
 	CPoint<int> GetPos()const { return pos; }
 
 	unsigned int GetHP()const { return hp; }
+	unsigned int GetHPMax()const { return hpMax; }
 	void SetHP(int hp);// 自身のHPをセットする(ただしマイナスの場合は0にする)
 
 	std::string GetName() const { return name; }

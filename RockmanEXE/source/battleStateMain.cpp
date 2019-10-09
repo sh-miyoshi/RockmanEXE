@@ -2,6 +2,7 @@
 #include "battle.h"
 #include "battleCharMgr.h"
 #include "battleSkillMgr.h"
+#include "battleFieldMgr.h"
 
 Battle::StateMain::StateMain(Battle* obj):obj(obj) {
 }
@@ -10,6 +11,7 @@ Battle::StateMain::~StateMain() {
 }
 
 void Battle::StateMain::Draw() {
+	BattleFieldMgr::GetInst()->DrawBaseFrame(BattleFieldMgr::eSTATE_MAIN);
 	BattleCharMgr::GetInst()->Draw();
 	BattleSkillMgr::GetInst()->Draw();
 }
@@ -25,4 +27,5 @@ void Battle::StateMain::Process() {
 		return;
 	}
 	BattleSkillMgr::GetInst()->Process();
+	BattleFieldMgr::GetInst()->GaugeProcess();
 }
