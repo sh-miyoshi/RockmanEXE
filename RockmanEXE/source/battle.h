@@ -62,7 +62,9 @@ private:
 	};
 
 	class StateBattleStart: public StateBase {
-		static const unsigned int DRAW_DELAY = 4;
+		static const unsigned int DRAW_DELAY = 7;
+		static const unsigned int WAIT_TIME = 10;
+		static const unsigned int STATE_END_TIME = WAIT_TIME + DRAW_DELAY * 3 * 2 + 20;
 
 		unsigned int count;
 		int imgTitle[3];

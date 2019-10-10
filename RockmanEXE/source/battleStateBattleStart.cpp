@@ -18,24 +18,30 @@ void Battle::StateBattleStart::Draw() {
 	BattleFieldMgr::GetInst()->DrawBaseFrame(BattleFieldMgr::eSTATE_BATTLE_START);
 	BattleCharMgr::GetInst()->Draw();
 
-	/*
-		Žd—l
-			0  - n1 : ”wŒi‚Ì‚Ý•`‰æ
-			n1 - n2 : BATTLE START•¶Žš‚Ì“oê•`‰æ
-			n2 - n3 : BATTLE START•¶Žš‚Ì‘Þo•`‰æ
-	*/
+	
+	// Žd—l
+	//    0  - n1 : ”wŒi‚Ì‚Ý•`‰æ
+	//    n1 - n2 : BATTLE START•¶Žš‚Ì“oê•`‰æ
+	//    n2 - n3 : BATTLE START•¶Žš‚Ì‘Þo•`‰æ
+	
 
-	int n = count / DRAW_DELAY;
-	if( n > 2 )
-		n = 2;
-	DrawGraph(105, 125, imgTitle[n], TRUE);
+	if( count > WAIT_TIME ) {
+		int n = (count- WAIT_TIME ) / DRAW_DELAY;
+		if( n >= 6 ) {
+			return;
+		}else if( n > 2 ) {
+			n = 2-(n % 3);
+		}
+		DrawGraph(105, 125, imgTitle[n], TRUE);
+	}
 }
 
 void Battle::StateBattleStart::Process() {
 	// TODO(ƒ\ƒEƒ‹ƒ†ƒjƒ]ƒ“)
 	// TODO(ƒvƒƒOƒ‰ƒ€ƒAƒhƒoƒ“ƒX)
 	count++;
-	if( count >= 3 * DRAW_DELAY + 20 )
+	if( count >= STATE_END_TIME ) {
 		obj->stateMgr.ChangeNext(new Battle::StateMain(obj));
+	}
 }
 
