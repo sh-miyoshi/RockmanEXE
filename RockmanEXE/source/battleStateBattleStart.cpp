@@ -3,7 +3,7 @@
 #include "battleCharMgr.h"
 #include "battleFieldMgr.h"
 
-Battle::StateBattleStart::StateBattleStart(Battle* obj):obj(obj),count(0),imgTitle() {
+Battle::StateBattleStart::StateBattleStart(Battle* obj):obj(obj), count(0), imgTitle() {
 	const std::string position = "Battle::StateBattleStart::StateBattleStart";
 	std::string fname = def::IMAGE_FILE_PATH + "battle/ƒtƒŒ[ƒ€/battle_begin.png";
 	LoadDivGraphWithErrorCheck(imgTitle, fname, position, 1, 3, 274, 32);
@@ -18,19 +18,19 @@ void Battle::StateBattleStart::Draw() {
 	BattleFieldMgr::GetInst()->DrawBaseFrame(BattleFieldMgr::eSTATE_BATTLE_START);
 	BattleCharMgr::GetInst()->Draw();
 
-	
+
 	// Žd—l
-	//    0  - n1 : ”wŒi‚Ì‚Ý•`‰æ
-	//    n1 - n2 : BATTLE START•¶Žš‚Ì“oê•`‰æ
-	//    n2 - n3 : BATTLE START•¶Žš‚Ì‘Þo•`‰æ
-	
+	//   0  - n1 : ”wŒi‚Ì‚Ý•`‰æ
+	//   n1 - n2 : BATTLE START•¶Žš‚Ì“oê•`‰æ
+	//   n2 - n3 : BATTLE START•¶Žš‚Ì‘Þo•`‰æ
+
 
 	if( count > WAIT_TIME ) {
-		int n = (count- WAIT_TIME ) / DRAW_DELAY;
+		int n = ( count - WAIT_TIME ) / DRAW_DELAY;
 		if( n >= 6 ) {
 			return;
-		}else if( n > 2 ) {
-			n = 2-(n % 3);
+		} else if( n > 2 ) {
+			n = 2 - ( n % 3 );
 		}
 		DrawGraph(105, 125, imgTitle[n], TRUE);
 	}
