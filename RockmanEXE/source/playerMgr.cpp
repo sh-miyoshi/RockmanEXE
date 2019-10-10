@@ -111,7 +111,7 @@ BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax
 	LoadDivGraphWithErrorCheck(imgCharge, fname, "BattlePlayer::BattlePlayer", 8, 2, 158, 150);
 
 	// フォルダーのセットアップ
-	std::shuffle(chipFolder.begin(),chipFolder.end(), rnd_generator);
+	std::shuffle(this->chipFolder.begin(),this->chipFolder.end(), rnd_generator);
 }
 
 BattlePlayer::~BattlePlayer() {
@@ -239,7 +239,7 @@ void BattlePlayer::SetSendChipList(std::vector<int> selectedIndexes) {
 
 	std::string msg = "[ ";
 	for( auto c : chipList ) {
-		msg += ToString( "( %d, %c ), ", c.id, c.code);
+		msg += ToString( "( ID: %d, Code: %c ), ", c.id, c.code);
 	}
 	msg += "]";
 	AppLogger::Info("Send Chips %s to BattleStateMain", msg.c_str());

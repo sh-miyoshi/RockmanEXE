@@ -34,8 +34,8 @@ void EffectMgr::LoadImages() {
 }
 
 void EffectMgr::DeleteImages() {
-	for( auto i = 0; i < eID_MAX; i++ ) {
-		for( auto j = 0; j < images[i].size(); j++ ) {
+	for( unsigned int i = 0; i < eID_MAX; i++ ) {
+		for( unsigned int j = 0; j < images[i].size(); j++ ) {
 			DeleteGraph(images[i][j]);
 		}
 	}
