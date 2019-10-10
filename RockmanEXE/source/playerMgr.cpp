@@ -74,7 +74,7 @@ void PlayerMgr::InitPlayer() {
 
 BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, unsigned int busterPower, std::vector<ChipInfo> chipFolder)
 	: BattleCharBase(name, hp, hpMax, eCHAR_PLAYER), chargeCount(0), chargeMaxTime(DEFAULT_CHARGE_TIME),
-	busterPower(busterPower), chipFolder(chipFolder) {
+	busterPower(busterPower), chipFolder(chipFolder), mindStatus(eSTATUS_通常) {
 
 	// TODO(chargeMaxTimeを変えられるようにする)
 
@@ -111,7 +111,7 @@ BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax
 	LoadDivGraphWithErrorCheck(imgCharge, fname, "BattlePlayer::BattlePlayer", 8, 2, 158, 150);
 
 	// フォルダーのセットアップ
-	std::shuffle(this->chipFolder.begin(),this->chipFolder.end(), rnd_generator);
+	std::shuffle(this->chipFolder.begin(), this->chipFolder.end(), rnd_generator);
 }
 
 BattlePlayer::~BattlePlayer() {
@@ -136,7 +136,7 @@ void BattlePlayer::Draw() {
 		ChipData c = ChipMgr::GetInst()->GetChipData(it->id);
 		DrawCharacter::GetInst()->DrawString(10, def::FMY - 25, c.name, WHITE, BLACK);
 		int size = GetDrawStringWidth(c.name.c_str(), ( int ) c.name.size());
-		DrawCharacter::GetInst()->DrawNumber(size + 20, def::FMY - 25,  c.power, DrawCharacter::COL_RED);
+		DrawCharacter::GetInst()->DrawNumber(size + 20, def::FMY - 25, c.power, DrawCharacter::COL_RED);
 
 		const unsigned int px = 3;
 		const unsigned int max = sendChipList.size() * px;
@@ -147,8 +147,8 @@ void BattlePlayer::Draw() {
 				break;
 			}
 			CPoint<int> tpos = BattleField::GetPixelPos(pos);
-			tpos.x+= ( i * px ) - 2 - max;
-			tpos.y+=  ( i * px ) - 81 - max;
+			tpos.x += ( i * px ) - 2 - max;
+			tpos.y += ( i * px ) - 81 - max;
 			DrawBox(tpos.x - 1, tpos.y - 1, tpos.x + 29, tpos.y + 29, BLACK, FALSE);
 			// 後ろから順に描画
 			c = ChipMgr::GetInst()->GetChipData(rit->id);
@@ -252,16 +252,16 @@ void BattlePlayer::SetSendChipList(std::vector<int> selectedIndexes) {
 
 	std::string msg = "[ ";
 	for( auto c : chipList ) {
-		msg += ToString( "( ID: %d, Code: %c ), ", c.id, c.code);
+		msg += ToString("( ID: %d, Code: %c ), ", c.id, c.code);
 	}
 	msg += "]";
 	AppLogger::Info("Send Chips %s to BattleStateMain", msg.c_str());
-	this->sendChipList = chipList; 
+	this->sendChipList = chipList;
 
 	// ここで選択したチップは削除する
 	// chipFolderから適切にindexで削除するために後ろから順に削除する
 	std::sort(selectedIndexes.begin(), selectedIndexes.end(), std::greater<int>());//降順ソート
 	for( auto si : selectedIndexes ) {
-		chipFolder.erase(chipFolder.begin()+si);
+		chipFolder.erase(chipFolder.begin() + si);
 	}
 }

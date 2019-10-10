@@ -11,13 +11,14 @@ class BattleFieldMgr {
 	int imgGauge[5];
 	int imgMindWindowFrame;
 	int imgHpFrame;
+	int imgMindStatus[17];
 
 	BattleField fieldData;
 	BattleBack backData;
 
 	BattleFieldMgr()
 		:gaugeCount(0), drawGaugeMaxCount(0), imgGauge(), imgMindWindowFrame(-1),
-		imgHpFrame(-1) {
+		imgHpFrame(-1), imgMindStatus() {
 	}
 	~BattleFieldMgr() {}
 public:

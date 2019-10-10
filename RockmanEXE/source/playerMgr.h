@@ -7,9 +7,33 @@
 #include "animation.h"
 
 class BattlePlayer:public BattleCharBase {
+public:
+	enum MindStatus {// 順番固定(画像の順番)
+		eSTATUS_フルシンクロ,
+		eSTATUS_怒り,
+		eSTATUS_通常,
+		eSTATUS_不安,
+		eSTATUS_ダーク,
+		eSTATUS_ロールソウル,
+		eSTATUS_アクアソウル,
+		eSTATUS_ウッドソウル,
+		eSTATUS_ジャンクソウル,
+		eSTATUS_ブルースソウル,
+		eSTATUS_メタルソウル,
+		eSTATUS_ガッツソウル,
+		eSTATUS_サーチソウル,
+		eSTATUS_ナンバーソウル,
+		eSTATUS_ファイアソウル,
+		eSTATUS_ウィンドソウル,
+		eSTATUS_サンダーソウル,
+
+		eSTATUS_MAX
+	};
+private:
 	unsigned int chargeCount;
 	unsigned int chargeMaxTime;
 	unsigned int busterPower;
+	MindStatus mindStatus;
 	int imgCharge[16];
 	std::vector<ChipInfo> chipFolder;
 	std::list<ChipInfo> sendChipList;
@@ -24,6 +48,8 @@ public:
 
 	std::vector<ChipInfo> GetHandData(unsigned max);
 	void SetSendChipList(std::vector<int> selectedIndexes);
+
+	MindStatus GetMindStatus()const { return mindStatus; }
 };
 
 class PlayerMgr {

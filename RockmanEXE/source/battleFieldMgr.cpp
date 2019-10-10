@@ -22,6 +22,14 @@ void BattleFieldMgr::BattleInit() {
 
 	fname = def::IMAGE_FILE_PATH + "battle/フレーム/hp_frame.png";
 	imgHpFrame = LoadGraphWithErrorCheck(fname, position);
+
+	int tmp[18];
+	fname = def::IMAGE_FILE_PATH + "battle/フレーム/mind_status.png";
+	LoadDivGraphWithErrorCheck(tmp, fname, position, 6, 3, 88, 32);
+	for( int i = 0; i < 17; i++ ) {
+		imgMindStatus[i] = tmp[i];
+	}
+	DeleteGraph(tmp[17]);
 }
 
 void BattleFieldMgr::BattleEnd() {
@@ -31,6 +39,9 @@ void BattleFieldMgr::BattleEnd() {
 		DeleteGraph(imgGauge[i]);
 	DeleteGraph(imgMindWindowFrame);
 	DeleteGraph(imgHpFrame);
+	for( int i = 0; i < 17; i++ ) {
+		DeleteGraph(imgMindStatus[i]);
+	}
 }
 
 void BattleFieldMgr::Draw() {
@@ -71,11 +82,12 @@ void BattleFieldMgr::DrawBaseFrame(BattleState state) {
 
 	// ココロウィンドウの描画
 	DrawGraph(x, 40, imgMindWindowFrame, TRUE);// フレームの描画
-	// TODO(実際のステータスの描画)
+	auto mind = PlayerMgr::GetInst()->GetBattleChar()->GetMindStatus();
+	DrawGraph(x, 40, imgMindStatus[mind], TRUE);
 
 	// HPの描画
 	DrawGraph(x, 5, imgHpFrame, TRUE);
-	DrawCharacter::GetInst()->DrawNumber(x+14, 7,hp, hp_col, 4);
+	DrawCharacter::GetInst()->DrawNumber(x + 14, 7, hp, hp_col, 4);
 }
 
 void BattleFieldMgr::Process() {
