@@ -96,7 +96,7 @@ BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax
 
 	fname = def::CHARACTER_IMAGE_PATH + "player_cannon.png";
 	anim[eANIM_CANNON] = std::shared_ptr<Animation>(new Animation());
-	anim[eANIM_CANNON]->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(4, 1), 5);
+	anim[eANIM_CANNON]->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(6, 1), 4, 1);
 
 	fname = def::CHARACTER_IMAGE_PATH + "player_sword.png";
 	anim[eANIM_SWORD] = std::shared_ptr<Animation>(new Animation());
@@ -202,6 +202,7 @@ void BattlePlayer::Process() {
 
 		// チップを使う
 		if( CKey::GetInst()->CheckKey(eKEY_ENTER) == 1 ) {
+#if 0
 			if( !sendChipList.empty() ) {
 				auto it = sendChipList.begin();
 				ChipData c = ChipMgr::GetInst()->GetChipData(it->id);
@@ -216,6 +217,18 @@ void BattlePlayer::Process() {
 				}
 				sendChipList.pop_front();
 			}
+#else
+			// debug(デバッグ用処理: 特定のチップを使い続ける)
+			ChipData c = ChipMgr::GetInst()->GetChipData(ChipMgr::eID_キャノン);
+			SkillArg arg;
+			arg.charPos = pos;
+			arg.power = c.power;
+			arg.myCharType = eCHAR_PLAYER;
+			BattleSkillMgr::GetInst()->Register(SkillMgr::GetData(c, arg));
+			if( c.playerAct != eANIM_NONE ) {
+				this->AttachAnim(anim[c.playerAct]);
+			}
+#endif
 		}
 	}
 }

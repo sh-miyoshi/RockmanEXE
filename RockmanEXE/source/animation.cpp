@@ -19,12 +19,12 @@ Animation::~Animation() {
 	DeleteData();
 }
 
-void Animation::LoadData(std::string fname, CPoint<unsigned int> size, CPoint<unsigned int> num, unsigned int imageDelay) {
+void Animation::LoadData(std::string fname, CPoint<unsigned int> size, CPoint<unsigned int> num, unsigned int imageDelay, unsigned int extraImageNum) {
 	LoadDivGraphWithErrorCheck(image, fname, "BattleCharBase::AnimData::LoadImage", num.x, num.y, size.x, size.y);
 
 	this->imageNum = num.x * num.y;
 	this->imageDelay = imageDelay;
-	this->endCount = this->imageNum * this->imageDelay;
+	this->endCount = ( this->imageNum + extraImageNum ) * this->imageDelay;
 }
 
 void Animation::DeleteData() {

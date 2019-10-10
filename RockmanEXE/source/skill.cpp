@@ -19,7 +19,8 @@ public:
 };
 
 class Skill_ƒLƒƒƒmƒ“Œn:public SkillData {
-	static const int DAMAGE_REGISTER_DELAY = 5 * 4;// ƒJƒEƒ“ƒgŒã‚Éƒ_ƒ[ƒW‚ğ“o˜^
+	static const int DAMAGE_REGISTER_COUNT = 20;
+	static const int SKILL_END_COUNT = 28;
 
 	CharType myCharType;
 	int count;
@@ -137,23 +138,29 @@ void Skill_ƒLƒƒƒmƒ“Œn::Draw() {
 	int ino = ( count / 5 ) - 1;
 	if( ino >= 0 ) {
 		if( ino > 2 )ino = 2;
-		int dx = ( myCharType == eCHAR_PLAYER ) ? 40 : -10;// TODO(“Goffset‚Ì’²®)
+		int dx = ( myCharType == eCHAR_PLAYER ) ? 45 : -10;// TODO(“Goffset‚Ì’²®)
+		if( count >= 12 && count < 22 ) {
+			dx -= 15;
+		}
 		CPoint<int> t = BattleField::GetPixelPos(charPos);
-		DrawRotaGraph(t.x+dx, t.y-10,1,0, imgBody[ino], TRUE);
+		DrawRotaGraph(t.x + dx, t.y - 11, 1, 0, imgBody[ino], TRUE);
 	}
 }
 
 bool Skill_ƒLƒƒƒmƒ“Œn::Process() {
 	count++;
 
-	if( count >= DAMAGE_REGISTER_DELAY ) {
+	if( count == DAMAGE_REGISTER_COUNT ) {
 		// “o˜^ŠÔ‚É‚È‚Á‚½‚çƒ_ƒ[ƒW‚ğ“o˜^
 		int targetType = eCHAR_ALL ^ myCharType;
 		CPoint<int> targetPos = BattleCharMgr::GetInst()->GetClosestCharPosWithSameLine(charPos, targetType);
 		if( targetPos.x > 0 ) {// ’¼üã‚É“G‚ª‚¢‚é‚È‚ç
 			BattleCharMgr::GetInst()->RegisterDamage(DamageData(targetPos, damage, targetType));
 		}
-		return true;
+	}
+
+	if( count >= SKILL_END_COUNT ) {
+		return true;// I—¹
 	}
 
 	return false;

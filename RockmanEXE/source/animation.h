@@ -17,9 +17,9 @@ public:
 	Animation(const Animation& data);
 	~Animation();
 
-	void LoadData(std::string fname, CPoint<unsigned int> size, CPoint<unsigned int> num, unsigned int imageDelay = 1);
+	void LoadData(std::string fname, CPoint<unsigned int> size, CPoint<unsigned int> num, unsigned int imageDelay = 1, unsigned int extraImageNum = 0);
 	void DeleteData();
-	void ResetCount(){ count=0; }
+	void ResetCount() { count = 0; }
 
 	virtual void Begin() {}
 	virtual void End() {}
