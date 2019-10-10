@@ -48,6 +48,7 @@ void BattleFieldMgr::DrawBaseFrame(BattleState state) {
 	case eSTATE_CHIP_SELECT:
 		x = 242;
 		break;
+	case eSTATE_BATTLE_START:
 	case eSTATE_MAIN:
 		// カスタムゲージの描画
 		if( gaugeCount < GAUGE_MAX_COUNT ) {
@@ -62,6 +63,9 @@ void BattleFieldMgr::DrawBaseFrame(BattleState state) {
 			DrawGraph(96, 5, imgGauge[c], TRUE);
 		}
 		x = 7;
+		break;
+	default:
+		AppLogger::Error("In DrawBaseFrame, State %d is not implemented yet.", state);
 		break;
 	}
 

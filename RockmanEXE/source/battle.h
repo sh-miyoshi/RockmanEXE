@@ -61,6 +61,21 @@ private:
 		void Process();
 	};
 
+	class StateBattleStart: public StateBase {
+		static const unsigned int DRAW_DELAY = 4;
+
+		unsigned int count;
+		int imgTitle[3];
+		Battle* obj;
+	public:
+		StateBattleStart(Battle* obj);
+		~StateBattleStart();
+
+		void Draw();
+		void Process();
+
+	};
+
 	class StateMain: public StateBase {
 		Battle* obj;
 	public:

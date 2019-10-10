@@ -158,6 +158,7 @@
     <ClCompile Include="source\battleBack.cpp" />
     <ClCompile Include="source\battleCharBase.cpp" />
     <ClCompile Include="source\battleCharMgr.cpp" />
+    <ClCompile Include="source\battleStateBattleStart.cpp" />
     <ClCompile Include="source\battleStateBigin.cpp" />
     <ClCompile Include="source\battleStateChipSelect.cpp" />
     <ClCompile Include="source\battleField.cpp" />

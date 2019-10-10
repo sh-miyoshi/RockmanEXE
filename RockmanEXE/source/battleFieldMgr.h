@@ -23,6 +23,7 @@ class BattleFieldMgr {
 public:
 	enum BattleState {
 		eSTATE_CHIP_SELECT,
+		eSTATE_BATTLE_START,
 		eSTATE_MAIN,
 		eSTATE_RESULT_WIN
 	};
