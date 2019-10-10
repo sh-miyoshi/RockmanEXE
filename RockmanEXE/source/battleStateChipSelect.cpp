@@ -148,15 +148,16 @@ void Battle::StateChipSelect::Draw() {
 	playerHand.Draw();
 
 	// 選択位置の描画
-	static const int DRAW_DELAY = 40;
-	if( ( drawCount / DRAW_DELAY ) % 2 == 0 ) {
-		if( pointer == BT_SEND_NO )
+	static const int DRAW_DELAY = 15;
+	if( pointer == BT_SEND_NO ) {
+		if( ( drawCount / DRAW_DELAY ) % 2 == 0 ) {
 			DrawGraph(180, 225, imgPointer[1], TRUE);
-		else {
-			int x = ( pointer % 5 ) * 32 + 12;
-			int y = ( pointer / 5 ) * 20 + 200;
-			DrawGraph(x, y, imgPointer[0], TRUE);
 		}
+	} else {
+		int x = ( pointer % 5 ) * 32 + 31;
+		int y = ( pointer / 5 ) * 20 + 223;
+		int ino = ( drawCount / DRAW_DELAY ) % 2;
+		DrawRotaGraph(x, y,1,0, imgPointer[ino], TRUE);
 	}
 
 	// チップ詳細情報の表示
@@ -177,7 +178,7 @@ void Battle::StateChipSelect::Process() {
 	if( CKey::GetInst()->CheckKey(eKEY_ENTER) == 1 ) {
 		if( pointer == BT_SEND_NO ) {// チップ選択完了
 			playerHand.SetSendChipList();// 選んだチップをBattleStatemainへ引き渡す
-			obj->stateMgr.ChangeNext(new Battle::StateMain(obj));
+			obj->stateMgr.ChangeNext(new Battle::StateBattleStart(obj));
 		} else {
 			playerHand.Select(pointer);
 		}
