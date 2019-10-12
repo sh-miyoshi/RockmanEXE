@@ -89,7 +89,10 @@ private:
 	};
 
 	class StateWin: public StateBase {
+		static const int VIEW_ITEM_COUNT = 20;
+
 		unsigned int count;
+		unsigned int bustingLv;
 		int imgResultFrame;
 		Battle* obj;
 	public:
@@ -100,6 +103,7 @@ private:
 		void Process();
 	};
 
+	bool isBoss;
 	unsigned int mainProcCount;
 	RtnCode rtnCode;
 	StateMgr stateMgr;

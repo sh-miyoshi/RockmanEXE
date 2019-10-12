@@ -5,8 +5,8 @@
 #include "enemy.h"
 #include "effectMgr.h"
 
-Battle::Battle():rtnCode(eRTN_CONTINUE), mainProcCount(0){
-	// TODO(ˆø”‚ÅenemyList‚ğæ“¾‚·‚é)
+Battle::Battle():rtnCode(eRTN_CONTINUE), mainProcCount(0), isBoss(false){
+	// TODO(ˆø”‚ÅenemyList, isBoss‚ğæ“¾‚·‚é)
 	std::list< std::shared_ptr<BattleCharBase>> enemyList;
 
 	std::shared_ptr<BattleCharBase> enemy1 = EnemyMgr::GetData(EnemyMgr::ID_“I);

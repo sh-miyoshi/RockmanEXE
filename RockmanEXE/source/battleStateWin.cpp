@@ -1,7 +1,9 @@
 #include "include.h"
 #include "battle.h"
+#include "fps.h"
+#include "drawCharacter.h"
 
-Battle::StateWin::StateWin(Battle* obj):obj(obj), imgResultFrame(-1), count(0){
+Battle::StateWin::StateWin(Battle* obj):obj(obj), imgResultFrame(-1), count(0), bustingLv(0) {
 	AppLogger::Info("Change Battle State to StateWin");
 
 	std::string fname = def::IMAGE_FILE_PATH + "battle/フレーム/battle_result_frame.png";
@@ -30,6 +32,27 @@ Battle::StateWin::StateWin(Battle* obj):obj(obj), imgResultFrame(-1), count(0){
 	// 同時に倒す
 	//   2体同時:	2point
 	//   3体同時:	4point
+
+	// 倒した時間によるポイント加算
+	int time = obj->mainProcCount / Fps::FPS;
+	bustingLv = 4;
+	if( obj->isBoss ) {
+		const int deadline[4] = { 50,40,30,-1 };
+		for( int i = 0; i < 4; i++ ) {
+			if( time > deadline[i] ) {
+				bustingLv += ( i * 2 );
+				break;
+			}
+		}
+	} else {
+		const int deadline[4] = { 36,12,5,-1 };
+		for( int i = 0; i < 4; i++ ) {
+			if( time > deadline[i] ) {
+				bustingLv += i;
+				break;
+			}
+		}
+	}
 }
 
 Battle::StateWin::~StateWin() {
@@ -43,7 +66,22 @@ void Battle::StateWin::Draw() {
 		x = 40;
 	DrawGraph(x, 45, imgResultFrame, TRUE);
 
-	// TODO(表示するもの: デリート時間, バスティングレベル, 取得アイテム)
+	if( count >= VIEW_ITEM_COUNT ) {
+		// デリート時間の描画
+		int time = obj->mainProcCount / Fps::FPS;
+		int min = time / 60;
+		int sec = time % 60;
+		if( min > 99 )
+			min = 99;
+		DrawCharacter::GetInst()->DrawNumberPadding(305, 92, min, 2);
+		DrawCharacter::GetInst()->DrawString(340, 95, "：", WHITE);
+		DrawCharacter::GetInst()->DrawNumberPadding(355, 92, sec, 2);
+
+		// バスティングレベルの描画
+		DrawCharacter::GetInst()->DrawNumber(365, 140, bustingLv);
+
+		// TODO(取得アイテム)
+	}
 }
 
 void Battle::StateWin::Process() {
