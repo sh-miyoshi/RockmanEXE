@@ -3,7 +3,7 @@
 #include "battleCharMgr.h"
 
 Battle::StateBegin::StateBegin(Battle* obj):obj(obj), count(0), drawNo(0){
-
+	AppLogger::Info("Change Battle State to StateBegin");
 }
 
 Battle::StateBegin::~StateBegin() {
@@ -20,7 +20,6 @@ void Battle::StateBegin::Process() {
 		count = 0;
 		drawNo++;
 		if( drawNo > BattleCharMgr::GetInst()->GetEnemyNum() ) {
-			AppLogger::Info("Change Battle State to Chip Select");
 			obj->stateMgr.ChangeNext(new Battle::StateChipSelect(obj));
 		}
 	}

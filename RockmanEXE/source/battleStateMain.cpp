@@ -5,6 +5,7 @@
 #include "battleFieldMgr.h"
 
 Battle::StateMain::StateMain(Battle* obj):obj(obj) {
+	AppLogger::Info("Change Battle State to StateMain");
 }
 
 Battle::StateMain::~StateMain() {
@@ -17,9 +18,10 @@ void Battle::StateMain::Draw() {
 }
 
 void Battle::StateMain::Process() {
+	obj->mainProcCount++;
+
 	switch( BattleCharMgr::GetInst()->MainProcess() ) {
 	case BattleCharMgr::eRTN_WIN:
-		AppLogger::Info("Change Battle State to StateWin");
 		obj->stateMgr.ChangeNext(new StateWin(obj));
 		return;
 	case BattleCharMgr::eRTN_LOSE:
@@ -27,5 +29,11 @@ void Battle::StateMain::Process() {
 		return;
 	}
 	BattleSkillMgr::GetInst()->Process();
-	BattleFieldMgr::GetInst()->GaugeProcess();
+	bool allowStateUpdate = BattleFieldMgr::GetInst()->GaugeProcess();
+	if( allowStateUpdate ) {
+		if( CKey::GetInst()->CheckKey(eKEY_DEV_L) == 1 || CKey::GetInst()->CheckKey(eKEY_DEV_R) == 1 ) {
+			BattleFieldMgr::GetInst()->ResetGaugeCount();
+			obj->stateMgr.ChangeNext(new StateChipSelect(obj));// チップ選択へ
+		}
+	}
 }

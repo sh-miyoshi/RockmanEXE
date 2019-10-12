@@ -4,6 +4,8 @@
 #include "battleFieldMgr.h"
 
 Battle::StateBattleStart::StateBattleStart(Battle* obj):obj(obj), count(0), imgTitle() {
+	AppLogger::Info("Change Battle State to StateBattleStart");
+
 	const std::string position = "Battle::StateBattleStart::StateBattleStart";
 	std::string fname = def::IMAGE_FILE_PATH + "battle/ÉtÉåÅ[ÉÄ/battle_begin.png";
 	LoadDivGraphWithErrorCheck(imgTitle, fname, position, 1, 3, 274, 32);

@@ -94,11 +94,13 @@ void BattleFieldMgr::Process() {
 	backData.Process();
 }
 
-void BattleFieldMgr::GaugeProcess() {
+bool BattleFieldMgr::GaugeProcess() {
 	if( gaugeCount < GAUGE_MAX_COUNT ) {
 		gaugeCount += 2;// TODO(カスタムゲージの上昇速度を調節できるようにする)
+		return false;// Stateをまだ更新できない
 	} else {
 		drawGaugeMaxCount++;
+		return true;// Stateを更新できる
 	}
 }
 

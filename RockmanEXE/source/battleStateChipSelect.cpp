@@ -112,6 +112,8 @@ void Battle::StateChipSelect::PlayerHandMgr::SetSendChipList() {
 Battle::StateChipSelect::StateChipSelect(Battle* obj)
 	:obj(obj), imgSelectFrame(-1), pointer(0), imgPointer(), drawCount(0) {
 
+	AppLogger::Info("Change Battle State to StateChipSelect");
+
 	// ‰æ‘œ‚Ì“Ç‚İ‚İ
 	const std::string position = "Battle::StateChipSelect::StateChipSelect";
 	std::string fname = def::IMAGE_FILE_PATH + "battle/ƒtƒŒ[ƒ€/battle_chip_select.png";

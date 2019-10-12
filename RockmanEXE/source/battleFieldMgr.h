@@ -39,7 +39,8 @@ public:
 	void Draw();
 	void DrawBaseFrame(BattleState state);
 	void Process();
-	void GaugeProcess();
+	bool GaugeProcess();
+	void ResetGaugeCount() { gaugeCount = 0; }
 
 	void GetPanelInfo(int result[BattleField::LAYER_MAX], int x, int y);
 };

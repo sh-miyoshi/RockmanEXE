@@ -5,7 +5,7 @@
 #include "enemy.h"
 #include "effectMgr.h"
 
-Battle::Battle():rtnCode(eRTN_CONTINUE){
+Battle::Battle():rtnCode(eRTN_CONTINUE), mainProcCount(0){
 	// TODO(ˆø”‚ÅenemyList‚ğæ“¾‚·‚é)
 	std::list< std::shared_ptr<BattleCharBase>> enemyList;
 
