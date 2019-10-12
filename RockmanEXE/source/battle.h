@@ -88,6 +88,24 @@ private:
 		void Process();
 	};
 
+	class StateEnemyDeleted: public StateBase {
+		static const unsigned int DRAW_DELAY = 4;
+		static const unsigned int INIT_WAIT_TIME = 10;
+		static const unsigned int END_WAIT_TUIME = 90;
+		static const unsigned int STATE_END_TIME = INIT_WAIT_TIME + DRAW_DELAY * 3 * 2 + END_WAIT_TUIME;
+
+		unsigned int count;
+		int imgTitle[3];
+		Battle* obj;
+	public:
+		StateEnemyDeleted(Battle* obj);
+		~StateEnemyDeleted();
+
+		void Draw();
+		void Process();
+
+	};
+
 	class StateWin: public StateBase {
 		static const int VIEW_ITEM_COUNT = 20;
 

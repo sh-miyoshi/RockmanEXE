@@ -28,12 +28,12 @@ protected:
 	std::shared_ptr<Animation> defaultAnim;
 	std::queue<std::shared_ptr<Animation>> animQueue;
 
-	bool AnimProcess();
 	bool MoveCheck(int x, int y);
 public:
 	BattleCharBase(std::string name, unsigned int hp, unsigned int hpMax, CharType myCharType);
 	~BattleCharBase() {}
 
+	bool AnimProcess();
 	virtual void Draw();
 	virtual void Process();// ƒLƒƒƒ‰‚Ìs“®
 

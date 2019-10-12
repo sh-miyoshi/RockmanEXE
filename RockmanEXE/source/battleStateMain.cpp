@@ -22,7 +22,7 @@ void Battle::StateMain::Process() {
 
 	switch( BattleCharMgr::GetInst()->MainProcess() ) {
 	case BattleCharMgr::eRTN_WIN:
-		obj->stateMgr.ChangeNext(new StateWin(obj));
+		obj->stateMgr.ChangeNext(new StateEnemyDeleted(obj));
 		return;
 	case BattleCharMgr::eRTN_LOSE:
 		AppLogger::Error("–¢ŽÀ‘•");// TODO

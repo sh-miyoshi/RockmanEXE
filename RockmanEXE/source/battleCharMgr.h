@@ -40,6 +40,7 @@ public:
 	void Draw();
 	void DrawAppearScene(unsigned int nowCharNo, unsigned int count);
 	RtnCode MainProcess();
+	void RunAnimProc();// アニメーション処理だけ実施する
 
 	CPoint<int> GetClosestCharPos(CPoint<int> myPos, int charType);
 	CPoint<int> GetClosestCharPosWithSameLine(CPoint<int> myPos, int charType);

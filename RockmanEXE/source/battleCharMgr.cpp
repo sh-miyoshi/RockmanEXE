@@ -96,6 +96,14 @@ BattleCharMgr::RtnCode BattleCharMgr::MainProcess() {
 	return eRTN_CONTINUE;
 }
 
+void BattleCharMgr::RunAnimProc() {
+	player->AnimProcess();
+
+	for( auto enemy : enemyList ) {
+		enemy->AnimProcess();
+	}
+}
+
 CPoint<int> BattleCharMgr::GetClosestCharPos(CPoint<int> myPos, int charType) {
 	// Å‘å‹——£(x*x+y*y)+1
 	static const int DIST_MAX

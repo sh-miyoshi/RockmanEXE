@@ -163,6 +163,7 @@
     <ClCompile Include="source\battleStateChipSelect.cpp" />
     <ClCompile Include="source\battleField.cpp" />
     <ClCompile Include="source\battleFieldMgr.cpp" />
+    <ClCompile Include="source\battleStateEnemyDeleted.cpp" />
     <ClCompile Include="source\battleStateMain.cpp" />
     <ClCompile Include="source\battleSkillMgr.cpp" />
     <ClCompile Include="source\battleStateWin.cpp" />
