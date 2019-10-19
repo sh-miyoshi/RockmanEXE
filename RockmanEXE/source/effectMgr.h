@@ -8,25 +8,33 @@
 typedef struct EffectArg {
 	CPoint<int> pos;
 	unsigned int rndSize;
+	unsigned int num;
+
+	EffectArg():rndSize(0), num(1) {}
+	~EffectArg() {}
 }EffectArg;
-
-class EffectData {
-public:
-	EffectData() {}
-	~EffectData() {}
-
-	virtual void Draw() {}
-	virtual bool Process() = 0;
-};
 
 class EffectMgr {
 public:
 	enum EffectID {
 		eID_ロックバスター_HIT,
+		eID_EnemyDeleted,
 
 		eID_MAX
 	};
 private:
+	class EffectData {
+		unsigned int count;
+		std::vector<CPoint<int>> drawPositions;
+		std::vector<int> images;
+	public:
+		EffectData(EffectArg args, std::vector<int> images);
+		~EffectData();
+
+		void Draw();
+		bool Process();
+	};
+
 	std::vector<int> images[eID_MAX];
 	std::list<std::shared_ptr<EffectData>> effectList;
 

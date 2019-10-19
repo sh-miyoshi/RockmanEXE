@@ -2,6 +2,7 @@
 #include "battleCharMgr.h"
 #include "playerMgr.h"
 #include "battleField.h"
+#include "effectMgr.h"
 
 DamageData::DamageData():power(0), targetType(0) {
 }
@@ -70,6 +71,11 @@ BattleCharMgr::RtnCode BattleCharMgr::MainProcess() {
 					int hp = ( int ) enemy->GetHP() - damage.power;
 					enemy->SetHP(hp);
 					if( hp <= 0 ) {
+						EffectArg args;
+						args.pos = BattleField::GetPixelPos(enemy->GetPos());
+						args.rndSize = 30;
+						args.num = 3;
+						EffectMgr::GetInst()->Register(EffectMgr::eID_EnemyDeleted, args);
 						// TODO(ƒfƒŠ[ƒgˆ—)
 					}
 				}
