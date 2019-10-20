@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\aes.cpp" />
     <ClCompile Include="source\animation.cpp" />
     <ClCompile Include="source\appLogger.cpp" />
     <ClCompile Include="source\battle.cpp" />
@@ -183,6 +184,7 @@
     <ClCompile Include="source\utilDxLib.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\aes.h" />
     <ClInclude Include="source\animation.h" />
     <ClInclude Include="source\appLogger.h" />
     <ClInclude Include="source\battle.h" />

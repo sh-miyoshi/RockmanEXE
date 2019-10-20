@@ -86,4 +86,11 @@ void Battle::StateWin::Draw() {
 
 void Battle::StateWin::Process() {
 	count++;
+	if( count >= VIEW_ITEM_COUNT ) {
+		// TODO(ƒ‚ƒUƒCƒNˆ—)
+		if( count >= VIEW_ITEM_COUNT + 50 ) {
+			if( CKey::GetInst()->CheckKey(eKEY_ENTER) == 1 )
+				obj->rtnCode = Battle::eRTN_WIN;
+		}
+	}
 }

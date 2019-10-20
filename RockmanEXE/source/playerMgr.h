@@ -5,6 +5,7 @@
 #include "battleCharBase.h"
 #include "chip.h"
 #include "animation.h"
+#include "enemy.h"
 
 class BattlePlayer:public BattleCharBase {
 public:
@@ -54,16 +55,24 @@ public:
 
 class PlayerMgr {
 	static const int FOLDER_NUM = 30;
+	enum BattleResult {
+		eBT_RTN_WIN,
+		eBT_RTN_LOSE,
+		eBT_RTN_MAX
+	};
 
 	std::string name;
 	unsigned int hp, hpMax;
 	unsigned int busterPower;
 	std::vector<ChipInfo> chipFolder;
+	unsigned int battleResult[EnemyMgr::ID_MAX][eBT_RTN_MAX];
 
 	BattlePlayer* battlePlayer;
 
 	PlayerMgr();
 	~PlayerMgr();
+
+	void Save();
 public:
 	static PlayerMgr* GetInst() {
 		static PlayerMgr inst;
@@ -75,6 +84,6 @@ public:
 
 	void CreateNewPlayer();
 	// TODO void LoadSaveFile();
-	// TODO Save()
+	void UpdateBattleResult(bool isWin, std::vector<EnemyMgr::EnemyID> enemies);
 	bool IsContinueOK();
 };

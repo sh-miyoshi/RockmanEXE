@@ -4,13 +4,16 @@
 #include "battleField.h"
 #include "battleSkillMgr.h"
 #include "drawCharacter.h"
+#include "aes.h"
 
 namespace {
 	const unsigned int DEFAULT_CHARGE_TIME = 2 * 60;// 2[second]
+	const std::string SAVE_FILE_NAME = "save.dat";
+	const int SAVE_HASH_VALUE = 24071;
 }
 
 PlayerMgr::PlayerMgr()
-	:name("ロックマン"), hp(0), hpMax(0), battlePlayer(nullptr), busterPower(1) {
+	:name("ロックマン"), hp(0), hpMax(0), battlePlayer(nullptr), busterPower(1), battleResult() {
 }
 
 PlayerMgr::~PlayerMgr() {
@@ -18,6 +21,54 @@ PlayerMgr::~PlayerMgr() {
 		delete battlePlayer;
 		battlePlayer = nullptr;
 	}
+}
+
+void PlayerMgr::Save() {
+	std::stringstream ss;
+	// intが続くときは区切り文字として'#'を挿入
+	//ss << money << '#';
+	for( int i = 0; i < FOLDER_NUM; i++ )
+		ss << chipFolder[i].id << chipFolder[i].code;
+	ss << hp << '#';
+	ss << hpMax << '#';
+	ss << busterPower << '#';
+	//ss << mindState << '#';
+	int result_val = 0;
+	for( int i = 0; i < EnemyMgr::ID_MAX; i++ ) {
+		for( int j = 0; j < eBT_RTN_MAX; j++ ) {
+			ss << battleResult[i][j] << '#';
+			result_val += battleResult[i][j];
+		}
+	}
+
+	// 適当な素数で割ったハッシュも保存
+	//int hash = money + hp + hpMax + busterPower + mindState;
+	int hash = hp + hpMax + busterPower;
+	hash += result_val;
+	hash %= SAVE_HASH_VALUE;
+	ss << hash;
+
+	static const int MAX_DATA_LENGTH = 1024;
+	unsigned int dataLength = ss.str().size();
+	if( dataLength >= MAX_DATA_LENGTH ) {
+		AppLogger::Error("保存しようとしているサイズが想定外に大きいです. Max: %d, Got: %d", MAX_DATA_LENGTH, dataLength);
+	}
+	char res[MAX_DATA_LENGTH];
+	unsigned char key[32], iv[AES_BLOCK_SIZE];
+	aes::AES::GenerateIV(iv, def::RESOURCE_PASSWORD, aes::AES_CTR);
+	for( int i = 0; i < 32; i++ ) {
+		key[i] = ( unsigned char ) def::RESOURCE_PASSWORD[i % def::RESOURCE_PASSWORD.size()];
+	}
+	aes::AES handler(aes::AES_CTR, key, 256, iv);
+	handler.EncryptString(res, ss.str().c_str(), dataLength);
+	FILE* fp;
+	fopen_s(&fp, SAVE_FILE_NAME.c_str(), "wb");
+	if( !fp ) {
+		AppLogger::Error("Faild to open Save File: %s", SAVE_FILE_NAME);
+		exit(1);
+	}
+	fwrite(res, sizeof(char), dataLength, fp);
+	fclose(fp);
 }
 
 void PlayerMgr::InitBattleChar() {
@@ -29,11 +80,26 @@ void PlayerMgr::InitBattleChar() {
 	battlePlayer->SetPos(1, 1);// 初期位置のセット
 }
 
+// debug(対戦形式の場合, HPは対戦ごとに全快なので保存する必要はない)
+//void PlayerMgr::SaveBattleChar() {
+//	if( !battlePlayer ) {
+//		AppLogger::Error("battlePlayer変数が初期化されていないのにSaveされようとしました");
+//		return;
+//	}
+//
+//	this->hp = battlePlayer->GetHP();
+//}
+
 void PlayerMgr::CreateNewPlayer() {
 	// 初期データをセット
 	hp = hpMax = 100;
 	name = "ロックマン";
 	busterPower = 1;
+	for( int i = 0; i < EnemyMgr::ID_MAX; i++ ) {
+		for( int j = 0; j < eBT_RTN_MAX; j++ ) {
+			battleResult[i][j] = 0;
+		}
+	}
 
 	// 初期フォルダーの設定
 	ChipInfo f[FOLDER_NUM] = {
@@ -72,9 +138,21 @@ void PlayerMgr::CreateNewPlayer() {
 		chipFolder.push_back(f[i]);
 }
 
+void PlayerMgr::UpdateBattleResult(bool isWin, std::vector<EnemyMgr::EnemyID> enemies) {
+	for( auto eid : enemies ) {
+		if( isWin ) {
+			battleResult[eid][eBT_RTN_WIN]++;
+		} else {
+			battleResult[eid][eBT_RTN_LOSE]++;
+		}
+	}
+
+	// Save result to file
+	Save();
+}
+
 bool PlayerMgr::IsContinueOK() {
-	// TODO(未実装)
-	return false;
+	return FileExist(SAVE_FILE_NAME);
 }
 
 BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, unsigned int busterPower, std::vector<ChipInfo> chipFolder)
@@ -219,9 +297,9 @@ void BattlePlayer::Process() {
 				BattleSkillMgr::GetInst()->Register(SkillMgr::GetData(c, arg));
 				if( c.playerAct != eANIM_NONE ) {
 					this->AttachAnim(anim[c.playerAct]);
-				}
+	}
 				sendChipList.pop_front();
-			}
+}
 #else
 			// debug(デバッグ用処理: 特定のチップを使い続ける)
 			ChipData c = ChipMgr::GetInst()->GetChipData(ChipMgr::eID_キャノン);

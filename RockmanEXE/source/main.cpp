@@ -26,9 +26,20 @@ class Main {
 		void Process();
 	};
 
+	class StateMenu:public StateBase {
+		Main* obj;
+	public:
+		StateMenu(Main* obj);
+		~StateMenu();
+
+		void Draw();
+		void Process();
+	};
+
 	class StateBattle:public StateBase {
 		Main* obj;
 		Battle battle;
+		std::vector<EnemyMgr::EnemyID> enemies;
 	public:
 		StateBattle(std::vector<Battle::EnemyInfo> enemies, Main* obj);
 		~StateBattle();
@@ -137,14 +148,30 @@ void Main::StateTitle::Draw() {
 
 void Main::StateTitle::Process() {
 	if( title.Process() ) {
-		printfDx("ok\n");
-		// TODO(state.ChangeNext(new StateMenu))
+		obj->stateMgr.ChangeNext(new StateMenu(obj));
 	}
+}
+
+Main::StateMenu::StateMenu(Main* obj):obj(obj) {
+}
+
+Main::StateMenu::~StateMenu() {
+}
+
+void Main::StateMenu::Draw() {
+	DrawString(100, 100, "Menu", RED);
+}
+
+void Main::StateMenu::Process() {
 }
 
 
 Main::StateBattle::StateBattle(std::vector<Battle::EnemyInfo> enemies, Main* obj)
 	:obj(obj), battle(enemies) {
+
+	for( auto e : enemies ) {
+		this->enemies.push_back(e.id);
+	}
 }
 
 Main::StateBattle::~StateBattle() {
@@ -157,8 +184,12 @@ void Main::StateBattle::Draw() {
 void Main::StateBattle::Process() {
 	switch( battle.Process() ) {
 	case Battle::eRTN_WIN:
+		PlayerMgr::GetInst()->UpdateBattleResult(true, enemies);
+		obj->stateMgr.ChangeNext(new StateMenu(obj));
 		break;
 	case Battle::eRTN_LOSE:
+		PlayerMgr::GetInst()->UpdateBattleResult(false, enemies);
+		obj->stateMgr.ChangeNext(new StateMenu(obj));
 		break;
 	}
 }
