@@ -85,6 +85,7 @@ EnemyBase::~EnemyBase() {
 }
 
 void EnemyBase::Draw() {
+	// TODO(HPが0ならSetDrawBlendMode)
 	BattleCharBase::Draw();
 
 	// HPの描画
@@ -106,7 +107,7 @@ void EnemyBase::Draw() {
 //-------------------------------------------------------
 // テスト用の的
 //-------------------------------------------------------
-Enemy_的::Enemy_的():EnemyBase("的", 1000) {
+Enemy_的::Enemy_的():EnemyBase("的", 10) {
 	std::string fname = def::CHARACTER_IMAGE_PATH + "的.png";
 	std::shared_ptr<Animation> animStand = std::shared_ptr<Animation>(new Animation());
 	animStand->LoadData(fname, CPoint<unsigned int>(100, 117), CPoint<unsigned int>(1, 1));

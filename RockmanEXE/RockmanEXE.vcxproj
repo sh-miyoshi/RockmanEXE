@@ -171,11 +171,13 @@
     <ClCompile Include="source\drawCharacter.cpp" />
     <ClCompile Include="source\effectMgr.cpp" />
     <ClCompile Include="source\enemy.cpp" />
+    <ClCompile Include="source\fade.cpp" />
     <ClCompile Include="source\keyConfig.cpp" />
     <ClCompile Include="source\fps.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\playerMgr.cpp" />
     <ClCompile Include="source\skill.cpp" />
+    <ClCompile Include="source\title.cpp" />
     <ClCompile Include="source\util.cpp" />
     <ClCompile Include="source\utilDxLib.cpp" />
   </ItemGroup>
@@ -193,6 +195,7 @@
     <ClInclude Include="source\drawCharacter.h" />
     <ClInclude Include="source\effectMgr.h" />
     <ClInclude Include="source\enemy.h" />
+    <ClInclude Include="source\fade.h" />
     <ClInclude Include="source\keyConfig.h" />
     <ClInclude Include="source\define.h" />
     <ClInclude Include="source\fps.h" />
@@ -201,6 +204,7 @@
     <ClInclude Include="source\point.h" />
     <ClInclude Include="source\skill.h" />
     <ClInclude Include="source\state.h" />
+    <ClInclude Include="source\title.h" />
     <ClInclude Include="source\util.h" />
     <ClInclude Include="source\utilDxLib.h" />
   </ItemGroup>

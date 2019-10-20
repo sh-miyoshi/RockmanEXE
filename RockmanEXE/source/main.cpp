@@ -8,12 +8,24 @@
 #include "chip.h"
 #include "effectMgr.h"
 #include "drawCharacter.h"
+#include "title.h"
 
 bool gExitFlag = false;
 unsigned long long gGameCount = 0;
 std::mt19937_64 rnd_generator;
 
 class Main {
+	class StateTitle:public StateBase {
+		Main* obj;
+		Title title;
+	public:
+		StateTitle(Main* obj);
+		~StateTitle();
+
+		void Draw();
+		void Process();
+	};
+
 	class StateBattle :public StateBase{
 		Main* obj;
 		Battle battle;
@@ -76,8 +88,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdS
 }
 
 Main::Main(void) {
-	AppLogger::Info("Change Main State to StateBattle");
-	stateMgr.ChangeNext(new StateBattle(this));
+	AppLogger::Info("Change Main State to StateTitle");
+	stateMgr.ChangeNext(new StateTitle(this));
 }
 
 Main::~Main(void) {
@@ -103,6 +115,27 @@ void Main::Process() {
 		gGameCount++;
 	}
 }
+
+Main::StateTitle::StateTitle(Main* obj):obj(obj) {
+}
+
+Main::StateTitle::~StateTitle() {
+}
+
+void Main::StateTitle::Draw() {
+	title.Draw();
+}
+
+void Main::StateTitle::Process() {
+	// TODO(stateèàóù)
+	switch( title.Process() ) {
+	case Title::eRTN_START_ÇÕÇ∂ÇﬂÇ©ÇÁ:
+		break;
+	case Title::eRTN_START_Ç¬Ç√Ç´Ç©ÇÁ:
+		break;
+	}
+}
+
 
 Main::StateBattle::StateBattle(Main* obj):obj(obj) {
 }

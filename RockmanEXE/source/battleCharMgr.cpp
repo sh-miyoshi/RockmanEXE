@@ -76,7 +76,6 @@ BattleCharMgr::RtnCode BattleCharMgr::MainProcess() {
 						args.rndSize = 30;
 						args.num = 3;
 						EffectMgr::GetInst()->Register(EffectMgr::eID_EnemyDeleted, args);
-						// TODO(ƒfƒŠ[ƒgˆ—)
 					}
 				}
 			}
