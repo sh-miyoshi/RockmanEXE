@@ -26,11 +26,11 @@ class Main {
 		void Process();
 	};
 
-	class StateMenu:public StateBase {
+	class StateTargetSelect:public StateBase {
 		Main* obj;
 	public:
-		StateMenu(Main* obj);
-		~StateMenu();
+		StateTargetSelect(Main* obj);
+		~StateTargetSelect();
 
 		void Draw();
 		void Process();
@@ -98,18 +98,18 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdS
 }
 
 Main::Main(void) {
-	//AppLogger::Info("Change Main State to StateTitle");
-	//stateMgr.ChangeNext(new StateTitle(this));
+	AppLogger::Info("Change Main State to StateTitle");
+	stateMgr.ChangeNext(new StateTitle(this));
 
-	// debug用stateChange
-	PlayerMgr::GetInst()->CreateNewPlayer();// TODO(タイトル画面で選択する)
-	AppLogger::Info("Change Main State to StateBattle");
-	std::vector<Battle::EnemyInfo> enemies;
-	Battle::EnemyInfo e1;
-	e1.id = EnemyMgr::ID_的;
-	e1.pos = CPoint<int>(4, 1);
-	enemies.push_back(e1);
-	stateMgr.ChangeNext(new StateBattle(enemies, this));
+	//// debug用stateChange
+	//PlayerMgr::GetInst()->CreateNewPlayer();// TODO(タイトル画面で選択する)
+	//AppLogger::Info("Change Main State to StateBattle");
+	//std::vector<Battle::EnemyInfo> enemies;
+	//Battle::EnemyInfo e1;
+	//e1.id = EnemyMgr::ID_的;
+	//e1.pos = CPoint<int>(4, 1);
+	//enemies.push_back(e1);
+	//stateMgr.ChangeNext(new StateBattle(enemies, this));
 }
 
 Main::~Main(void) {
@@ -148,21 +148,35 @@ void Main::StateTitle::Draw() {
 
 void Main::StateTitle::Process() {
 	if( title.Process() ) {
-		obj->stateMgr.ChangeNext(new StateMenu(obj));
+		obj->stateMgr.ChangeNext(new StateTargetSelect(obj));
 	}
 }
 
-Main::StateMenu::StateMenu(Main* obj):obj(obj) {
+Main::StateTargetSelect::StateTargetSelect(Main* obj):obj(obj) {
 }
 
-Main::StateMenu::~StateMenu() {
+Main::StateTargetSelect::~StateTargetSelect() {
 }
 
-void Main::StateMenu::Draw() {
-	DrawString(100, 100, "Menu", RED);
+void Main::StateTargetSelect::Draw() {
+	// TODO(実処理は未実装)
+	DrawString(100, 100, "TargetSelect", WHITE);
+	DrawString(120, 140, "A: Title", WHITE);
+	DrawString(120, 120, "S: Battle", WHITE);
 }
 
-void Main::StateMenu::Process() {
+void Main::StateTargetSelect::Process() {
+	// TODO(実処理は未実装)
+	if( CKey::GetInst()->CheckKey(eKEY_DEV_L) == 1 ) {
+		obj->stateMgr.ChangeNext(new StateTitle(obj));
+	} else if( CKey::GetInst()->CheckKey(eKEY_DEV_R) == 1 ) {
+		std::vector<Battle::EnemyInfo> enemies;
+		Battle::EnemyInfo e1;
+		e1.id = EnemyMgr::ID_的;
+		e1.pos = CPoint<int>(4, 1);
+		enemies.push_back(e1);
+		obj->stateMgr.ChangeNext(new StateBattle(enemies, obj));
+	}
 }
 
 
@@ -185,11 +199,11 @@ void Main::StateBattle::Process() {
 	switch( battle.Process() ) {
 	case Battle::eRTN_WIN:
 		PlayerMgr::GetInst()->UpdateBattleResult(true, enemies);
-		obj->stateMgr.ChangeNext(new StateMenu(obj));
+		obj->stateMgr.ChangeNext(new StateTargetSelect(obj));
 		break;
 	case Battle::eRTN_LOSE:
 		PlayerMgr::GetInst()->UpdateBattleResult(false, enemies);
-		obj->stateMgr.ChangeNext(new StateMenu(obj));
+		obj->stateMgr.ChangeNext(new StateTargetSelect(obj));
 		break;
 	}
 }

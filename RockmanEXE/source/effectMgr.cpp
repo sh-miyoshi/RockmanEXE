@@ -63,7 +63,7 @@ EffectMgr::EffectData::EffectData(EffectArg args, std::vector<int> images)
 	:images(images), count(0) {
 
 	// •`‰æˆÊ’u‚ÌŒˆ’è
-	for( int i = 0; i < args.num; i++ ) {
+	for( unsigned int i = 0; i < args.num; i++ ) {
 		int rndX = rnd_generator() % ( args.rndSize * 2 );
 		int rndY = rnd_generator() % ( args.rndSize * 2 );
 		CPoint<int> pos;

@@ -10,6 +10,7 @@ namespace {
 	const unsigned int DEFAULT_CHARGE_TIME = 2 * 60;// 2[second]
 	const std::string SAVE_FILE_NAME = "save.dat";
 	const int SAVE_HASH_VALUE = 24071;
+	const unsigned int MAX_SAVE_DATA_LENGTH = 2048;
 }
 
 PlayerMgr::PlayerMgr()
@@ -48,12 +49,11 @@ void PlayerMgr::Save() {
 	hash %= SAVE_HASH_VALUE;
 	ss << hash;
 
-	static const int MAX_DATA_LENGTH = 1024;
 	unsigned int dataLength = ss.str().size();
-	if( dataLength >= MAX_DATA_LENGTH ) {
-		AppLogger::Error("保存しようとしているサイズが想定外に大きいです. Max: %d, Got: %d", MAX_DATA_LENGTH, dataLength);
+	if( dataLength >= MAX_SAVE_DATA_LENGTH ) {
+		AppLogger::Error("保存しようとしているサイズが想定外に大きいです. Max: %d, Got: %d", MAX_SAVE_DATA_LENGTH, dataLength);
 	}
-	char res[MAX_DATA_LENGTH];
+	char res[MAX_SAVE_DATA_LENGTH];
 	unsigned char key[32], iv[AES_BLOCK_SIZE];
 	aes::AES::GenerateIV(iv, def::RESOURCE_PASSWORD, aes::AES_CTR);
 	for( int i = 0; i < 32; i++ ) {
@@ -136,6 +136,69 @@ void PlayerMgr::CreateNewPlayer() {
 	};
 	for( int i = 0; i < FOLDER_NUM; i++ )
 		chipFolder.push_back(f[i]);
+
+	AppLogger::Info("Start with New Player");
+}
+
+void PlayerMgr::ContinueWithSaveFile() {
+	char buf[MAX_SAVE_DATA_LENGTH];
+	FILE* fp;
+	fopen_s(&fp, SAVE_FILE_NAME.c_str(), "rb");
+	if( !fp ) {
+		AppLogger::Error("Faild to open Save File: %s", SAVE_FILE_NAME.c_str());
+		exit(1);
+	}
+	size_t readSize = fread(buf, sizeof(char), MAX_SAVE_DATA_LENGTH, fp);
+	fclose(fp);
+
+	if( readSize >= MAX_SAVE_DATA_LENGTH ) {
+		AppLogger::Error("想定外に大きなファイルをロードしようとしました. ");
+		return;
+	}
+
+	char res[MAX_SAVE_DATA_LENGTH];
+	unsigned char key[32], iv[AES_BLOCK_SIZE];
+	aes::AES::GenerateIV(iv, def::RESOURCE_PASSWORD, aes::AES_CTR);
+	for( int i = 0; i < 32; i++ ) {
+		key[i] = ( unsigned char ) def::RESOURCE_PASSWORD[i % def::RESOURCE_PASSWORD.size()];
+	}
+
+	aes::AES handler(aes::AES_CTR, key, 256, iv);
+	handler.DecryptString(res, buf, readSize);
+
+	char dummy;
+	std::istringstream is(res);
+	//is >> money >> dummy;
+	for( int i = 0; i < FOLDER_NUM; i++ ) {
+		ChipInfo folder_tmp;
+		is >> folder_tmp.id >> folder_tmp.code;
+		chipFolder.push_back(folder_tmp);
+	}
+	is >> hp >> dummy;
+	is >> hpMax >> dummy;
+	is >> busterPower >> dummy;
+	//is >> mindState >> dummy;
+	int result_val = 0;
+	for( int i = 0; i < EnemyMgr::ID_MAX; i++ ) {
+		for( int j = 0; j < eBT_RTN_MAX; j++ ) {
+			is >> battleResult[i][j] >> dummy;
+			result_val += battleResult[i][j];
+		}
+	}
+
+	int hash, calc_hash;
+	//calc_hash = money + hp + hpMax + shotPower + mindState;
+	calc_hash = hp + hpMax + busterPower;
+	calc_hash += result_val;
+	calc_hash %= SAVE_HASH_VALUE;
+	is >> hash;
+	if( hash != calc_hash ) {
+		std::string message;
+		AppLogger::Error("セーブファイルに不正な改ざんがありました。%sを削除して最初から開始してください", SAVE_FILE_NAME.c_str());
+		exit(1);
+	}
+
+	AppLogger::Info("Start with Save File: %s", SAVE_FILE_NAME.c_str());
 }
 
 void PlayerMgr::UpdateBattleResult(bool isWin, std::vector<EnemyMgr::EnemyID> enemies) {
@@ -297,9 +360,9 @@ void BattlePlayer::Process() {
 				BattleSkillMgr::GetInst()->Register(SkillMgr::GetData(c, arg));
 				if( c.playerAct != eANIM_NONE ) {
 					this->AttachAnim(anim[c.playerAct]);
-	}
+				}
 				sendChipList.pop_front();
-}
+			}
 #else
 			// debug(デバッグ用処理: 特定のチップを使い続ける)
 			ChipData c = ChipMgr::GetInst()->GetChipData(ChipMgr::eID_キャノン);

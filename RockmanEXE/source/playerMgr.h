@@ -83,7 +83,7 @@ public:
 	void InitBattleChar();
 
 	void CreateNewPlayer();
-	// TODO void LoadSaveFile();
+	void ContinueWithSaveFile();
 	void UpdateBattleResult(bool isWin, std::vector<EnemyMgr::EnemyID> enemies);
 	bool IsContinueOK();
 };

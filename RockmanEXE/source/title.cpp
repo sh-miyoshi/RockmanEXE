@@ -82,7 +82,8 @@ void Title::StateTitleSelect::Process() {
 		obj->isFinish = true;
 		break;
 	case 1:// ‚Â‚Ã‚«‚©‚ç
-		AppLogger::Error("–¢ŽÀ‘•");
+		PlayerMgr::GetInst()->ContinueWithSaveFile();
+		obj->isFinish = true;
 		break;
 	}
 }
