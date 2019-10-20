@@ -3,6 +3,8 @@
 #include <vector>
 #include "state.h"
 #include "chip.h"
+#include "enemy.h"
+#include "point.h"
 
 class Battle {
 public:
@@ -11,6 +13,11 @@ public:
 		eRTN_WIN,
 		eRTN_LOSE
 	};
+
+	typedef struct EnemyInfo {
+		EnemyMgr::EnemyID id;
+		CPoint<int> pos;
+	}EnemyInfo;
 private:
 	class StateBegin: public StateBase {
 		static const int BEGIN_COUNTUP_VALUE = 256 / 30;// 30カウントでキャラ描画完了
@@ -126,7 +133,7 @@ private:
 	RtnCode rtnCode;
 	StateMgr stateMgr;
 public:
-	Battle();
+	Battle(std::vector<EnemyInfo> enemies);
 	~Battle();
 
 	void Draw();

@@ -78,7 +78,7 @@ void Title::StateTitleSelect::Draw() {
 void Title::StateTitleSelect::Process() {
 	switch(selecter.Process()) {
 	case 0:// はじめから
-		PlayerMgr::GetInst()->CreateNewPlayer();// TODO(タイトル画面で選択する)
+		PlayerMgr::GetInst()->CreateNewPlayer();
 		obj->isFinish = true;
 		break;
 	case 1:// つづきから

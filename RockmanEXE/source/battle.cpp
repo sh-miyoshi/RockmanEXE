@@ -5,20 +5,15 @@
 #include "enemy.h"
 #include "effectMgr.h"
 
-Battle::Battle():rtnCode(eRTN_CONTINUE), mainProcCount(0), isBoss(false){
-	// TODO(引数でenemyList, isBossを取得する)
+Battle::Battle(std::vector<EnemyInfo> enemies):rtnCode(eRTN_CONTINUE), mainProcCount(0), isBoss(false) {
 	std::list< std::shared_ptr<BattleCharBase>> enemyList;
-
-	std::shared_ptr<BattleCharBase> enemy1 = EnemyMgr::GetData(EnemyMgr::ID_的);
-	enemy1->SetPos(4, 1);
-	enemyList.push_back(enemy1);
-	/*std::shared_ptr<BattleCharBase> enemy1 = EnemyMgr::GetData(EnemyMgr::ID_メットール);
-	enemy1->SetPos(3, 1);
-	enemyList.push_back(enemy1);*/
-
 	std::string infoMsg = "[ ";
-	for(auto e : enemyList) {
-		infoMsg += ToString("%s, ", e->GetName().c_str());
+
+	for( auto e : enemies ) {
+		std::shared_ptr<BattleCharBase> enemy = EnemyMgr::GetData(e.id);
+		infoMsg += ToString("%s, ", enemy->GetName().c_str());
+		enemy->SetPos(e.pos.x, e.pos.y);
+		enemyList.push_back(enemy);
 	}
 	infoMsg += "]";
 	AppLogger::Info("Battle In with Enemy List: %s", infoMsg.c_str());

@@ -26,11 +26,11 @@ class Main {
 		void Process();
 	};
 
-	class StateBattle :public StateBase{
+	class StateBattle:public StateBase {
 		Main* obj;
 		Battle battle;
 	public:
-		StateBattle(Main* obj);
+		StateBattle(std::vector<Battle::EnemyInfo> enemies, Main* obj);
 		~StateBattle();
 
 		void Draw();
@@ -87,9 +87,18 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdS
 }
 
 Main::Main(void) {
-	AppLogger::Info("Change Main State to StateTitle");
-	stateMgr.ChangeNext(new StateTitle(this));
-	//PlayerMgr::GetInst()->CreateNewPlayer();// TODO(タイトル画面で選択する)
+	//AppLogger::Info("Change Main State to StateTitle");
+	//stateMgr.ChangeNext(new StateTitle(this));
+
+	// debug用stateChange
+	PlayerMgr::GetInst()->CreateNewPlayer();// TODO(タイトル画面で選択する)
+	AppLogger::Info("Change Main State to StateBattle");
+	std::vector<Battle::EnemyInfo> enemies;
+	Battle::EnemyInfo e1;
+	e1.id = EnemyMgr::ID_的;
+	e1.pos = CPoint<int>(4, 1);
+	enemies.push_back(e1);
+	stateMgr.ChangeNext(new StateBattle(enemies, this));
 }
 
 Main::~Main(void) {
@@ -134,7 +143,8 @@ void Main::StateTitle::Process() {
 }
 
 
-Main::StateBattle::StateBattle(Main* obj):obj(obj) {
+Main::StateBattle::StateBattle(std::vector<Battle::EnemyInfo> enemies, Main* obj)
+	:obj(obj), battle(enemies) {
 }
 
 Main::StateBattle::~StateBattle() {
