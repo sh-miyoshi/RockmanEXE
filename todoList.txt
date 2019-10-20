@@ -24,9 +24,6 @@ battle
 チップ追加
 menu
 	全部
-title
-	選択肢(はじめから・つづきから)の描画
-	選択後のStateChange処理
 gameOver
 	全部
 mapMove, event処理など
