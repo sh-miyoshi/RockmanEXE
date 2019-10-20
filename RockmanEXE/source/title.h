@@ -2,15 +2,9 @@
 
 #include "state.h"
 #include "fade.h"
+#include "selecter.h"
 
 class Title {
-public:
-	enum RtnCode {
-		eRTN_CONTINUE,
-		eRTN_START_‚Í‚¶‚ß‚©‚ç,
-		eRTN_START_‚Â‚Ã‚«‚©‚ç,
-	};
-private:
 	class StateTitleBegin:public StateBase {
 		static const unsigned int ALLOW_SELECT_COUNT = 60;
 
@@ -27,6 +21,7 @@ private:
 
 	class StateTitleSelect:public StateBase {
 		Title* obj;
+		Selecter selecter;
 	public:
 		StateTitleSelect(Title* obj);
 		~StateTitleSelect();
@@ -37,11 +32,11 @@ private:
 
 	int imgBack;
 	StateMgr stateMgr;
-	RtnCode rtnCode;
+	bool isFinish;
 public:
 	Title();
 	~Title();
 
 	void Draw();
-	RtnCode Process();
+	bool Process();
 };

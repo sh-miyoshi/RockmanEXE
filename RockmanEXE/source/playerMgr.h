@@ -73,7 +73,8 @@ public:
 	BattlePlayer* GetBattleChar() { return battlePlayer; }
 	void InitBattleChar();
 
-	void InitPlayer();
+	void CreateNewPlayer();
 	// TODO void LoadSaveFile();
 	// TODO Save()
+	bool IsContinueOK();
 };

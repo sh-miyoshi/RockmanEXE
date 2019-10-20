@@ -29,7 +29,7 @@ void PlayerMgr::InitBattleChar() {
 	battlePlayer->SetPos(1, 1);// 初期位置のセット
 }
 
-void PlayerMgr::InitPlayer() {
+void PlayerMgr::CreateNewPlayer() {
 	// 初期データをセット
 	hp = hpMax = 100;
 	name = "ロックマン";
@@ -70,6 +70,11 @@ void PlayerMgr::InitPlayer() {
 	};
 	for( int i = 0; i < FOLDER_NUM; i++ )
 		chipFolder.push_back(f[i]);
+}
+
+bool PlayerMgr::IsContinueOK() {
+	// TODO(未実装)
+	return false;
 }
 
 BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, unsigned int busterPower, std::vector<ChipInfo> chipFolder)

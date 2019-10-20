@@ -73,7 +73,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdS
 	ChipMgr::GetInst()->LoadData();
 	EffectMgr::GetInst()->LoadImages();
 	DrawCharacter::GetInst()->LoadImages();
-	PlayerMgr::GetInst()->InitPlayer();// TODO(タイトル画面で選択する)
 
 	Main main;
 	main.Process();
@@ -90,6 +89,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdS
 Main::Main(void) {
 	AppLogger::Info("Change Main State to StateTitle");
 	stateMgr.ChangeNext(new StateTitle(this));
+	//PlayerMgr::GetInst()->CreateNewPlayer();// TODO(タイトル画面で選択する)
 }
 
 Main::~Main(void) {
@@ -127,12 +127,9 @@ void Main::StateTitle::Draw() {
 }
 
 void Main::StateTitle::Process() {
-	// TODO(state処理)
-	switch( title.Process() ) {
-	case Title::eRTN_START_はじめから:
-		break;
-	case Title::eRTN_START_つづきから:
-		break;
+	if( title.Process() ) {
+		printfDx("ok\n");
+		// TODO(state.ChangeNext(new StateMenu))
 	}
 }
 

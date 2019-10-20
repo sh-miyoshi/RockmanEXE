@@ -176,6 +176,7 @@
     <ClCompile Include="source\fps.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\playerMgr.cpp" />
+    <ClCompile Include="source\selecter.cpp" />
     <ClCompile Include="source\skill.cpp" />
     <ClCompile Include="source\title.cpp" />
     <ClCompile Include="source\util.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="source\include.h" />
     <ClInclude Include="source\playerMgr.h" />
     <ClInclude Include="source\point.h" />
+    <ClInclude Include="source\selecter.h" />
     <ClInclude Include="source\skill.h" />
     <ClInclude Include="source\state.h" />
     <ClInclude Include="source\title.h" />
