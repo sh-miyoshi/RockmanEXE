@@ -1,9 +1,9 @@
 battle
 	chipSelect
-		ソウルユニゾン
+		(ソウルユニゾン)
 		フレームの描画
 	battleMain
-		chipUse 暗転処理
+		chipUse (暗転処理)
 		敵の攻撃など
 		ダメージ処理(のけぞりなど)
 		無敵処理
@@ -11,8 +11,7 @@ battle
 		敵撃破時の描画
 		ロックマン死亡時の演出
 	battleBegin
-		テロップを出す
-		(debug)プログラムアドバンス、ソウルユニゾン
+		(プログラムアドバンス、ソウルユニゾン)
 	battleResult
 		負けた時の状態遷移
 		勝った時の報酬の決定・画面
@@ -26,7 +25,8 @@ battle
 menu
 	全部
 title
-	全部
+	選択肢(はじめから・つづきから)の描画
+	選択後のStateChange処理
 gameOver
 	全部
 mapMove, event処理など
