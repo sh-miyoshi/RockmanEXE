@@ -14,7 +14,7 @@ namespace {
 }
 
 PlayerMgr::PlayerMgr()
-	:name("ロックマン"), hp(0), hpMax(0), battlePlayer(nullptr), busterPower(1), battleResult() {
+	:name("ロックマン"), hp(0), hpMax(0), battlePlayer(nullptr), busterPower(1), battleResult(), mindStatus(BattlePlayer::eSTATUS_通常) {
 }
 
 PlayerMgr::~PlayerMgr() {
@@ -33,7 +33,7 @@ void PlayerMgr::Save() {
 	ss << hp << '#';
 	ss << hpMax << '#';
 	ss << busterPower << '#';
-	//ss << mindState << '#';
+	ss << ( int ) mindStatus << '#';
 	int result_val = 0;
 	for( int i = 0; i < EnemyMgr::ID_MAX; i++ ) {
 		for( int j = 0; j < eBT_RTN_MAX; j++ ) {
@@ -76,7 +76,7 @@ void PlayerMgr::InitBattleChar() {
 		delete battlePlayer;
 	}
 
-	battlePlayer = new BattlePlayer(name, hp, hpMax, busterPower, chipFolder);
+	battlePlayer = new BattlePlayer(name, hp, hpMax, busterPower, mindStatus, chipFolder);
 	battlePlayer->SetPos(1, 1);// 初期位置のセット
 }
 
@@ -177,7 +177,9 @@ void PlayerMgr::ContinueWithSaveFile() {
 	is >> hp >> dummy;
 	is >> hpMax >> dummy;
 	is >> busterPower >> dummy;
-	//is >> mindState >> dummy;
+	int tm;
+	is >> tm >> dummy;
+	mindStatus = ( BattlePlayer::MindStatus )tm;
 	int result_val = 0;
 	for( int i = 0; i < EnemyMgr::ID_MAX; i++ ) {
 		for( int j = 0; j < eBT_RTN_MAX; j++ ) {
@@ -218,9 +220,9 @@ bool PlayerMgr::IsContinueOK() {
 	return FileExist(SAVE_FILE_NAME);
 }
 
-BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, unsigned int busterPower, std::vector<ChipInfo> chipFolder)
+BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, unsigned int busterPower, MindStatus mindStatus, std::vector<ChipInfo> chipFolder)
 	: BattleCharBase(name, hp, hpMax, eCHAR_PLAYER), chargeCount(0), chargeMaxTime(DEFAULT_CHARGE_TIME),
-	busterPower(busterPower), chipFolder(chipFolder), mindStatus(eSTATUS_通常) {
+	busterPower(busterPower), chipFolder(chipFolder), mindStatus(mindStatus) {
 
 	// TODO(chargeMaxTimeを変えられるようにする)
 
@@ -362,7 +364,7 @@ void BattlePlayer::Process() {
 					this->AttachAnim(anim[c.playerAct]);
 				}
 				sendChipList.pop_front();
-			}
+	}
 #else
 			// debug(デバッグ用処理: 特定のチップを使い続ける)
 			ChipData c = ChipMgr::GetInst()->GetChipData(ChipMgr::eID_キャノン);
@@ -375,7 +377,7 @@ void BattlePlayer::Process() {
 				this->AttachAnim(anim[c.playerAct]);
 			}
 #endif
-		}
+}
 	}
 }
 

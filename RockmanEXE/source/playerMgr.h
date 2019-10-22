@@ -41,7 +41,14 @@ private:
 
 	std::shared_ptr<Animation> anim[eANIM_MAX];
 public:
-	BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, unsigned int busterPower, std::vector<ChipInfo> chipFolder);
+	BattlePlayer(
+		std::string name, 
+		unsigned int hp, 
+		unsigned int hpMax, 
+		unsigned int busterPower, 
+		MindStatus mindStatus,
+		std::vector<ChipInfo> chipFolder
+	);
 	~BattlePlayer();
 
 	virtual void Draw();
@@ -64,6 +71,7 @@ class PlayerMgr {
 	std::string name;
 	unsigned int hp, hpMax;
 	unsigned int busterPower;
+	BattlePlayer::MindStatus mindStatus;
 	std::vector<ChipInfo> chipFolder;
 	unsigned int battleResult[EnemyMgr::ID_MAX][eBT_RTN_MAX];
 
