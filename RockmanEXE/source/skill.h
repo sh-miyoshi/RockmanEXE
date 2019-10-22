@@ -26,6 +26,7 @@ public:
 		eID_バスター,
 		eID_キャノン,
 		eID_ハイキャノン,
+		eID_ショックウェーブ,
 
 		eID_MAX
 	};

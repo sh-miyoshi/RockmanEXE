@@ -41,6 +41,23 @@ public:
 	bool Process();
 };
 
+class Skill_ショックウェーブ:public SkillData {
+	static const int IMAGE_DELAY = 4;// 次の画像に移るまでのカウント
+	static const int NEXT_STEP_COUNT = 7 * IMAGE_DELAY;
+
+	CharType myCharType;
+	int count;
+	CPoint<int> atkPos;
+	int image[7];
+	int damage;
+public:
+	Skill_ショックウェーブ(CPoint<int> charPos, int damage, CharType myCharType);
+	~Skill_ショックウェーブ();
+
+	void Draw();
+	bool Process();
+};
+
 //-------------------------------------------------------
 // グローバルメソッド
 //-------------------------------------------------------
@@ -52,6 +69,8 @@ std::shared_ptr<SkillData> SkillMgr::GetData(int id, SkillArg args) {
 		return std::shared_ptr<Skill_キャノン系>(new Skill_キャノン系(args.charPos, args.power, args.myCharType, Skill_キャノン系::eTYPE_NORMAL));
 	case eID_ハイキャノン:
 		return std::shared_ptr<Skill_キャノン系>(new Skill_キャノン系(args.charPos, args.power, args.myCharType, Skill_キャノン系::eTYPE_HIGH));
+	case eID_ショックウェーブ:
+		return std::shared_ptr<Skill_ショックウェーブ>(new Skill_ショックウェーブ(args.charPos, args.power, args.myCharType));
 	default:
 		AppLogger::Error("SkillMgr::GetData wrong skill id (%d)", id);
 		exit(1);
@@ -92,7 +111,7 @@ Skill_バスター::Skill_バスター(CPoint<int> charPos, int damage, CharType myCharT
 	CPoint<int> damagePos = BattleCharMgr::GetInst()->GetClosestCharPosWithSameLine(charPos, targetType);
 	if( damagePos.x > 0 ) {// 攻撃がヒットする位置に対象がいたら
 		// ダメージデータの登録
-		BattleCharMgr::GetInst()->RegisterDamage(DamageData(damagePos, damage, targetType));
+		BattleCharMgr::GetInst()->RegisterDamage(DamageData(damagePos, damage, targetType, 1));
 		EffectArg args;
 		args.pos = BattleField::GetPixelPos(damagePos);
 		args.rndSize = 10;
@@ -155,7 +174,7 @@ bool Skill_キャノン系::Process() {
 		int targetType = eCHAR_ALL ^ myCharType;
 		CPoint<int> targetPos = BattleCharMgr::GetInst()->GetClosestCharPosWithSameLine(charPos, targetType);
 		if( targetPos.x > 0 ) {// 直線上に敵がいるなら
-			BattleCharMgr::GetInst()->RegisterDamage(DamageData(targetPos, damage, targetType));
+			BattleCharMgr::GetInst()->RegisterDamage(DamageData(targetPos, damage, targetType, 1));
 		}
 	}
 
@@ -163,5 +182,51 @@ bool Skill_キャノン系::Process() {
 		return true;// 終了
 	}
 
+	return false;
+}
+
+Skill_ショックウェーブ::Skill_ショックウェーブ(CPoint<int> charPos, int damage, CharType myCharType)
+	:count(0), myCharType(myCharType), image(), damage(damage) {
+
+	std::string fname = def::SKILL_IMAGE_PATH + "ショックウェーブ.png";
+	LoadDivGraphWithErrorCheck(image, fname, "Skill_ショックウェーブ::Skill_ショックウェーブ", 7, 1, 100, 140);
+
+	if( myCharType == eCHAR_PLAYER )
+		this->atkPos.x = charPos.x + 1;// 目の前の一マス
+	else
+		this->atkPos.x = charPos.x - 1;// 目の前の一マス
+	this->atkPos.y = charPos.y;
+
+	int targetType = eCHAR_ALL ^ myCharType;
+	BattleCharMgr::GetInst()->RegisterDamage(DamageData(this->atkPos, damage, targetType, NEXT_STEP_COUNT));
+}
+
+Skill_ショックウェーブ::~Skill_ショックウェーブ() {
+	for( int i = 0; i < sizeof(image) / sizeof(image[0]); i++ ) {
+		DeleteGraph(image[i]);
+	}
+}
+
+void Skill_ショックウェーブ::Draw() {
+	int ino = count / IMAGE_DELAY;
+	CPoint<int> pos = BattleField::GetPixelPos(atkPos);
+	DrawRotaGraph(pos.x, pos.y,1,0, image[ino], TRUE);
+}
+
+bool Skill_ショックウェーブ::Process() {
+	if( count >= NEXT_STEP_COUNT ) {// 一定カウント後一個次のマスへ
+		count = 0;
+		atkPos.x += ( myCharType == eCHAR_PLAYER ) ? 1 : -1;
+		// debug(穴パネル)
+		if( atkPos.x < 0 || atkPos.x >= BattleField::FIELD_NUM_X ) {// 攻撃が範囲外に行けば
+			return true;
+		}
+
+		// TODO(攻撃の登録)
+		//int targetType = eCHAR_ALL ^ myCharType;
+		//BattleCharMgr::GetInst()->RegisterDamage(DamageData(this->atkPos, damage, targetType, NEXT_STEP_COUNT));
+	} else
+		count++;
+	// TODO(HitAREAの描画)
 	return false;
 }

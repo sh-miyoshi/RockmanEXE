@@ -9,9 +9,10 @@ public:
 	CPoint<int> pos;
 	int power;
 	int targetType;
+	unsigned int endCount;
 
 	DamageData();
-	DamageData(CPoint<int> pos, int power, int targetType);
+	DamageData(CPoint<int> pos, int power, int targetType, unsigned int endCount);
 	~DamageData();
 };
 

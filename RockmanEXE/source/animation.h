@@ -24,7 +24,7 @@ public:
 	virtual void Begin() {}
 	virtual void End() {}
 	void Draw(int x, int y);
-	bool Process();
+	virtual bool Process();
 };
 
 enum PlayerAnimType {

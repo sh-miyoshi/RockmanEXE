@@ -4,11 +4,11 @@
 #include "battleField.h"
 #include "effectMgr.h"
 
-DamageData::DamageData():power(0), targetType(0) {
+DamageData::DamageData():power(0), targetType(0),endCount(1) {
 }
 
-DamageData::DamageData(CPoint<int> pos, int power, int targetType)
-	: pos(pos), power(power), targetType(targetType) {
+DamageData::DamageData(CPoint<int> pos, int power, int targetType,unsigned int endCount)
+	: pos(pos), power(power), targetType(targetType),endCount(endCount) {
 }
 
 DamageData::~DamageData() {
@@ -55,20 +55,20 @@ BattleCharMgr::RtnCode BattleCharMgr::MainProcess() {
 	}
 
 	// ダメージ処理
-	for( auto damage : damageList ) {
-		if( damage.targetType & eCHAR_PLAYER ) {
-			if( damage.pos == player->GetPos() ) {
-				int hp = ( int ) player->GetHP() - damage.power;
+	for( auto it = damageList.begin(); it != damageList.end(); ) {
+		if( it->targetType & eCHAR_PLAYER ) {
+			if( it->pos == player->GetPos() ) {
+				int hp = ( int ) player->GetHP() - it->power;
 				player->SetHP(hp);
 				if( hp <= 0 ) {
 					return eRTN_LOSE;// 敗北
 				}
 			}
 		}
-		if( damage.targetType & eCHAR_ENEMY ) {
+		if( it->targetType & eCHAR_ENEMY ) {
 			for( auto enemy : enemyList ) {
-				if( damage.pos == enemy->GetPos() ) {
-					int hp = ( int ) enemy->GetHP() - damage.power;
+				if( it->pos == enemy->GetPos() ) {
+					int hp = ( int ) enemy->GetHP() - it->power;
 					enemy->SetHP(hp);
 					if( hp <= 0 ) {
 						EffectArg args;
@@ -84,8 +84,14 @@ BattleCharMgr::RtnCode BattleCharMgr::MainProcess() {
 		//if( damage.targetType & eCHAR_OBJECT ) {
 
 		//}
+
+		if( it->endCount > 1 ) {
+			it->endCount--;
+			it++;
+		} else {
+			it = damageList.erase(it);
+		}
 	}
-	damageList.clear();// 処理が終わればすべてクリア
 
 	// 終了判定
 	bool enemyDeleted = true;

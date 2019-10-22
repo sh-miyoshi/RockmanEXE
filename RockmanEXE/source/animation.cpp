@@ -46,15 +46,9 @@ void Animation::Draw(int x, int y) {
 }
 
 bool Animation::Process() {
-	if( count == 0 ) {
-		Begin();// ‰Šú‰»ˆ—‚ğÀs
-	}
-
 	count++;
 
 	if( count >= endCount ) {
-		End();
-		count = 0;
 		return true;
 	}
 	return false;

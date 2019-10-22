@@ -2,6 +2,8 @@
 #include "enemy.h"
 #include "battleCharMgr.h"
 #include "battleField.h"
+#include "skill.h"
+#include "battleSkillMgr.h"
 
 class EnemyBase:public BattleCharBase {
 protected:
@@ -22,6 +24,7 @@ public:
 
 class Enemy_メットール:public EnemyBase {
 	static const int Power_ショックウェーブ = 10;// debug(固定？)
+	static const int DELAY_ショックウェーブ = 4;
 
 	class AnimMove:public Animation {
 		Enemy_メットール* obj;
@@ -30,7 +33,7 @@ class Enemy_メットール:public EnemyBase {
 
 		void Begin() {
 			int y = BattleCharMgr::GetInst()->GetClosestCharPos(obj->pos, eCHAR_PLAYER).y;
-			if( y < 0 ) {// ロックマンが見つからなかった
+			if( y < 0 || y == obj->pos.y ) {// ロックマンが見つからなかった
 				// 何もしない
 			} else if( y < obj->pos.y ) {// ロックマンが上にいるなら
 				if( obj->MoveCheck(obj->pos.x, obj->pos.y - 1) ) {
@@ -44,8 +47,34 @@ class Enemy_メットール:public EnemyBase {
 		}
 	};
 
+	class Animショックウェーブ:public Animation {
+		Enemy_メットール* obj;
+	public:
+		Animショックウェーブ(Enemy_メットール* obj):obj(obj) {}
+
+		void Begin() {
+			count = 0;
+		}
+
+		virtual bool Process() {
+			const int timing = 12 * DELAY_ショックウェーブ;
+			count++;
+			if( count == timing ) {// 攻撃を行うタイミングになったら
+				// 攻撃の登録
+				SkillArg arg;
+				arg.charPos = obj->pos;
+				arg.power = Power_ショックウェーブ;
+				arg.myCharType = eCHAR_ENEMY;
+				BattleSkillMgr::GetInst()->Register(SkillMgr::GetData(SkillMgr::eID_ショックウェーブ, arg));
+				return true;
+			}
+			return false;
+		}
+	};
+
 	unsigned int waveCount;
 	std::shared_ptr<AnimMove> animMove;
+	std::shared_ptr<Animショックウェーブ> animAttack;
 public:
 	Enemy_メットール();
 	~Enemy_メットール();
@@ -130,6 +159,10 @@ Enemy_メットール::Enemy_メットール()
 	fname = def::CHARACTER_IMAGE_PATH + "メットール_move.png";
 	animMove = std::shared_ptr<AnimMove>(new AnimMove(this));
 	animMove->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(1, 1));
+
+	fname = def::CHARACTER_IMAGE_PATH + "メットール_atk.png";
+	animAttack = std::shared_ptr<Animショックウェーブ>(new Animショックウェーブ(this));
+	animAttack->LoadData(fname, CPoint<unsigned int>(100, 140), CPoint<unsigned int>(15, 1), DELAY_ショックウェーブ);
 }
 
 Enemy_メットール::~Enemy_メットール() {
@@ -161,7 +194,7 @@ void Enemy_メットール::Process() {
 				waveCount = 0;
 
 			if( waveCount >= SHOCK_WAVE_COUNT ) {
-				// TODO(ショックウェーブを打つ)
+				this->AttachAnim(animAttack);
 				waveCount = 0;
 				count = 0;
 			} else if( count % MOVE_COUNT == 0 ) {

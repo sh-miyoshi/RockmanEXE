@@ -98,7 +98,7 @@ private:
 	class StateEnemyDeleted: public StateBase {
 		static const unsigned int DRAW_DELAY = 4;
 		static const unsigned int INIT_WAIT_TIME = 10;
-		static const unsigned int END_WAIT_TUIME = 90;
+		static const unsigned int END_WAIT_TUIME = 60;
 		static const unsigned int STATE_END_TIME = INIT_WAIT_TIME + DRAW_DELAY * 3 * 2 + END_WAIT_TUIME;
 
 		unsigned int count;
