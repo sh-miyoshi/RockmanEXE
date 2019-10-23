@@ -61,6 +61,7 @@ BattleCharMgr::RtnCode BattleCharMgr::MainProcess() {
 				it->endCount = 0;// “–‚½‚Á‚½‚çƒ_ƒ[ƒW‚ÍÁ‹Ž
 				int hp = ( int ) player->GetHP() - it->power;
 				player->SetMuteki();
+				// TODO(‚Ì‚¯‚¼‚èˆ—)
 				player->SetHP(hp);
 				if( hp <= 0 ) {
 					return eRTN_LOSE;// ”s–k
