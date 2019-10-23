@@ -57,9 +57,10 @@ BattleCharMgr::RtnCode BattleCharMgr::MainProcess() {
 	// ダメージ処理
 	for( auto it = damageList.begin(); it != damageList.end(); ) {
 		if( it->targetType & eCHAR_PLAYER ) {
-			if( it->pos == player->GetPos() ) {
+			if( it->pos == player->GetPos() && !player->IsMuteki()) {
 				it->endCount = 0;// 当たったらダメージは消去
 				int hp = ( int ) player->GetHP() - it->power;
+				player->SetMuteki();
 				player->SetHP(hp);
 				if( hp <= 0 ) {
 					return eRTN_LOSE;// 敗北

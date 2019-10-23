@@ -19,9 +19,8 @@ public:
 
 	void LoadData(std::string fname, CPoint<unsigned int> size, CPoint<unsigned int> num, unsigned int imageDelay = 1, unsigned int extraImageNum = 0);
 	void DeleteData();
-	void ResetCount() { count = 0; }
 
-	virtual void Begin() {}
+	virtual void Begin() { count = 0; }
 	virtual void End() {}
 	void Draw(int x, int y);
 	virtual bool Process();

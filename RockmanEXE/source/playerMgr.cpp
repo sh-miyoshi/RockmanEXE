@@ -222,7 +222,7 @@ bool PlayerMgr::IsContinueOK() {
 
 BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax, unsigned int busterPower, MindStatus mindStatus, std::vector<ChipInfo> chipFolder)
 	: BattleCharBase(name, hp, hpMax, eCHAR_PLAYER), chargeCount(0), chargeMaxTime(DEFAULT_CHARGE_TIME),
-	busterPower(busterPower), chipFolder(chipFolder), mindStatus(mindStatus) {
+	busterPower(busterPower), chipFolder(chipFolder), mindStatus(mindStatus), mutekiCount(-1) {
 
 	// TODO(chargeMaxTimeを変えられるようにする)
 
@@ -268,7 +268,9 @@ BattlePlayer::~BattlePlayer() {
 }
 
 void BattlePlayer::Draw() {
-	BattleCharBase::Draw();
+	if( mutekiCount < 0 || ( mutekiCount >= 0 && ( mutekiCount / 2 ) % 2 == 0 ) ) {
+		BattleCharBase::Draw();
+	}
 
 	if( chargeCount > 20 ) {
 		int no = ( chargeCount < chargeMaxTime ) ? 0 : 8;
@@ -307,6 +309,13 @@ void BattlePlayer::Draw() {
 }
 
 void BattlePlayer::Process() {
+	if( mutekiCount >= 0 ) {
+		mutekiCount++;
+		if( mutekiCount >= MUTEKI_TIME ) {
+			mutekiCount = -1;
+		}
+	}
+
 	if( AnimProcess() ) {
 		// 移動処理
 		if( CKey::GetInst()->CheckKey(eKEY_DOWN) == 1 ) {
@@ -364,7 +373,7 @@ void BattlePlayer::Process() {
 					this->AttachAnim(anim[c.playerAct]);
 				}
 				sendChipList.pop_front();
-	}
+			}
 #else
 			// debug(デバッグ用処理: 特定のチップを使い続ける)
 			ChipData c = ChipMgr::GetInst()->GetChipData(ChipMgr::eID_キャノン);
@@ -377,7 +386,7 @@ void BattlePlayer::Process() {
 				this->AttachAnim(anim[c.playerAct]);
 			}
 #endif
-}
+		}
 	}
 }
 

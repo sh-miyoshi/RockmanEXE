@@ -31,9 +31,12 @@ public:
 		eSTATUS_MAX
 	};
 private:
+	static const int MUTEKI_TIME = 2 * 60;
+
 	unsigned int chargeCount;
 	unsigned int chargeMaxTime;
 	unsigned int busterPower;
+	int mutekiCount;
 	MindStatus mindStatus;
 	int imgCharge[16];
 	std::vector<ChipInfo> chipFolder;
@@ -42,10 +45,10 @@ private:
 	std::shared_ptr<Animation> anim[eANIM_MAX];
 public:
 	BattlePlayer(
-		std::string name, 
-		unsigned int hp, 
-		unsigned int hpMax, 
-		unsigned int busterPower, 
+		std::string name,
+		unsigned int hp,
+		unsigned int hpMax,
+		unsigned int busterPower,
 		MindStatus mindStatus,
 		std::vector<ChipInfo> chipFolder
 	);
@@ -56,7 +59,8 @@ public:
 
 	std::vector<ChipInfo> GetHandData(unsigned max);
 	void SetSendChipList(std::vector<int> selectedIndexes);
-
+	void SetMuteki() { mutekiCount = 0; }
+	bool IsMuteki()const { return mutekiCount >= 0; }
 	MindStatus GetMindStatus()const { return mindStatus; }
 };
 
