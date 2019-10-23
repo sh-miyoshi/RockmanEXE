@@ -222,9 +222,9 @@ bool Skill_ƒVƒ‡ƒbƒNƒEƒF[ƒu::Process() {
 			return true;
 		}
 
-		// TODO(UŒ‚‚Ì“o˜^)
-		//int targetType = eCHAR_ALL ^ myCharType;
-		//BattleCharMgr::GetInst()->RegisterDamage(DamageData(this->atkPos, damage, targetType, NEXT_STEP_COUNT));
+		// UŒ‚‚Ì“o˜^
+		int targetType = eCHAR_ALL ^ myCharType;
+		BattleCharMgr::GetInst()->RegisterDamage(DamageData(this->atkPos, damage, targetType, NEXT_STEP_COUNT));
 	} else
 		count++;
 	// TODO(HitAREA‚Ì•`‰æ)

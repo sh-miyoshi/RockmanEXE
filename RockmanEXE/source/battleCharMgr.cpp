@@ -58,6 +58,7 @@ BattleCharMgr::RtnCode BattleCharMgr::MainProcess() {
 	for( auto it = damageList.begin(); it != damageList.end(); ) {
 		if( it->targetType & eCHAR_PLAYER ) {
 			if( it->pos == player->GetPos() ) {
+				it->endCount = 0;// 当たったらダメージは消去
 				int hp = ( int ) player->GetHP() - it->power;
 				player->SetHP(hp);
 				if( hp <= 0 ) {
@@ -68,6 +69,7 @@ BattleCharMgr::RtnCode BattleCharMgr::MainProcess() {
 		if( it->targetType & eCHAR_ENEMY ) {
 			for( auto enemy : enemyList ) {
 				if( it->pos == enemy->GetPos() ) {
+					it->endCount = 0;// 当たったらダメージは消去
 					int hp = ( int ) enemy->GetHP() - it->power;
 					enemy->SetHP(hp);
 					if( hp <= 0 ) {
