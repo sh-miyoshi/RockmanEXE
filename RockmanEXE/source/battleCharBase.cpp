@@ -2,6 +2,8 @@
 #include "battleCharBase.h"
 #include "animation.h"
 #include "battleField.h"
+#include "battleCharMgr.h"
+#include "battleFieldMgr.h"
 
 bool BattleCharBase::AnimProcess() {
 	if( animQueue.empty() ) {
@@ -36,9 +38,22 @@ bool BattleCharBase::MoveCheck(int x, int y) {
 		return false;
 	}
 
-	// TODO(その他のチェック)
-	//   IsAnyChar?
-	//   移動先が自分のパネルかどうか
+	// 移動先にすでにキャラクタがいたら
+	for( auto pos : BattleCharMgr::GetInst()->GetAllCharPos(eCHAR_ALL) ) {
+		if( pos == CPoint<int>(x, y) ) {
+			return false;
+		}
+	}
+
+	// 移動先が自分のパネルかどうか
+	int panel[BattleField::LAYER_MAX];
+	BattleFieldMgr::GetInst()->GetPanelInfo(panel,x,y);
+	if( panel[BattleField::LAYER_USER] == BattleField::USER_PLAYER && myCharType != eCHAR_PLAYER ) {
+		return false;
+	}
+	if( panel[BattleField::LAYER_USER] == BattleField::USER_ENEMY && myCharType != eCHAR_ENEMY ) {
+		return false;
+	}
 
 	return true;// その場所に動ける
 }
