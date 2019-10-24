@@ -25,4 +25,5 @@ public:
 
 	void SetUnSelectable(int index);
 	void SetPointer(int pointer);
+	int GetPointer()const { return pointer; }
 };

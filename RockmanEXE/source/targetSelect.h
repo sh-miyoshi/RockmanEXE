@@ -4,6 +4,7 @@
 #include "selecter.h"
 
 class TargetSelect {
+	Selecter selecter;
 public:
 	enum RtnCode {
 		eRTN_CONTINUE,
