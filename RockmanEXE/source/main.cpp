@@ -9,6 +9,7 @@
 #include "effectMgr.h"
 #include "drawCharacter.h"
 #include "title.h"
+#include "targetSelect.h"
 
 bool gExitFlag = false;
 unsigned long long gGameCount = 0;
@@ -28,6 +29,7 @@ class Main {
 
 	class StateTargetSelect:public StateBase {
 		Main* obj;
+		TargetSelect targetSelect;
 	public:
 		StateTargetSelect(Main* obj);
 		~StateTargetSelect();
@@ -103,13 +105,15 @@ Main::Main(void) {
 
 	// debug用stateChange
 	PlayerMgr::GetInst()->CreateNewPlayer();// TODO(タイトル画面で選択する)
-	AppLogger::Info("Change Main State to StateBattle");
-	std::vector<Battle::EnemyInfo> enemies;
-	Battle::EnemyInfo e1;
-	e1.id = EnemyMgr::ID_メットール;
-	e1.pos = CPoint<int>(4, 1);
-	enemies.push_back(e1);
-	stateMgr.ChangeNext(new StateBattle(enemies, this));
+	AppLogger::Info("Change Main State to StateTargetSelect");
+	stateMgr.ChangeNext(new StateTargetSelect(this));
+	//AppLogger::Info("Change Main State to StateBattle");
+	//std::vector<Battle::EnemyInfo> enemies;
+	//Battle::EnemyInfo e1;
+	//e1.id = EnemyMgr::ID_メットール;
+	//e1.pos = CPoint<int>(4, 1);
+	//enemies.push_back(e1);
+	//stateMgr.ChangeNext(new StateBattle(enemies, this));
 }
 
 Main::~Main(void) {
@@ -159,23 +163,15 @@ Main::StateTargetSelect::~StateTargetSelect() {
 }
 
 void Main::StateTargetSelect::Draw() {
-	// TODO(実処理は未実装)
-	DrawString(100, 100, "TargetSelect", WHITE);
-	DrawString(120, 140, "A: Title", WHITE);
-	DrawString(120, 120, "S: Battle", WHITE);
+	targetSelect.Draw();
 }
 
 void Main::StateTargetSelect::Process() {
-	// TODO(実処理は未実装)
-	if( CKey::GetInst()->CheckKey(eKEY_DEV_L) == 1 ) {
-		obj->stateMgr.ChangeNext(new StateTitle(obj));
-	} else if( CKey::GetInst()->CheckKey(eKEY_DEV_R) == 1 ) {
-		std::vector<Battle::EnemyInfo> enemies;
-		Battle::EnemyInfo e1;
-		e1.id = EnemyMgr::ID_的;
-		e1.pos = CPoint<int>(4, 1);
-		enemies.push_back(e1);
-		obj->stateMgr.ChangeNext(new StateBattle(enemies, obj));
+	switch( targetSelect.Process() ) {
+	case TargetSelect::eRTN_START_BATTLE:
+		break;
+	case TargetSelect::eRTN_MY_INFO:
+		break;
 	}
 }
 

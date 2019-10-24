@@ -21,8 +21,8 @@ Battle::Battle(std::vector<EnemyInfo> enemies):rtnCode(eRTN_CONTINUE), mainProcC
 	BattleCharMgr::GetInst()->BattleInit(enemyList);
 	BattleFieldMgr::GetInst()->BattleInit();
 
-	stateMgr.ChangeNext(new StateBattleStart(this));// debug(Å‰‚Ìstate)
-//	stateMgr.ChangeNext(new StateBegin(this));
+//	stateMgr.ChangeNext(new StateBattleStart(this));// debug(Å‰‚Ìstate)
+	stateMgr.ChangeNext(new StateBegin(this));
 }
 
 Battle::~Battle() {

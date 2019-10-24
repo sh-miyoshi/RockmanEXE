@@ -1,7 +1,6 @@
 battle
 	chipSelect
 		(ソウルユニゾン)
-		フレームの描画
 	battleMain
 		chipUse (暗転処理)
 		ダメージ処理(のけぞり)

@@ -179,6 +179,7 @@
     <ClCompile Include="source\playerMgr.cpp" />
     <ClCompile Include="source\selecter.cpp" />
     <ClCompile Include="source\skill.cpp" />
+    <ClCompile Include="source\targetSelect.cpp" />
     <ClCompile Include="source\title.cpp" />
     <ClCompile Include="source\util.cpp" />
     <ClCompile Include="source\utilDxLib.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="source\selecter.h" />
     <ClInclude Include="source\skill.h" />
     <ClInclude Include="source\state.h" />
+    <ClInclude Include="source\targetSelect.h" />
     <ClInclude Include="source\title.h" />
     <ClInclude Include="source\util.h" />
     <ClInclude Include="source\utilDxLib.h" />
