@@ -35,6 +35,7 @@ public:
 
 	bool AnimProcess();
 	virtual void Draw();
+	virtual void Draw(int pixelX, int pixelY);
 	virtual void Process();// ƒLƒƒƒ‰‚Ìs“®
 
 	void SetDefaultAnim(std::shared_ptr<Animation> anim) { this->defaultAnim = anim; }

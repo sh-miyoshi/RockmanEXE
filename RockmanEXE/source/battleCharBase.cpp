@@ -47,7 +47,7 @@ bool BattleCharBase::MoveCheck(int x, int y) {
 
 	// ˆÚ“®æ‚ªŽ©•ª‚Ìƒpƒlƒ‹‚©‚Ç‚¤‚©
 	int panel[BattleField::LAYER_MAX];
-	BattleFieldMgr::GetInst()->GetPanelInfo(panel,x,y);
+	BattleFieldMgr::GetInst()->GetPanelInfo(panel, x, y);
 	if( panel[BattleField::LAYER_USER] == BattleField::USER_PLAYER && myCharType != eCHAR_PLAYER ) {
 		return false;
 	}
@@ -64,12 +64,15 @@ BattleCharBase::BattleCharBase(std::string name, unsigned int hp, unsigned int h
 
 void BattleCharBase::Draw() {
 	CPoint<int> t = BattleField::GetPixelPos(pos);
+	Draw(t.x, t.y);
+}
 
+void BattleCharBase::Draw(int pixelX, int pixelY) {
 	if( animQueue.empty() ) {
-		defaultAnim->Draw(t.x, t.y);
+		defaultAnim->Draw(pixelX, pixelY);
 	} else {
 		std::shared_ptr<Animation> anim = animQueue.front();
-		anim->Draw(t.x, t.y);
+		anim->Draw(pixelX, pixelY);
 	}
 }
 
