@@ -44,6 +44,7 @@ void BattleCharMgr::DrawAppearScene(unsigned int nowCharNo, unsigned int count) 
 			enemy->Draw();
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
+		i++;
 	}
 }
 
@@ -51,6 +52,7 @@ BattleCharMgr::RtnCode BattleCharMgr::MainProcess() {
 	player->Process();
 
 	for( auto enemy : enemyList ) {
+		// TODO(deleteカウントを設けて、それ以上なら削除する)
 		enemy->Process();
 	}
 
