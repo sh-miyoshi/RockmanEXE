@@ -9,12 +9,6 @@
 #include "battle.h"
 
 class TargetSelect {
-	enum {
-		eTRG_ƒƒbƒg[ƒ‹x1,
-
-		eTRG_MAX
-	};
-
 	class CharInfo {
 		EnemyMgr::EnemyID id;
 		CPoint<int> viewPos;
@@ -39,6 +33,8 @@ class TargetSelect {
 		~TargetInfo() {}
 	};
 
+	int selectMaxNum;
+	int selectNo;
 	Selecter selecter;
 	std::vector<TargetInfo> targetInfo;
 public:
