@@ -10,6 +10,7 @@
 #include "drawCharacter.h"
 #include "title.h"
 #include "targetSelect.h"
+#include "myinfo.h"
 
 bool gExitFlag = false;
 unsigned long long gGameCount = 0;
@@ -45,6 +46,17 @@ class Main {
 	public:
 		StateBattle(std::vector<Battle::EnemyInfo> enemies, Main* obj);
 		~StateBattle();
+
+		void Draw();
+		void Process();
+	};
+
+	class StateMyInfo:public StateBase {
+		Main* obj;
+		MyInfo myInfo;
+	public:
+		StateMyInfo(Main* obj);
+		~StateMyInfo();
 
 		void Draw();
 		void Process();
@@ -169,8 +181,10 @@ void Main::StateTargetSelect::Draw() {
 void Main::StateTargetSelect::Process() {
 	switch( targetSelect.Process() ) {
 	case TargetSelect::eRTN_START_BATTLE:
+		obj->stateMgr.ChangeNext(new StateBattle(targetSelect.GetEnemyInfo(), obj));
 		break;
 	case TargetSelect::eRTN_MY_INFO:
+		obj->stateMgr.ChangeNext(new StateMyInfo(obj));
 		break;
 	}
 }
@@ -201,5 +215,21 @@ void Main::StateBattle::Process() {
 		PlayerMgr::GetInst()->UpdateBattleResult(false, enemies);
 		obj->stateMgr.ChangeNext(new StateTargetSelect(obj));
 		break;
+	}
+}
+
+Main::StateMyInfo::StateMyInfo(Main* obj):obj(obj) {
+}
+
+Main::StateMyInfo::~StateMyInfo() {
+}
+
+void Main::StateMyInfo::Draw() {
+	myInfo.Draw();
+}
+
+void Main::StateMyInfo::Process() {
+	if( myInfo.Process() ) {
+		obj->stateMgr.ChangeNext(new StateTargetSelect(obj));
 	}
 }
