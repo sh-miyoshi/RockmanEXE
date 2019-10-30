@@ -82,6 +82,46 @@ public:
 	virtual void Process();
 };
 
+class Enemy_ビリー:public EnemyBase {
+	class AnimMove:public Animation {
+		Enemy_ビリー* obj;
+	public:
+		AnimMove(Enemy_ビリー* obj):obj(obj) {}
+
+		virtual void Begin() {
+			count = 0;
+
+			// 4方向のうち動けるか所を候補リストに追加、リストからランダムで移動
+			std::vector<CPoint<int>> candidates;
+			if( obj->MoveCheck(obj->pos.x + 1, obj->pos.y) ) {
+				candidates.push_back(CPoint<int>(obj->pos.x + 1, obj->pos.y));
+			}
+			if( obj->MoveCheck(obj->pos.x - 1, obj->pos.y) ) {
+				candidates.push_back(CPoint<int>(obj->pos.x - 1, obj->pos.y));
+			}
+			if( obj->MoveCheck(obj->pos.x, obj->pos.y - 1) ) {
+				candidates.push_back(CPoint<int>(obj->pos.x, obj->pos.y - 1));
+			}
+			if( obj->MoveCheck(obj->pos.x, obj->pos.y + 1) ) {
+				candidates.push_back(CPoint<int>(obj->pos.x, obj->pos.y + 1));
+			}
+
+			if( candidates.size() ) {// もし移動可能な場所があるなら
+				unsigned int rnd = rnd_generator() % candidates.size();
+				obj->SetPos(candidates[rnd].x, candidates[rnd].y);
+			}
+		}
+	};
+
+	unsigned int atkCount;
+	std::shared_ptr<AnimMove> animMove;
+public:
+	Enemy_ビリー();
+	~Enemy_ビリー();
+
+	virtual void Process();
+};
+
 //-------------------------------------------------------
 // 全体処理
 //-------------------------------------------------------
@@ -91,6 +131,8 @@ std::shared_ptr<BattleCharBase> EnemyMgr::GetData(int id) {
 		return std::shared_ptr<Enemy_的>(new Enemy_的());
 	case ID_メットール:
 		return std::shared_ptr<Enemy_メットール>(new Enemy_メットール());
+	case ID_ビリー:
+		return std::shared_ptr<Enemy_ビリー>(new Enemy_ビリー());
 	default:
 		AppLogger::Error("EnemyMgr::GetData wrong char id (%d)", id);
 		exit(1);
@@ -199,6 +241,56 @@ void Enemy_メットール::Process() {
 				count = 0;
 			} else if( count % MOVE_COUNT == 0 ) {
 				this->AttachAnim(animMove);
+			}
+		}
+		count++;
+	}
+}
+
+Enemy_ビリー::Enemy_ビリー():EnemyBase("ビリー", 50), atkCount(0) {
+	std::string fname = def::CHARACTER_IMAGE_PATH + "ビリー_stand.png";
+	std::shared_ptr<Animation> animStand = std::shared_ptr<Animation>(new Animation());
+	animStand->LoadData(fname, CPoint<unsigned int>(112, 114), CPoint<unsigned int>(1, 1));
+	BattleCharBase::SetDefaultAnim(animStand);
+
+	fname = def::CHARACTER_IMAGE_PATH + "ビリー_move.png";
+	animMove = std::shared_ptr<AnimMove>(new AnimMove(this));
+	animMove->LoadData(fname, CPoint<unsigned int>(112, 114), CPoint<unsigned int>(6, 1));
+
+	// TODO(攻撃)
+}
+
+Enemy_ビリー::~Enemy_ビリー() {
+}
+
+void Enemy_ビリー::Process() {
+	// デリートモーション中(操作不可)
+	if( hp <= 0 ) {
+		return;
+	}
+
+	static const int WAIT_COUNT = 90;// 最初の何もしないカウント
+	static const int ACT_COUNT = 1 * 60;
+
+	//-------------------------------
+	// 最初のnカウント:	何もしない
+	// 以降ループ
+	//	4/5: 適当に移動
+	//	1/5: 攻撃
+	//-------------------------------
+
+	if( AnimProcess() ) {
+		if( count >= WAIT_COUNT ) {
+			if( count % ACT_COUNT == 0 ) {// 行動する
+				if( atkCount < 4 ) {//移動処理
+					this->AttachAnim(animMove);
+					atkCount++;
+				} else {// 攻撃処理
+					// todo(自分の攻撃が存在しないなら、BattleMgrから強制モーション設定で回避)
+					// TODO(SetAnim(ANIM_ATK1);)
+					atkCount = 0;
+					count = 0;
+				}
 			}
 		}
 		count++;

@@ -117,15 +117,15 @@ Main::Main(void) {
 
 	// debug用stateChange
 	PlayerMgr::GetInst()->CreateNewPlayer();// TODO(タイトル画面で選択する)
-	AppLogger::Info("Change Main State to StateTargetSelect");
-	stateMgr.ChangeNext(new StateTargetSelect(this));
-	//AppLogger::Info("Change Main State to StateBattle");
-	//std::vector<Battle::EnemyInfo> enemies;
-	//Battle::EnemyInfo e1;
-	//e1.id = EnemyMgr::ID_メットール;
-	//e1.pos = CPoint<int>(4, 1);
-	//enemies.push_back(e1);
-	//stateMgr.ChangeNext(new StateBattle(enemies, this));
+	/*AppLogger::Info("Change Main State to StateTargetSelect");
+	stateMgr.ChangeNext(new StateTargetSelect(this));*/
+	AppLogger::Info("Change Main State to StateBattle");
+	std::vector<Battle::EnemyInfo> enemies;
+	Battle::EnemyInfo e1;
+	e1.id = EnemyMgr::ID_ビリー;
+	e1.pos = CPoint<int>(4, 1);
+	enemies.push_back(e1);
+	stateMgr.ChangeNext(new StateBattle(enemies, this));
 }
 
 Main::~Main(void) {
