@@ -9,6 +9,7 @@ public:
 	CPoint<int> charPos;
 	int power;
 	CharType myCharType;
+	unsigned int ariveTime;
 };
 
 class SkillData {
@@ -27,6 +28,7 @@ public:
 		eID_キャノン,
 		eID_ハイキャノン,
 		eID_ショックウェーブ,
+		eID_サンダーボール,
 
 		eID_MAX
 	};
