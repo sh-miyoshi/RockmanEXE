@@ -24,17 +24,17 @@ void ChipMgr::LoadData() {
 	}
 
 	// チップ情報の設定
-	chipData[eID_キャノン] = ChipData(0, "キャノン", 0, 40, eANIM_CANNON, false);
-	chipData[eID_ハイキャノン] = ChipData(1, "ハイキャノン", 0, 80, eANIM_CANNON, false);
-	chipData[eID_サンダーボール] = ChipData(14, "サンダーボール", 0, 40, eANIM_NONE, false);
-	chipData[eID_フレイムライン] = ChipData(20, "フレイムライン", 0, 80, eANIM_CANNON, false);
-	chipData[eID_ミニボム] = ChipData(43, "ミニボム", 0, 50, eANIM_BOMB, false);
-	chipData[eID_ソード] = ChipData(53, "ソード", 0, 80, eANIM_SWORD, false);
-	chipData[eID_ワイドソード] = ChipData(54, "ワイドソード", 0, 80, eANIM_SWORD, false);
-	chipData[eID_ブーメラン] = ChipData(68, "ブーメラン", 0, 60, eANIM_NONE, false);
-	chipData[eID_リカバリー10] = ChipData(108, "リカバリー10", 0, 10, eANIM_NONE, false);
-	chipData[eID_リカバリー30] = ChipData(109, "リカバリー30", 0, 30, eANIM_NONE, false);
-	chipData[eID_ストーンキューブ] = ChipData(125, "ストーンキューブ", 0, 0, eANIM_NONE, true);
+	chipData[eID_キャノン] = ChipData(eID_キャノン, "キャノン", 0, 40, eANIM_CANNON, false);
+	chipData[eID_ハイキャノン] = ChipData(eID_ハイキャノン, "ハイキャノン", 0, 80, eANIM_CANNON, false);
+	chipData[eID_サンダーボール] = ChipData(eID_サンダーボール, "サンダーボール", 0, 40, eANIM_NONE, false);
+	chipData[eID_フレイムライン] = ChipData(eID_フレイムライン, "フレイムライン", 0, 80, eANIM_CANNON, false);
+	chipData[eID_ミニボム] = ChipData(eID_ミニボム, "ミニボム", 0, 50, eANIM_BOMB, false);
+	chipData[eID_ソード] = ChipData(eID_ソード, "ソード", 0, 80, eANIM_SWORD, false);
+	chipData[eID_ワイドソード] = ChipData(eID_ワイドソード, "ワイドソード", 0, 80, eANIM_SWORD, false);
+	chipData[eID_ブーメラン] = ChipData(eID_ブーメラン, "ブーメラン", 0, 60, eANIM_NONE, false);
+	chipData[eID_リカバリー10] = ChipData(eID_リカバリー10, "リカバリー10", 0, 10, eANIM_NONE, false);
+	chipData[eID_リカバリー30] = ChipData(eID_リカバリー30, "リカバリー30", 0, 30, eANIM_NONE, false);
+	chipData[eID_ストーンキューブ] = ChipData(eID_ストーンキューブ, "ストーンキューブ", 0, 0, eANIM_NONE, true);
 
 	// チップアイコン画像の読み込みと設定
 	std::string fname = def::IMAGE_FILE_PATH + "battle/chip_icon.png";
@@ -42,16 +42,15 @@ void ChipMgr::LoadData() {
 	LoadDivGraphWithErrorCheck(t1, fname, position, 30, 8, 28, 28);
 	LoadDivGraph(fname.c_str(), 240, 30, 8, 28, 28, t2);// 同じファイルからなので読み込めるのは確定
 
+	std::vector<int> used;// 使用しているアイコンの番号
 	for( auto i = 0; i < eID_MAX; i++ ) {
 		unsigned int id = chipData[i].id;
 		chipData[i].imgIcon = t1[id];
 		chipData[i].imgIconMono = t2[id];
 		GraphFilter(chipData[i].imgIconMono, DX_GRAPH_FILTER_MONO, 0, 0);// モノクロ化
-	}
-
-	std::vector<int> used;// 使用しているアイコンの番号
-	for( auto i = 0; i < eID_MAX; i++ ) {
-		used.push_back(chipData[i].id);
+		if( !chipData[i].name.empty() ) {
+			used.push_back(chipData[i].id);
+		}
 	}
 
 	// 使わないものは開放しておく
@@ -141,6 +140,12 @@ ChipData ChipMgr::GetChipData(int id, char code) {
 		exit(1);
 	}
 	ChipData ret = chipData[id];
+
+	if( ret.name.empty() ) {
+		AppLogger::Error("Chip ID(%d) is not implemented yet", id);
+		exit(1);
+	}
+
 	ret.code = code;
 	return ret;
 }
