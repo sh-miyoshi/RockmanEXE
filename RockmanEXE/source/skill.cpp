@@ -258,6 +258,9 @@ bool Skill_ショックウェーブ::Process() {
 Skill_サンダーボール::Skill_サンダーボール(CPoint<int> charPos, int damage, CharType myCharType, unsigned int ariveTime)
 	:myCharType(myCharType), count(0), image(), damage(damage), ariveTime(ariveTime) {
 
+	std::string fname = def::SKILL_IMAGE_PATH + "サンダーボール.png";
+	LoadDivGraphWithErrorCheck(image, fname, "Skill_サンダーボール::Skill_サンダーボール", 4, 1, 64, 80);
+
 	if( myCharType == eCHAR_PLAYER ) {
 		this->atkPos.x = charPos.x + 1;// 目の前の一マス
 		moveDirect = def::eMUKI_RIGHT;
@@ -270,9 +273,9 @@ Skill_サンダーボール::Skill_サンダーボール(CPoint<int> charPos, int damage, Char
 	this->atkPos.y = charPos.y;
 	drawOfs = startPos;
 
-	std::string fname = def::SKILL_IMAGE_PATH + "サンダーボール.png";
-	LoadDivGraphWithErrorCheck(image, fname, "Skill_サンダーボール::Skill_サンダーボール", 4, 1, 64, 80);
-
+	// ダメージ登録
+	int targetType = eCHAR_ALL ^ myCharType;
+	BattleCharMgr::GetInst()->RegisterDamage(DamageData(this->atkPos, damage, targetType, NEXT_STEP_COUNT));
 }
 
 Skill_サンダーボール::~Skill_サンダーボール() {
@@ -346,6 +349,10 @@ bool Skill_サンダーボール::Process() {
 		if( atkPos.x < 0 || atkPos.x >= BattleField::FIELD_NUM_X || atkPos.y < 0 || atkPos.y >= BattleField::FIELD_NUM_Y ) {
 			return true;
 		}
+
+		// ダメージ情報登録
+		int targetType = eCHAR_ALL ^ myCharType;
+		BattleCharMgr::GetInst()->RegisterDamage(DamageData(this->atkPos, damage, targetType, NEXT_STEP_COUNT));
 	}
 
 	count++;
