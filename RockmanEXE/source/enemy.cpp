@@ -183,7 +183,6 @@ EnemyBase::~EnemyBase() {
 }
 
 void EnemyBase::Draw() {
-	// TODO(HP‚ª0‚È‚çSetDrawBlendMode)
 	BattleCharBase::Draw();
 
 	// HP‚Ì•`‰æ

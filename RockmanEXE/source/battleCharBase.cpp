@@ -64,7 +64,16 @@ BattleCharBase::BattleCharBase(std::string name, unsigned int hp, unsigned int h
 
 void BattleCharBase::Draw() {
 	CPoint<int> t = BattleField::GetPixelPos(pos);
+	if( hp == 0 ) {
+		SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
+		Draw(t.x, t.y);// åıÇã≠Ç≠Ç∑ÇÈÇΩÇﬂÇ…í èÌÇÊÇËï`âÊ
+	}
+
 	Draw(t.x, t.y);
+
+	if( hp == 0 ) {
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
 }
 
 void BattleCharBase::Draw(int pixelX, int pixelY) {
