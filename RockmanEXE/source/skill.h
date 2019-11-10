@@ -3,6 +3,7 @@
 #include "point.h"
 #include "battleCharBase.h"
 #include "chip.h"
+#include "idManager.h"
 
 class SkillArg {
 public:
@@ -13,12 +14,17 @@ public:
 };
 
 class SkillData {
+	int objectID;
+	bool isPenetrate;// UŒ‚ƒqƒbƒg‚àŠÑ’Ê‚µ‚Äˆ—‚ğ‘±s‚·‚é‚©
 public:
-	SkillData() {}
+	SkillData(bool isPenetrate):objectID(IDManager::CreateUniqueID()),isPenetrate(isPenetrate) {}
 	~SkillData() {}
 
 	virtual bool Process() = 0;
 	virtual void Draw() {}
+
+	int GetObjectID()const { return objectID; }
+	bool GetPenetrate()const { return isPenetrate; }
 };
 
 class SkillMgr {

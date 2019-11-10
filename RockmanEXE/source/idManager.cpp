@@ -1,8 +1,9 @@
 #include "idManager.h"
 
-int IDManager::id = 1;
+namespace {
+	static int id = 0;
+}
 
 int IDManager::CreateUniqueID() {
-	// TODO(generate hash)
 	return id++;
 }

@@ -130,12 +130,12 @@ std::shared_ptr<SkillData> SkillMgr::GetData(ChipData c, SkillArg args) {
 //-------------------------------------------------------
 // バスター
 //-------------------------------------------------------
-Skill_バスター::Skill_バスター(CPoint<int> charPos, int damage, CharType myCharType) {
+Skill_バスター::Skill_バスター(CPoint<int> charPos, int damage, CharType myCharType):SkillData(false) {
 	int targetType = eCHAR_ALL ^ myCharType;
 	CPoint<int> damagePos = BattleCharMgr::GetInst()->GetClosestCharPosWithSameLine(charPos, targetType);
 	if( damagePos.x > 0 ) {// 攻撃がヒットする位置に対象がいたら
 		// ダメージデータの登録
-		BattleCharMgr::GetInst()->RegisterDamage(DamageData(damagePos, damage, targetType, 1));
+		BattleCharMgr::GetInst()->RegisterDamage(DamageData(damagePos, damage, targetType, 1, GetObjectID()));
 		EffectArg args;
 		args.pos = BattleField::GetPixelPos(damagePos);
 		args.rndSize = 10;
@@ -157,7 +157,7 @@ bool Skill_バスター::Process() {
 // キャノン
 //-------------------------------------------------------
 Skill_キャノン系::Skill_キャノン系(CPoint<int> charPos, int damage, CharType myCharType, Type skillType)
-	:charPos(charPos), count(0), myCharType(myCharType), imgBody(), damage(damage) {
+	:charPos(charPos), count(0), myCharType(myCharType), imgBody(), damage(damage), SkillData(false) {
 
 	int temp[9];
 	std::string fname = def::SKILL_IMAGE_PATH + "キャノン_body.png";
@@ -198,7 +198,7 @@ bool Skill_キャノン系::Process() {
 		int targetType = eCHAR_ALL ^ myCharType ^ eCHAR_OBJECT;
 		CPoint<int> targetPos = BattleCharMgr::GetInst()->GetClosestCharPosWithSameLine(charPos, targetType);
 		if( targetPos.x > 0 ) {// 直線上に敵がいるなら
-			BattleCharMgr::GetInst()->RegisterDamage(DamageData(targetPos, damage, targetType, 1));
+			BattleCharMgr::GetInst()->RegisterDamage(DamageData(targetPos, damage, targetType, 1, GetObjectID()));
 		}
 	}
 
@@ -210,7 +210,7 @@ bool Skill_キャノン系::Process() {
 }
 
 Skill_ショックウェーブ::Skill_ショックウェーブ(CPoint<int> charPos, int damage, CharType myCharType)
-	:count(0), myCharType(myCharType), image(), damage(damage) {
+	:count(0), myCharType(myCharType), image(), damage(damage), SkillData(true) {
 
 	std::string fname = def::SKILL_IMAGE_PATH + "ショックウェーブ.png";
 	LoadDivGraphWithErrorCheck(image, fname, "Skill_ショックウェーブ::Skill_ショックウェーブ", 7, 1, 100, 140);
@@ -222,7 +222,7 @@ Skill_ショックウェーブ::Skill_ショックウェーブ(CPoint<int> charPos, int damage, 
 	this->atkPos.y = charPos.y;
 
 	int targetType = eCHAR_ALL ^ myCharType;
-	BattleCharMgr::GetInst()->RegisterDamage(DamageData(this->atkPos, damage, targetType, NEXT_STEP_COUNT));
+	BattleCharMgr::GetInst()->RegisterDamage(DamageData(this->atkPos, damage, targetType, NEXT_STEP_COUNT, GetObjectID()));
 }
 
 Skill_ショックウェーブ::~Skill_ショックウェーブ() {
@@ -248,7 +248,7 @@ bool Skill_ショックウェーブ::Process() {
 
 		// 攻撃の登録
 		int targetType = eCHAR_ALL ^ myCharType;
-		BattleCharMgr::GetInst()->RegisterDamage(DamageData(this->atkPos, damage, targetType, NEXT_STEP_COUNT));
+		BattleCharMgr::GetInst()->RegisterDamage(DamageData(this->atkPos, damage, targetType, NEXT_STEP_COUNT, GetObjectID()));
 	} else
 		count++;
 	// TODO(HitAREAの描画)
@@ -256,7 +256,7 @@ bool Skill_ショックウェーブ::Process() {
 }
 
 Skill_サンダーボール::Skill_サンダーボール(CPoint<int> charPos, int damage, CharType myCharType, unsigned int ariveTime)
-	:myCharType(myCharType), count(0), image(), damage(damage), ariveTime(ariveTime) {
+	:myCharType(myCharType), count(0), image(), damage(damage), ariveTime(ariveTime),SkillData(true) {
 
 	std::string fname = def::SKILL_IMAGE_PATH + "サンダーボール.png";
 	LoadDivGraphWithErrorCheck(image, fname, "Skill_サンダーボール::Skill_サンダーボール", 4, 1, 64, 80);
@@ -275,7 +275,7 @@ Skill_サンダーボール::Skill_サンダーボール(CPoint<int> charPos, int damage, Char
 
 	// ダメージ登録
 	int targetType = eCHAR_ALL ^ myCharType;
-	BattleCharMgr::GetInst()->RegisterDamage(DamageData(this->atkPos, damage, targetType, NEXT_STEP_COUNT));
+	BattleCharMgr::GetInst()->RegisterDamage(DamageData(this->atkPos, damage, targetType, NEXT_STEP_COUNT, GetObjectID()));
 }
 
 Skill_サンダーボール::~Skill_サンダーボール() {
@@ -352,7 +352,7 @@ bool Skill_サンダーボール::Process() {
 
 		// ダメージ情報登録
 		int targetType = eCHAR_ALL ^ myCharType;
-		BattleCharMgr::GetInst()->RegisterDamage(DamageData(this->atkPos, damage, targetType, NEXT_STEP_COUNT));
+		BattleCharMgr::GetInst()->RegisterDamage(DamageData(this->atkPos, damage, targetType, NEXT_STEP_COUNT, GetObjectID()));
 	}
 
 	count++;
