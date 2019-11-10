@@ -10,9 +10,10 @@ public:
 	int power;
 	int targetType;
 	unsigned int endCount;
+	int skillObjectID;
 
 	DamageData();
-	DamageData(CPoint<int> pos, int power, int targetType, unsigned int endCount);
+	DamageData(CPoint<int> pos, int power, int targetType, unsigned int endCount, int skillObjectID);
 	~DamageData();
 };
 

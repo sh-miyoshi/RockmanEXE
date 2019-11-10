@@ -5,6 +5,7 @@
 
 class BattleSkillMgr {
 	std::list<std::shared_ptr<SkillData>> skillList;
+	std::list<int> hitList;
 
 	BattleSkillMgr() {}
 	~BattleSkillMgr() {}
@@ -17,4 +18,5 @@ public:
 	void Draw();
 	void Process();
 	void Register(std::shared_ptr<SkillData> skill);
+	void RegisterHitSkill(int objectID);
 };

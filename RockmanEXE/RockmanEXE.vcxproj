@@ -173,6 +173,7 @@
     <ClCompile Include="source\effectMgr.cpp" />
     <ClCompile Include="source\enemy.cpp" />
     <ClCompile Include="source\fade.cpp" />
+    <ClCompile Include="source\idManager.cpp" />
     <ClCompile Include="source\keyConfig.cpp" />
     <ClCompile Include="source\fps.cpp" />
     <ClCompile Include="source\main.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="source\effectMgr.h" />
     <ClInclude Include="source\enemy.h" />
     <ClInclude Include="source\fade.h" />
+    <ClInclude Include="source\idManager.h" />
     <ClInclude Include="source\keyConfig.h" />
     <ClInclude Include="source\define.h" />
     <ClInclude Include="source\fps.h" />

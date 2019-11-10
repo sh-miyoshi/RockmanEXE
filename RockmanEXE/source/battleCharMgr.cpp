@@ -4,11 +4,11 @@
 #include "battleField.h"
 #include "effectMgr.h"
 
-DamageData::DamageData():power(0), targetType(0),endCount(1) {
+DamageData::DamageData():power(0), targetType(0),endCount(1), skillObjectID(-1){
 }
 
-DamageData::DamageData(CPoint<int> pos, int power, int targetType,unsigned int endCount)
-	: pos(pos), power(power), targetType(targetType),endCount(endCount) {
+DamageData::DamageData(CPoint<int> pos, int power, int targetType,unsigned int endCount, int skillObjectID)
+	: pos(pos), power(power), targetType(targetType),endCount(endCount), skillObjectID(skillObjectID){
 }
 
 DamageData::~DamageData() {
