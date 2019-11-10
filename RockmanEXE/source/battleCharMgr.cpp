@@ -3,12 +3,13 @@
 #include "playerMgr.h"
 #include "battleField.h"
 #include "effectMgr.h"
+#include "battleSkillMgr.h"
 
-DamageData::DamageData():power(0), targetType(0),endCount(1) {
+DamageData::DamageData():power(0), targetType(0),endCount(1),skillObjectID(-1) {
 }
 
-DamageData::DamageData(CPoint<int> pos, int power, int targetType,unsigned int endCount)
-	: pos(pos), power(power), targetType(targetType),endCount(endCount) {
+DamageData::DamageData(CPoint<int> pos, int power, int targetType,unsigned int endCount, int skillObjectID)
+	: pos(pos), power(power), targetType(targetType),endCount(endCount), skillObjectID(skillObjectID) {
 }
 
 DamageData::~DamageData() {
@@ -61,6 +62,7 @@ BattleCharMgr::RtnCode BattleCharMgr::MainProcess() {
 		if( it->targetType & eCHAR_PLAYER ) {
 			if( it->pos == player->GetPos() && !player->IsMuteki()) {
 				it->endCount = 0;// 当たったらダメージは消去
+				BattleSkillMgr::GetInst()->RegisterHitSkill(it->skillObjectID);
 				int hp = ( int ) player->GetHP() - it->power;
 				player->SetMuteki();
 				// TODO(のけぞり処理)
@@ -74,6 +76,7 @@ BattleCharMgr::RtnCode BattleCharMgr::MainProcess() {
 			for( auto enemy : enemyList ) {
 				if( it->pos == enemy->GetPos() ) {
 					it->endCount = 0;// 当たったらダメージは消去
+					BattleSkillMgr::GetInst()->RegisterHitSkill(it->skillObjectID);
 					int hp = ( int ) enemy->GetHP() - it->power;
 					enemy->SetHP(hp);
 					if( hp <= 0 ) {

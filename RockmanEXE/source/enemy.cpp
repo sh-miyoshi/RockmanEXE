@@ -83,6 +83,8 @@ public:
 };
 
 class Enemy_ビリー:public EnemyBase {
+	static const int DELAY_サンダーボール = 6;
+
 	class AnimMove:public Animation {
 		Enemy_ビリー* obj;
 	public:
@@ -113,8 +115,33 @@ class Enemy_ビリー:public EnemyBase {
 		}
 	};
 
+	class Animサンダーボール:public Animation {
+		static const int Power_サンダーボール = 20;// debug(固定？)
+
+		Enemy_ビリー* obj;
+	public:
+		Animサンダーボール(Enemy_ビリー* obj):obj(obj) {}
+
+		virtual bool Process() {
+			const int timing = 7 * DELAY_サンダーボール;
+			if( count == timing ) {// 攻撃を行うタイミングになったら
+				// 攻撃の登録
+				SkillArg args;
+				args.charPos= obj->pos;
+				args.power = Power_サンダーボール;
+				args.ariveTime = 4;
+				args.myCharType = eCHAR_ENEMY;
+				BattleSkillMgr::GetInst()->Register(SkillMgr::GetData(SkillMgr::eID_サンダーボール, args));
+				return true;
+			}
+
+			return Animation::Process();
+		}
+	};
+
 	unsigned int atkCount;
 	std::shared_ptr<AnimMove> animMove;
+	std::shared_ptr<Animサンダーボール> animAttack;
 public:
 	Enemy_ビリー();
 	~Enemy_ビリー();
@@ -257,10 +284,14 @@ Enemy_ビリー::Enemy_ビリー():EnemyBase("ビリー", 50), atkCount(0) {
 	animMove = std::shared_ptr<AnimMove>(new AnimMove(this));
 	animMove->LoadData(fname, CPoint<unsigned int>(112, 114), CPoint<unsigned int>(6, 1));
 
-	// TODO(攻撃)
+	fname = def::CHARACTER_IMAGE_PATH + "ビリー_atk.png";
+	animAttack = std::shared_ptr<Animサンダーボール>(new Animサンダーボール(this));
+	animAttack->LoadData(fname, CPoint<unsigned int>(112, 114), CPoint<unsigned int>(8, 1), DELAY_サンダーボール);
 }
 
 Enemy_ビリー::~Enemy_ビリー() {
+	animMove->DeleteData();
+	animAttack->DeleteData();
 }
 
 void Enemy_ビリー::Process() {
@@ -286,8 +317,7 @@ void Enemy_ビリー::Process() {
 					this->AttachAnim(animMove);
 					atkCount++;
 				} else {// 攻撃処理
-					// todo(自分の攻撃が存在しないなら、BattleMgrから強制モーション設定で回避)
-					// TODO(SetAnim(ANIM_ATK1);)
+					this->AttachAnim(animAttack);
 					atkCount = 0;
 					count = 0;
 				}
