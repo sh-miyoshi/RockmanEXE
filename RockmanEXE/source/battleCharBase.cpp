@@ -6,6 +6,12 @@
 #include "battleFieldMgr.h"
 
 bool BattleCharBase::AnimProcess() {
+	// Delete用アニメーション
+	if( hp <= 0 ) {
+		deleteCount++;
+		return false;
+	}
+
 	if( animQueue.empty() ) {
 		if( !defaultAnim ) {
 			AppLogger::Error("Default Animationがセットされていません");
@@ -59,13 +65,15 @@ bool BattleCharBase::MoveCheck(int x, int y) {
 }
 
 BattleCharBase::BattleCharBase(std::string name, unsigned int hp, unsigned int hpMax, CharType myCharType)
-	:name(name), hp(hp), hpMax(hpMax), myCharType(myCharType), animInitialized(false), defaultAnim(nullptr) {
+	:name(name), hp(hp), hpMax(hpMax), myCharType(myCharType), animInitialized(false)
+	, defaultAnim(nullptr), deleteCount(0){
 }
 
 void BattleCharBase::Draw() {
 	CPoint<int> t = BattleField::GetPixelPos(pos);
 	if( hp == 0 ) {
 		SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
+		Draw(t.x, t.y);// 光を強くするために通常より描画
 		Draw(t.x, t.y);// 光を強くするために通常より描画
 	}
 

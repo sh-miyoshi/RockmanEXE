@@ -19,6 +19,8 @@ enum CharType {
 
 class BattleCharBase {
 protected:
+	static const unsigned int DELETE_TIME = 20;
+
 	std::string name;
 	unsigned int hp, hpMax;
 	CPoint<int> pos;
@@ -27,6 +29,7 @@ protected:
 	std::vector<std::shared_ptr<Animation>> animData;
 	std::shared_ptr<Animation> defaultAnim;
 	std::queue<std::shared_ptr<Animation>> animQueue;
+	unsigned int deleteCount;
 
 	bool MoveCheck(int x, int y);
 public:
@@ -49,4 +52,5 @@ public:
 	void SetHP(int hp);// 自身のHPをセットする(ただしマイナスの場合は0にする)
 
 	std::string GetName() const { return name; }
+	bool IsDelete()const { return (deleteCount >= DELETE_TIME); }
 };

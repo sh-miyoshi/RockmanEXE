@@ -52,9 +52,13 @@ void BattleCharMgr::DrawAppearScene(unsigned int nowCharNo, unsigned int count) 
 BattleCharMgr::RtnCode BattleCharMgr::MainProcess() {
 	player->Process();
 
-	for( auto enemy : enemyList ) {
-		// TODO(deleteカウントを設けて、それ以上なら削除する)
-		enemy->Process();
+	for( auto it = enemyList.begin(); it != enemyList.end();) {
+		if( ( *it )->IsDelete() ) {
+			it = enemyList.erase(it);
+		} else {
+			( *it )->Process();
+			it++;
+		}
 	}
 
 	// ダメージ処理
@@ -119,8 +123,13 @@ BattleCharMgr::RtnCode BattleCharMgr::MainProcess() {
 void BattleCharMgr::RunAnimProc() {
 	player->AnimProcess();
 
-	for( auto enemy : enemyList ) {
-		enemy->AnimProcess();
+	for( auto it = enemyList.begin(); it != enemyList.end();) {
+		if( ( *it )->IsDelete() ) {
+			it = enemyList.erase(it);
+		} else {
+			( *it )->AnimProcess();
+			it++;
+		}
 	}
 }
 
