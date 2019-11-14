@@ -25,7 +25,7 @@ void Battle::StateMain::Process() {
 		obj->stateMgr.ChangeNext(new StateEnemyDeleted(obj));
 		return;
 	case BattleCharMgr::eRTN_LOSE:
-		AppLogger::Error("–¢ŽÀ‘•");// TODO
+		obj->stateMgr.ChangeNext(new StateLose(obj));
 		return;
 	}
 	BattleSkillMgr::GetInst()->Process();

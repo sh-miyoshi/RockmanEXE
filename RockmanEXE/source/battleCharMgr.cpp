@@ -26,7 +26,10 @@ void BattleCharMgr::BattleEnd() {
 }
 
 void BattleCharMgr::Draw() {
-	player->Draw();
+	// プレイヤーはデリートしない
+	if( !player->IsDelete() ) {
+		player->Draw();
+	}
 
 	for( auto enemy : enemyList ) {
 		enemy->Draw();

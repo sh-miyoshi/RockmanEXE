@@ -128,6 +128,19 @@ private:
 		void Process();
 	};
 
+	class StateLose: public StateBase {
+		static const unsigned int END_TIME = 30;
+
+		unsigned int count;
+		Battle* obj;
+	public:
+		StateLose(Battle* obj);
+		~StateLose();
+
+		void Draw();
+		void Process();
+	};
+
 	bool isBoss;
 	unsigned int mainProcCount;
 	RtnCode rtnCode;

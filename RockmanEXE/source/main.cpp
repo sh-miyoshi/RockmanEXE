@@ -122,7 +122,7 @@ Main::Main(void) {
 	AppLogger::Info("Change Main State to StateBattle");
 	std::vector<Battle::EnemyInfo> enemies;
 	Battle::EnemyInfo e1;
-	e1.id = EnemyMgr::ID_ƒrƒŠ[;
+	e1.id = EnemyMgr::ID_“I;
 	e1.pos = CPoint<int>(4, 1);
 	enemies.push_back(e1);
 	stateMgr.ChangeNext(new StateBattle(enemies, this));
@@ -212,6 +212,7 @@ void Main::StateBattle::Process() {
 		obj->stateMgr.ChangeNext(new StateTargetSelect(obj));
 		break;
 	case Battle::eRTN_LOSE:
+		// TODO(move to game over)
 		PlayerMgr::GetInst()->UpdateBattleResult(false, enemies);
 		obj->stateMgr.ChangeNext(new StateTargetSelect(obj));
 		break;

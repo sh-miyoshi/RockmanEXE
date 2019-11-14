@@ -9,7 +9,7 @@
 namespace {
 	const unsigned int DEFAULT_CHARGE_TIME = 2 * 60;// 2[second]
 	const std::string SAVE_FILE_NAME = "save.dat";
-	const int SAVE_HASH_VALUE = 24071;
+	const int SAVE_HASH_VALUE = 6917021;
 	const unsigned int MAX_SAVE_DATA_LENGTH = 2048;
 }
 
@@ -378,9 +378,9 @@ void BattlePlayer::Process() {
 			// debug(デバッグ用処理: 特定のチップを使い続ける)
 			ChipData c = ChipMgr::GetInst()->GetChipData(ChipMgr::eID_キャノン);
 			SkillArg arg;
-			arg.charPos = pos;
-			arg.power = c.power;
-			arg.myCharType = eCHAR_PLAYER;
+			arg.charPos = CPoint<int>(5,1);
+			arg.power = 100;
+			arg.myCharType = eCHAR_ENEMY;
 			BattleSkillMgr::GetInst()->Register(SkillMgr::GetData(c, arg));
 			if( c.playerAct != eANIM_NONE ) {
 				this->AttachAnim(anim[c.playerAct]);
