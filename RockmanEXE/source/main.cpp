@@ -11,6 +11,7 @@
 #include "title.h"
 #include "targetSelect.h"
 #include "myinfo.h"
+#include "gameOver.h"
 
 bool gExitFlag = false;
 unsigned long long gGameCount = 0;
@@ -57,6 +58,17 @@ class Main {
 	public:
 		StateMyInfo(Main* obj);
 		~StateMyInfo();
+
+		void Draw();
+		void Process();
+	};
+
+	class StateGameOver:public StateBase {
+		Main* obj;
+		GameOver gameOver;
+	public:
+		StateGameOver(Main* obj);
+		~StateGameOver();
 
 		void Draw();
 		void Process();
@@ -212,9 +224,8 @@ void Main::StateBattle::Process() {
 		obj->stateMgr.ChangeNext(new StateTargetSelect(obj));
 		break;
 	case Battle::eRTN_LOSE:
-		// TODO(move to game over)
 		PlayerMgr::GetInst()->UpdateBattleResult(false, enemies);
-		obj->stateMgr.ChangeNext(new StateTargetSelect(obj));
+		obj->stateMgr.ChangeNext(new StateGameOver(obj));
 		break;
 	}
 }
@@ -232,5 +243,21 @@ void Main::StateMyInfo::Draw() {
 void Main::StateMyInfo::Process() {
 	if( myInfo.Process() ) {
 		obj->stateMgr.ChangeNext(new StateTargetSelect(obj));
+	}
+}
+
+Main::StateGameOver::StateGameOver(Main* obj):obj(obj) {
+}
+
+Main::StateGameOver::~StateGameOver() {
+}
+
+void Main::StateGameOver::Draw() {
+	gameOver.Draw();
+}
+
+void Main::StateGameOver::Process() {
+	if( gameOver.Process() ) {
+		obj->stateMgr.ChangeNext(new StateTitle(obj));
 	}
 }
