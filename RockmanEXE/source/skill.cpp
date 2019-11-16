@@ -78,6 +78,27 @@ public:
 	bool Process();
 };
 
+class Skill_ソード系:public SkillData {
+	static const int SKILL_DELAY = 3;// 次の画像に移るまでのカウント
+
+	unsigned int count;
+	int damage;
+	int image[4];
+	CharType myCharType;
+	std::vector<CPoint<int>> atkPoses;
+public:
+	enum Type {
+		eTYPE_ソード,
+		eTYPE_ワイドソード,
+	};
+
+	Skill_ソード系(Type type, CPoint<int> charPos, int damage, CharType myCharType);
+	~Skill_ソード系();
+
+	void Draw();
+	bool Process();
+};
+
 //-------------------------------------------------------
 // グローバルメソッド
 //-------------------------------------------------------
@@ -93,6 +114,10 @@ std::shared_ptr<SkillData> SkillMgr::GetData(int id, SkillArg args) {
 		return std::shared_ptr<Skill_ショックウェーブ>(new Skill_ショックウェーブ(args.charPos, args.power, args.myCharType));
 	case eID_サンダーボール:
 		return std::shared_ptr<Skill_サンダーボール>(new Skill_サンダーボール(args.charPos, args.power, args.myCharType, args.ariveTime));
+	case eID_ソード:
+		return std::shared_ptr<Skill_ソード系>(new Skill_ソード系(Skill_ソード系::eTYPE_ソード, args.charPos, args.power, args.myCharType));
+	case eID_ワイドソード:
+		return std::shared_ptr<Skill_ソード系>(new Skill_ソード系(Skill_ソード系::eTYPE_ワイドソード, args.charPos, args.power, args.myCharType));
 	default:
 		AppLogger::Error("SkillMgr::GetData wrong skill id (%d)", id);
 		exit(1);
@@ -113,13 +138,27 @@ std::shared_ptr<SkillData> SkillMgr::GetData(ChipData c, SkillArg args) {
 		id = eID_サンダーボール;
 		break;
 	case ChipMgr::eID_ストーンキューブ:
+		id = eID_ストーンキューブ;
+		break;
 	case ChipMgr::eID_ソード:
+		id = eID_ソード;
+		break;
+	case ChipMgr::eID_ワイドソード:
+		id = eID_ワイドソード;
+		break;
 	case ChipMgr::eID_フレイムライン:
+		id = eID_フレイムライン_固定;
+		break;
 	case ChipMgr::eID_リカバリー10:
 	case ChipMgr::eID_リカバリー30:
+		id = eID_リカバリー;
+		break;
 	case ChipMgr::eID_ブーメラン:
+		id = eID_ブーメラン_周回;
+		break;
 	case ChipMgr::eID_ミニボム:
-	case ChipMgr::eID_ワイドソード:
+		id = eID_ミニボム;
+		break;
 	default:
 		AppLogger::Error("Chip %dに対するスキルは未実装です", c.id);
 		exit(1);
@@ -256,7 +295,7 @@ bool Skill_ショックウェーブ::Process() {
 }
 
 Skill_サンダーボール::Skill_サンダーボール(CPoint<int> charPos, int damage, CharType myCharType, unsigned int ariveTime)
-	:myCharType(myCharType), count(0), image(), damage(damage), ariveTime(ariveTime),SkillData(true) {
+	:myCharType(myCharType), count(0), image(), damage(damage), ariveTime(ariveTime), SkillData(true) {
 
 	std::string fname = def::SKILL_IMAGE_PATH + "サンダーボール.png";
 	LoadDivGraphWithErrorCheck(image, fname, "Skill_サンダーボール::Skill_サンダーボール", 4, 1, 64, 80);
@@ -356,5 +395,81 @@ bool Skill_サンダーボール::Process() {
 	}
 
 	count++;
+	return false;
+}
+
+Skill_ソード系::Skill_ソード系(Type type, CPoint<int> charPos, int damage, CharType myCharType)
+	:myCharType(myCharType), count(0), image(), damage(damage), SkillData(true) {
+
+	// Set Image
+	std::string fname = def::SKILL_IMAGE_PATH + "ソード.png";
+	int t[12];
+	LoadDivGraphWithErrorCheck(t, fname, "Skill_ソード", 4, 3, 160, 150);
+	for( int i = 0; i < 4; i++ ) {
+		switch( type ) {
+		case eTYPE_ソード:
+			image[i] = t[i];
+			DeleteGraph(t[i + 4]);
+			DeleteGraph(t[i + 8]);
+			break;
+		case eTYPE_ワイドソード:
+			image[i] = t[i + 8];
+			DeleteGraph(t[i]);
+			DeleteGraph(t[i + 4]);
+			break;
+		default:
+			AppLogger::Error("予期せぬソードタイプが選択されました. type: %d", type);
+			break;
+		}
+	}
+
+	// TODO(攻撃位置のセット)
+	CPoint<int> pos = charPos;
+	switch( myCharType ) {
+	case eCHAR_PLAYER:
+		pos.x++;
+		break;
+	case eCHAR_ENEMY:
+		pos.x--;
+		break;
+	default:
+		AppLogger::Error("予期せぬキャラタイプが選択されました. type: %d", myCharType);
+		break;
+	}
+	atkPoses.push_back(pos);// とりあえず目の前の一マスは攻撃
+
+	if( type == eTYPE_ワイドソード ) {
+		// 上下も攻撃
+		atkPoses.push_back(CPoint<int>(pos.x, pos.y - 1));
+		atkPoses.push_back(CPoint<int>(pos.x, pos.y + 1));
+	}
+}
+
+Skill_ソード系::~Skill_ソード系() {
+	for( int i = 0; i < 4; i++ ) {
+		DeleteGraph(image[i]);
+	}
+}
+
+void Skill_ソード系::Draw() {
+	int ino = ( count / SKILL_DELAY );
+	if( ino > 4 ) {
+		ino = 4;
+	}
+	CPoint<int> pos = BattleField::GetPixelPos(atkPoses[0]);
+	DrawRotaGraph(pos.x, pos.y, 1, 0, image[ino], TRUE);
+}
+
+bool Skill_ソード系::Process() {
+	count++;
+	if( count == SKILL_DELAY * 1 ) {
+		// ダメージデータの登録
+		int targetType = eCHAR_ALL ^ myCharType;
+		for( auto pos : atkPoses ) {
+			BattleCharMgr::GetInst()->RegisterDamage(DamageData(pos, damage, targetType, 1, GetObjectID()));
+		}
+	} else if( count >= SKILL_DELAY * 4 ) {
+		return true;
+	}
 	return false;
 }

@@ -31,10 +31,23 @@ class SkillMgr {
 public:
 	enum SkillID {
 		eID_バスター,
+		eID_ショックウェーブ,
 		eID_キャノン,
 		eID_ハイキャノン,
-		eID_ショックウェーブ,
+		eID_ブーメラン_周回,
+		eID_ブーメラン_直線,
 		eID_サンダーボール,
+		eID_ストーンキューブ,
+		eID_ヘルズローリング_UP,
+		eID_ヘルズローリング_DOWN,
+		eID_フレイムライン_固定,
+		eID_ソード,
+		eID_リカバリー,
+		eID_ダークアームブレード_SHORT,
+		eID_ダークアームブレード_LONG,
+		eID_ミニボム,
+		eID_ワイドソード,
+		eID_シューティングバスター,
 
 		eID_MAX
 	};

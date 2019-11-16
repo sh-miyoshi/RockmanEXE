@@ -376,11 +376,11 @@ void BattlePlayer::Process() {
 			}
 #else
 			// debug(デバッグ用処理: 特定のチップを使い続ける)
-			ChipData c = ChipMgr::GetInst()->GetChipData(ChipMgr::eID_キャノン);
+			ChipData c = ChipMgr::GetInst()->GetChipData(ChipMgr::eID_ワイドソード);
 			SkillArg arg;
-			arg.charPos = CPoint<int>(5,1);
-			arg.power = 100;
-			arg.myCharType = eCHAR_ENEMY;
+			arg.charPos = pos;
+			arg.power = c.power;
+			arg.myCharType = eCHAR_PLAYER;
 			BattleSkillMgr::GetInst()->Register(SkillMgr::GetData(c, arg));
 			if( c.playerAct != eANIM_NONE ) {
 				this->AttachAnim(anim[c.playerAct]);
