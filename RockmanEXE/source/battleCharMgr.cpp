@@ -81,7 +81,7 @@ BattleCharMgr::RtnCode BattleCharMgr::MainProcess() {
 				BattleSkillMgr::GetInst()->RegisterHitSkill(it->skillObjectID);
 				int hp = ( int ) player->GetHP() - it->power;
 				player->SetMuteki();
-				// TODO(のけぞり処理)
+				player->AttachDamageAnim();// のけぞり処理(debug スーパーアーマー)
 				player->SetHP(hp);
 				if( hp <= 0 ) {
 					return eRTN_LOSE;// 敗北

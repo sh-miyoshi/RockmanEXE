@@ -28,6 +28,7 @@ public:
 
 enum PlayerAnimType {
 	eANIM_NONE,
+	eANIM_STAND,
 	eANIM_MOVE,
 	eANIM_SHOT,
 	eANIM_CANNON,

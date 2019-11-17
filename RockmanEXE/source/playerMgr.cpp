@@ -240,9 +240,9 @@ BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax
 
 	// アニメーションの設定
 	std::string fname = def::CHARACTER_IMAGE_PATH + "player_stand.png";
-	std::shared_ptr<Animation> animStand = std::shared_ptr<Animation>(new Animation());
-	animStand->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(1, 1));
-	BattleCharBase::SetDefaultAnim(animStand);
+	anim[eANIM_STAND] = std::shared_ptr<Animation>(new Animation());
+	anim[eANIM_STAND]->LoadData(fname, CPoint<unsigned int>(100, 100), CPoint<unsigned int>(1, 1));
+	BattleCharBase::SetDefaultAnim(anim[eANIM_STAND]);
 
 	anim[eANIM_NONE] = std::shared_ptr<Animation>(new Animation());
 
@@ -266,6 +266,10 @@ BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax
 	anim[eANIM_BOMB] = std::shared_ptr<Animation>(new Animation());
 	anim[eANIM_BOMB]->LoadData(fname, CPoint<unsigned int>(100, 114), CPoint<unsigned int>(5, 1), 3);
 
+	fname = def::CHARACTER_IMAGE_PATH + "player_damaged.png";
+	damageAnim = std::shared_ptr<Animation>(new Animation());
+	damageAnim->LoadData(fname, CPoint<unsigned int>(100,100), CPoint<unsigned int>(6,1),2);
+
 	// チャージ画像の読み込み
 	fname = def::SKILL_IMAGE_PATH + "ロックバスター_charge.png";
 	LoadDivGraphWithErrorCheck(imgCharge, fname, "BattlePlayer::BattlePlayer", 8, 2, 158, 150);
@@ -277,6 +281,10 @@ BattlePlayer::BattlePlayer(std::string name, unsigned int hp, unsigned int hpMax
 BattlePlayer::~BattlePlayer() {
 	for( int i = 0; i < sizeof(imgCharge) / sizeof(imgCharge[0]); i++ )
 		DeleteGraph(imgCharge[i]);
+	for( int i = 0; i < eANIM_MAX; i++ ) {
+		anim[i]->DeleteData();
+	}
+	damageAnim->DeleteData();
 }
 
 void BattlePlayer::Draw() {
@@ -388,7 +396,7 @@ void BattlePlayer::Process() {
 			}
 #else
 			// debug(デバッグ用処理: 特定のチップを使い続ける)
-			ChipData c = ChipMgr::GetInst()->GetChipData(ChipMgr::eID_ワイドソード);
+			ChipData c = ChipMgr::GetInst()->GetChipData(ChipMgr::eID_ブーメラン);
 			SkillArg arg;
 			arg.charPos = pos;
 			arg.power = c.power;
@@ -433,4 +441,8 @@ void BattlePlayer::SetSendChipList(std::vector<int> selectedIndexes) {
 	for( auto si : selectedIndexes ) {
 		chipFolder.erase(chipFolder.begin() + si);
 	}
+}
+
+void BattlePlayer::AttachDamageAnim() {
+	this->AttachAnim(damageAnim, true);
 }

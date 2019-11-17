@@ -100,8 +100,10 @@ void BattleCharBase::Process() {
 
 void BattleCharBase::AttachAnim(std::shared_ptr<Animation> anim, bool forceRun) {
 	if( forceRun ) {
-		AppLogger::Error("未実装です");
-		exit(1);
+		// 既存のアニメーションを全削除
+		while( !animQueue.empty() ) {
+			animQueue.pop();
+		}
 	}
 	animQueue.push(anim);
 }

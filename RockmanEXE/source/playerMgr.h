@@ -43,6 +43,7 @@ private:
 	std::list<ChipInfo> sendChipList;
 
 	std::shared_ptr<Animation> anim[eANIM_MAX];
+	std::shared_ptr<Animation> damageAnim;
 public:
 	BattlePlayer(
 		std::string name,
@@ -57,11 +58,14 @@ public:
 	virtual void Draw();
 	virtual void Process();
 
+	MindStatus GetMindStatus()const { return mindStatus; }
 	std::vector<ChipInfo> GetHandData(unsigned max);
 	void SetSendChipList(std::vector<int> selectedIndexes);
+
+	// TODO(ˆÈ‰º‚ÌMethod‚ÍBoss‚àŽg—p‚·‚é‚Ì‚ÅBattleCharBase‚É‚Ü‚Æ‚ß‚é)
 	void SetMuteki() { mutekiCount = 0; }
 	bool IsMuteki()const { return mutekiCount >= 0; }
-	MindStatus GetMindStatus()const { return mindStatus; }
+	void AttachDamageAnim();
 };
 
 class PlayerMgr {
