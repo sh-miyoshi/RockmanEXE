@@ -8,7 +8,7 @@ public:
 	int id;
 	char code;
 
-	ChipInfo():id(0), code('*') {}
+	ChipInfo():id(-1), code('*') {}
 	ChipInfo(int id, char code):id(id), code(code) {}
 
 	bool operator<(const ChipInfo& right) const {

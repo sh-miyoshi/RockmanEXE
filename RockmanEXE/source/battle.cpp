@@ -6,19 +6,7 @@
 #include "effectMgr.h"
 
 Battle::Battle(std::vector<EnemyInfo> enemies):rtnCode(eRTN_CONTINUE), mainProcCount(0), isBoss(false) {
-	std::list< std::shared_ptr<BattleCharBase>> enemyList;
-	std::string infoMsg = "[ ";
-
-	for( auto e : enemies ) {
-		std::shared_ptr<BattleCharBase> enemy = EnemyMgr::GetData(e.id);
-		infoMsg += ToString("%s, ", enemy->GetName().c_str());
-		enemy->SetPos(e.pos.x, e.pos.y);
-		enemyList.push_back(enemy);
-	}
-	infoMsg += "]";
-	AppLogger::Info("Battle In with Enemy List: %s", infoMsg.c_str());
-
-	BattleCharMgr::GetInst()->BattleInit(enemyList);
+	BattleCharMgr::GetInst()->BattleInit(enemies);
 	BattleFieldMgr::GetInst()->BattleInit();
 
 //	stateMgr.ChangeNext(new StateBattleStart(this));// debug(ç≈èâÇÃstate)

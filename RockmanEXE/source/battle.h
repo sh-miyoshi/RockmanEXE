@@ -114,11 +114,29 @@ private:
 	};
 
 	class StateWin: public StateBase {
+		class ResultValue {
+		public:
+			enum Type {
+				eTYPE_MONEY,
+				eTYPE_CHIP
+			};
+
+			int image;
+			std::string name;
+			int value;
+			Type type;
+
+			ResultValue():image(-1), value(0), type(eTYPE_MONEY) {}
+			~ResultValue() {}
+		};
+
 		static const int VIEW_ITEM_COUNT = 20;
 
 		unsigned int count;
 		unsigned int bustingLv;
 		int imgResultFrame;
+		int imgZenny;
+		ResultValue getItem;
 		Battle* obj;
 	public:
 		StateWin(Battle* obj);

@@ -116,6 +116,12 @@ void PlayerMgr::CreateNewPlayer() {
 		{ ChipMgr::eID_ハイキャノン,'*' },
 		{ ChipMgr::eID_ハイキャノン,'*' },
 
+		{ ChipMgr::eID_サンダーボール,'S' },
+		{ ChipMgr::eID_サンダーボール,'S' },
+		{ ChipMgr::eID_サンダーボール,'T' },
+		{ ChipMgr::eID_サンダーボール,'T' },
+		{ ChipMgr::eID_サンダーボール,'*' },
+
 		{ ChipMgr::eID_キャノン,'A' },
 		{ ChipMgr::eID_キャノン,'A' },
 		{ ChipMgr::eID_キャノン,'A' },
@@ -134,8 +140,14 @@ void PlayerMgr::CreateNewPlayer() {
 		{ ChipMgr::eID_キャノン,'*' },
 		{ ChipMgr::eID_キャノン,'*' },
 	};
-	for( int i = 0; i < FOLDER_NUM; i++ )
+
+	std::string infoMsg = "[ ";
+	for( int i = 0; i < FOLDER_NUM; i++ ) {
 		chipFolder.push_back(f[i]);
+		infoMsg += ToString("%d, ", f[i].id);
+	}
+	infoMsg += "]";
+	AppLogger::Info("Battle In with Enemy List: %s", infoMsg.c_str());
 
 	AppLogger::Info("Start with New Player");
 }

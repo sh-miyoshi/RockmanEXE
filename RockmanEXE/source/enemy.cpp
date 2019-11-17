@@ -5,6 +5,23 @@
 #include "skill.h"
 #include "battleSkillMgr.h"
 
+class EnemyAttack {
+	unsigned int bustingLevel;
+	ChipInfo chip;
+public:
+	EnemyAttack(unsigned int bustingLevel, int chipID, char chipCode)
+		:bustingLevel(bustingLevel), chip(chipID, chipCode) {
+	}
+	~EnemyAttack() {}
+
+	ChipInfo GetChip(unsigned int bustingLevel) {
+		if( bustingLevel >= this->bustingLevel ) {
+			return chip;
+		}
+		return ChipInfo(-1, '*');
+	}
+};
+
 class EnemyBase:public BattleCharBase {
 protected:
 	unsigned int count;
@@ -127,7 +144,7 @@ class Enemy_ビリー:public EnemyBase {
 			if( count == timing ) {// 攻撃を行うタイミングになったら
 				// 攻撃の登録
 				SkillArg args;
-				args.charPos= obj->pos;
+				args.charPos = obj->pos;
 				args.power = Power_サンダーボール;
 				args.ariveTime = 4;
 				args.myCharType = eCHAR_ENEMY;
@@ -167,6 +184,29 @@ std::shared_ptr<BattleCharBase> EnemyMgr::GetData(int id) {
 	return std::shared_ptr<BattleCharBase>();
 }
 
+std::list<ChipInfo> EnemyMgr::GetChips(int id, unsigned int bustingLevel) {
+	std::list<EnemyAttack> candidates;
+	switch( id ) {
+	case ID_的:
+		break;
+	case ID_メットール:
+		break;
+	case ID_ビリー:
+		candidates.push_back(EnemyAttack(6, ChipMgr::eID_サンダーボール, 'A'));
+		candidates.push_back(EnemyAttack(11, ChipMgr::eID_サンダーボール, '*'));
+		break;
+	default:
+		AppLogger::Error("EnemyMgr::GetData wrong char id (%d)", id);
+		exit(1);
+	}
+
+	std::list<ChipInfo> res;
+	for( auto c : candidates ) {
+		res.push_back(c.GetChip(bustingLevel));
+	}
+	return res;
+}
+
 //-------------------------------------------------------
 // 敵関連の基底クラス
 //-------------------------------------------------------
@@ -184,6 +224,8 @@ EnemyBase::~EnemyBase() {
 
 void EnemyBase::Draw() {
 	BattleCharBase::Draw();
+
+	// TODO(HOが別の敵と被るので別表示にする)
 
 	// HPの描画
 	CPoint<int> t = BattleField::GetPixelPos(CPoint<int>(pos.x, pos.y + 1));
@@ -204,7 +246,7 @@ void EnemyBase::Draw() {
 //-------------------------------------------------------
 // テスト用の的
 //-------------------------------------------------------
-Enemy_的::Enemy_的():EnemyBase("的", 10) {
+Enemy_的::Enemy_的():EnemyBase("的", 1000) {
 	std::string fname = def::CHARACTER_IMAGE_PATH + "的.png";
 	std::shared_ptr<Animation> animStand = std::shared_ptr<Animation>(new Animation());
 	animStand->LoadData(fname, CPoint<unsigned int>(100, 117), CPoint<unsigned int>(1, 1));

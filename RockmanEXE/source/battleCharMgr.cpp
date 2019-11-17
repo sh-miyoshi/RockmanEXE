@@ -15,11 +15,20 @@ DamageData::DamageData(CPoint<int> pos, int power, int targetType,unsigned int e
 DamageData::~DamageData() {
 }
 
-void BattleCharMgr::BattleInit(std::list< std::shared_ptr<BattleCharBase>> enemyList) {
+void BattleCharMgr::BattleInit(std::vector<Battle::EnemyInfo> enemies) {
 	PlayerMgr::GetInst()->InitBattleChar();
 	player = PlayerMgr::GetInst()->GetBattleChar();
 
-	this->enemyList = enemyList;
+	std::string infoMsg = "[ ";
+	for( auto e : enemies ) {
+		std::shared_ptr<BattleCharBase> enemy = EnemyMgr::GetData(e.id);
+		infoMsg += ToString("%s, ", enemy->GetName().c_str());
+		enemy->SetPos(e.pos.x, e.pos.y);
+		enemyList.push_back(enemy);
+		initEnemyList.push_back(e.id);
+	}
+	infoMsg += "]";
+	AppLogger::Info("Battle In with Enemy List: %s", infoMsg.c_str());
 }
 
 void BattleCharMgr::BattleEnd() {

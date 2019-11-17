@@ -1,7 +1,9 @@
 #pragma once
 
 #include <memory>
+#include <list>
 #include "battleCharBase.h"
+#include "chip.h"
 
 class EnemyMgr {
 public:
@@ -14,4 +16,5 @@ public:
 	};
 
 	static std::shared_ptr<BattleCharBase> GetData(int id);
+	static std::list<ChipInfo> GetChips(int id, unsigned int bustingLevel);
 };

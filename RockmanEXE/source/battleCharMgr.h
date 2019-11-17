@@ -3,6 +3,7 @@
 #include <memory>
 #include <list>
 #include "battleCharBase.h"
+#include "battle.h"
 
 class DamageData {
 public:
@@ -20,10 +21,11 @@ public:
 class BattleCharMgr {
 	class BattlePlayer* player;
 	std::list< std::shared_ptr<BattleCharBase>> enemyList;
+	std::list<int> initEnemyList;
 	std::list<DamageData> damageList;
 
 	BattleCharMgr():player(nullptr) {}
-	~BattleCharMgr(){}
+	~BattleCharMgr() {}
 public:
 	enum RtnCode {
 		eRTN_CONTINUE,
@@ -36,7 +38,7 @@ public:
 		return &inst;
 	}
 
-	void BattleInit(std::list< std::shared_ptr<BattleCharBase>> enemyList);
+	void BattleInit(std::vector<Battle::EnemyInfo> enemies);
 	void BattleEnd();
 
 	void Draw();
@@ -48,6 +50,7 @@ public:
 	CPoint<int> GetClosestCharPosWithSameLine(CPoint<int> myPos, int charType);
 	std::vector<CPoint<int>> GetAllCharPos(int charType);
 	unsigned int GetEnemyNum()const { return enemyList.size(); }
+	std::list<int> GetInitEnemyList()const { return initEnemyList; }
 
 	void RegisterDamage(DamageData data);
 };

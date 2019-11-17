@@ -2,8 +2,9 @@
 #include "battle.h"
 #include "fps.h"
 #include "drawCharacter.h"
+#include "battleCharMgr.h"
 
-Battle::StateWin::StateWin(Battle* obj):obj(obj), imgResultFrame(-1), count(0), bustingLv(0) {
+Battle::StateWin::StateWin(Battle* obj):obj(obj), imgResultFrame(-1), count(0), bustingLv(0), imgZenny(-1) {
 	AppLogger::Info("Change Battle State to StateWin");
 
 	std::string fname = def::IMAGE_FILE_PATH + "battle/フレーム/battle_result_frame.png";
@@ -37,7 +38,7 @@ Battle::StateWin::StateWin(Battle* obj):obj(obj), imgResultFrame(-1), count(0), 
 	int time = obj->mainProcCount / Fps::FPS;
 	bustingLv = 4;
 	if( obj->isBoss ) {
-		const int deadline[4] = { 50,40,30,-1 };
+		const int deadline[4] = { 50, 40, 30, -1 };
 		for( int i = 0; i < 4; i++ ) {
 			if( time > deadline[i] ) {
 				bustingLv += ( i * 2 );
@@ -45,7 +46,7 @@ Battle::StateWin::StateWin(Battle* obj):obj(obj), imgResultFrame(-1), count(0), 
 			}
 		}
 	} else {
-		const int deadline[4] = { 36,12,5,-1 };
+		const int deadline[4] = { 36, 12, 5, -1 };
 		for( int i = 0; i < 4; i++ ) {
 			if( time > deadline[i] ) {
 				bustingLv += i;
@@ -53,10 +54,55 @@ Battle::StateWin::StateWin(Battle* obj):obj(obj), imgResultFrame(-1), count(0), 
 			}
 		}
 	}
+
+	// TODO(それ以外の加算)
+
+	// 取得リソース(お金, チップなど)の設定
+	std::vector<ChipInfo> chips;
+	for( auto id : BattleCharMgr::GetInst()->GetInitEnemyList() ) {
+		auto cs = EnemyMgr::GetChips(id, bustingLv);
+		for( auto c : cs ) {
+			chips.push_back(c);
+		}
+	}
+
+	// debug(報酬の重みづけ)
+	unsigned int rnd = rnd_generator() % ( chips.size() + 1 );
+	if( rnd == chips.size() ) {	// 報酬はお金
+		std::string fname = def::IMAGE_FILE_PATH + "battle/zenny.png";
+		imgZenny = LoadGraphWithErrorCheck(fname, "Battle::StateWin::StateWin");
+
+		getItem.type = ResultValue::eTYPE_MONEY;
+		getItem.name = "ゼニー";
+		getItem.image = imgZenny;
+		switch( bustingLv ) {
+		case  4: getItem.value = 30; break;
+		case  5: getItem.value = 50; break;
+		case  6: getItem.value = 100; break;
+		case  7: getItem.value = 200; break;
+		case  8: getItem.value = 400; break;
+		case  9: getItem.value = 500; break;
+		case 10: getItem.value = 1000; break;
+		default:
+			getItem.value = 2000;
+			break;
+		}
+	} else {// 報酬はチップ
+		getItem.type = ResultValue::eTYPE_CHIP;
+		auto c = ChipMgr::GetInst()->GetChipData(chips[rnd].id);
+		getItem.name = c.name;
+		getItem.image = c.imgInfo;
+		getItem.value = ( int ) chips[rnd].code;
+	}
+
+	if( getItem.name.empty() ) {
+		AppLogger::Error("Logic Error: 報酬がセットされていません");
+	}
 }
 
 Battle::StateWin::~StateWin() {
 	DeleteGraph(imgResultFrame);
+	DeleteGraph(imgZenny);
 }
 
 void Battle::StateWin::Draw() {
@@ -80,7 +126,21 @@ void Battle::StateWin::Draw() {
 		// バスティングレベルの描画
 		DrawCharacter::GetInst()->DrawNumber(365, 140, bustingLv);
 
-		// TODO(取得アイテム)
+		// 取得アイテムの描画
+		DrawGraph(268, 189, getItem.image, TRUE);
+		// TODO(mosaic.Draw();)
+		// 名前表示
+		if( count >= VIEW_ITEM_COUNT + 40 ) {
+			DrawCharacter::GetInst()->DrawString(100, 245, getItem.name, WHITE);
+			switch( getItem.type ) {
+			case ResultValue::eTYPE_CHIP:
+				DrawCharacter::GetInst()->DrawString(230, 245, ToString("%c", ( char ) getItem.value), WHITE);
+				break;
+			case ResultValue::eTYPE_MONEY:
+				DrawCharacter::GetInst()->DrawString(100 + 90, 245, ToString("%4dZ", getItem.value), WHITE);
+				break;
+			}
+		}
 	}
 }
 
