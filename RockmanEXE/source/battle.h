@@ -5,6 +5,7 @@
 #include "chip.h"
 #include "enemy.h"
 #include "point.h"
+#include "mosaic.h"
 
 class Battle {
 public:
@@ -137,6 +138,7 @@ private:
 		int imgResultFrame;
 		int imgZenny;
 		ResultValue getItem;
+		Mosaic mosaic;
 		Battle* obj;
 	public:
 		StateWin(Battle* obj);

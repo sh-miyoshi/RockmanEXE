@@ -4,7 +4,10 @@
 #include "drawCharacter.h"
 #include "battleCharMgr.h"
 
-Battle::StateWin::StateWin(Battle* obj):obj(obj), imgResultFrame(-1), count(0), bustingLv(0), imgZenny(-1) {
+Battle::StateWin::StateWin(Battle* obj)
+	:obj(obj), imgResultFrame(-1), count(0), bustingLv(0), imgZenny(-1)
+	,mosaic(CPoint<int>(268, 189), CPoint<int>(112, 96), CPoint<int>(16, 16)) {
+
 	AppLogger::Info("Change Battle State to StateWin");
 
 	std::string fname = def::IMAGE_FILE_PATH + "battle/フレーム/battle_result_frame.png";
@@ -128,7 +131,8 @@ void Battle::StateWin::Draw() {
 
 		// 取得アイテムの描画
 		DrawGraph(268, 189, getItem.image, TRUE);
-		// TODO(mosaic.Draw();)
+		mosaic.Draw();
+
 		// 名前表示
 		if( count >= VIEW_ITEM_COUNT + 40 ) {
 			DrawCharacter::GetInst()->DrawString(100, 245, getItem.name, WHITE);
@@ -147,7 +151,10 @@ void Battle::StateWin::Draw() {
 void Battle::StateWin::Process() {
 	count++;
 	if( count >= VIEW_ITEM_COUNT ) {
-		// TODO(モザイク処理)
+		if( count % 7 == 0 ) {
+			mosaic.Update(10);
+		}
+
 		if( count >= VIEW_ITEM_COUNT + 50 ) {
 			if( CKey::GetInst()->CheckKey(eKEY_ENTER) == 1 )
 				obj->rtnCode = Battle::eRTN_WIN;

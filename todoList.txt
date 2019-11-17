@@ -7,8 +7,6 @@ battle
 	battleMain
 		ダメージ処理(のけぞり)
 		敵削除処理
-	battleResult
-		勝った時の報酬の決定・画面
 敵追加
 	フォルテ
 スキル追加
