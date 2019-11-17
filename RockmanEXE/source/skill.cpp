@@ -34,7 +34,7 @@ public:
 		eTYPE_MEGA,
 	};
 
-	Skill_キャノン系(CPoint<int> charPos, int damage, CharType myCharType, Type skillType);
+	Skill_キャノン系(Type skillType, CPoint<int> charPos, int damage, CharType myCharType);
 	~Skill_キャノン系();
 
 	void Draw();
@@ -99,6 +99,34 @@ public:
 	bool Process();
 };
 
+class Skill_ブーメラン:public SkillData {
+public:
+	enum Type {
+		eTYPE_直線,
+		eTYPE_周回
+	};
+private:
+	static const int IMAGE_DELAY = 4;// 次の画像に移るまでのカウント
+	static const int NEXT_STEP_COUNT = 2 * IMAGE_DELAY;
+
+	CharType myCharType;
+	unsigned int count;
+	int image[4];
+	CPoint<int> atkPos;
+	Type attackType;
+	int muki;// 周回の時の向き(UP or DOWN)
+	int damage;
+
+	bool IsWayBack();
+	bool IsCorner(int x, int y);
+public:
+	Skill_ブーメラン(Type type, CPoint<int> initAtkPos, int damage, CharType myCharType);
+	~Skill_ブーメラン();
+
+	void Draw();
+	bool Process();
+};
+
 //-------------------------------------------------------
 // グローバルメソッド
 //-------------------------------------------------------
@@ -107,9 +135,9 @@ std::shared_ptr<SkillData> SkillMgr::GetData(int id, SkillArg args) {
 	case eID_バスター:
 		return std::shared_ptr<Skill_バスター>(new Skill_バスター(args.charPos, args.power, args.myCharType));
 	case eID_キャノン:
-		return std::shared_ptr<Skill_キャノン系>(new Skill_キャノン系(args.charPos, args.power, args.myCharType, Skill_キャノン系::eTYPE_NORMAL));
+		return std::shared_ptr<Skill_キャノン系>(new Skill_キャノン系(Skill_キャノン系::eTYPE_NORMAL, args.charPos, args.power, args.myCharType));
 	case eID_ハイキャノン:
-		return std::shared_ptr<Skill_キャノン系>(new Skill_キャノン系(args.charPos, args.power, args.myCharType, Skill_キャノン系::eTYPE_HIGH));
+		return std::shared_ptr<Skill_キャノン系>(new Skill_キャノン系(Skill_キャノン系::eTYPE_HIGH, args.charPos, args.power, args.myCharType));
 	case eID_ショックウェーブ:
 		return std::shared_ptr<Skill_ショックウェーブ>(new Skill_ショックウェーブ(args.charPos, args.power, args.myCharType));
 	case eID_サンダーボール:
@@ -118,6 +146,10 @@ std::shared_ptr<SkillData> SkillMgr::GetData(int id, SkillArg args) {
 		return std::shared_ptr<Skill_ソード系>(new Skill_ソード系(Skill_ソード系::eTYPE_ソード, args.charPos, args.power, args.myCharType));
 	case eID_ワイドソード:
 		return std::shared_ptr<Skill_ソード系>(new Skill_ソード系(Skill_ソード系::eTYPE_ワイドソード, args.charPos, args.power, args.myCharType));
+	case eID_ブーメラン_周回:
+		return std::shared_ptr<Skill_ブーメラン>(new Skill_ブーメラン(Skill_ブーメラン::eTYPE_周回, args.charPos, args.power, args.myCharType));
+	case eID_ブーメラン_直線:
+		return std::shared_ptr<Skill_ブーメラン>(new Skill_ブーメラン(Skill_ブーメラン::eTYPE_直線, args.charPos, args.power, args.myCharType));
 	default:
 		AppLogger::Error("SkillMgr::GetData wrong skill id (%d)", id);
 		exit(1);
@@ -155,6 +187,7 @@ std::shared_ptr<SkillData> SkillMgr::GetData(ChipData c, SkillArg args) {
 		break;
 	case ChipMgr::eID_ブーメラン:
 		id = eID_ブーメラン_周回;
+		args.charPos = CPoint<int>(0, BattleField::FIELD_NUM_Y - 1);// チップの場合は左下から攻撃
 		break;
 	case ChipMgr::eID_ミニボム:
 		id = eID_ミニボム;
@@ -195,7 +228,7 @@ bool Skill_バスター::Process() {
 //-------------------------------------------------------
 // キャノン
 //-------------------------------------------------------
-Skill_キャノン系::Skill_キャノン系(CPoint<int> charPos, int damage, CharType myCharType, Type skillType)
+Skill_キャノン系::Skill_キャノン系(Type skillType, CPoint<int> charPos, int damage, CharType myCharType)
 	:charPos(charPos), count(0), myCharType(myCharType), imgBody(), damage(damage), SkillData(false) {
 
 	int temp[9];
@@ -248,6 +281,9 @@ bool Skill_キャノン系::Process() {
 	return false;
 }
 
+//-------------------------------------------------------
+// ショックウェーブ
+//-------------------------------------------------------
 Skill_ショックウェーブ::Skill_ショックウェーブ(CPoint<int> charPos, int damage, CharType myCharType)
 	:count(0), myCharType(myCharType), image(), damage(damage), SkillData(true) {
 
@@ -294,6 +330,9 @@ bool Skill_ショックウェーブ::Process() {
 	return false;
 }
 
+//-------------------------------------------------------
+// サンダーボール
+//-------------------------------------------------------
 Skill_サンダーボール::Skill_サンダーボール(CPoint<int> charPos, int damage, CharType myCharType, unsigned int ariveTime)
 	:myCharType(myCharType), count(0), image(), damage(damage), ariveTime(ariveTime), SkillData(true) {
 
@@ -398,6 +437,9 @@ bool Skill_サンダーボール::Process() {
 	return false;
 }
 
+//-------------------------------------------------------
+// ソード系
+//-------------------------------------------------------
 Skill_ソード系::Skill_ソード系(Type type, CPoint<int> charPos, int damage, CharType myCharType)
 	:myCharType(myCharType), count(0), image(), damage(damage), SkillData(true) {
 
@@ -471,5 +513,113 @@ bool Skill_ソード系::Process() {
 	} else if( count >= SKILL_DELAY * 4 ) {
 		return true;
 	}
+	return false;
+}
+
+bool Skill_ブーメラン::IsWayBack() {
+	return ( muki == def::eMUKI_UP && atkPos.y == 0 ) || ( muki == def::eMUKI_DOWN && atkPos.y == BattleField::FIELD_NUM_Y - 1 );
+}
+
+bool Skill_ブーメラン::IsCorner(int x, int y) {
+	int trgX = ( myCharType == eCHAR_PLAYER ) ? BattleField::FIELD_NUM_X - 1 : 0;
+	int trgY = ( muki == def::eMUKI_UP ) ? 0 : BattleField::FIELD_NUM_Y - 1;
+	return ( x == trgX ) && ( y == trgY );
+}
+
+//-------------------------------------------------------
+// ブーメラン
+//-------------------------------------------------------
+Skill_ブーメラン::Skill_ブーメラン(Type type, CPoint<int> initAtkPos, int damage, CharType myCharType)
+	:SkillData(true), myCharType(myCharType), count(0), image(), atkPos(initAtkPos), attackType(type)
+	, muki(def::eMUKI_UP), damage(damage) {
+
+	// 画像の読み込み
+	std::string fname = def::SKILL_IMAGE_PATH + "ブーメラン.png";
+	LoadDivGraphWithErrorCheck(image, fname, "Skill_ブーメラン::Skill_ブーメラン", 4, 1, 100, 80);
+
+	// 向きのセット
+	if( type == eTYPE_周回 ) {
+		if( atkPos.y == 0 ) {
+			muki = def::eMUKI_DOWN;
+		} else if( atkPos.y == BattleField::FIELD_NUM_Y - 1 ) {
+			muki = def::eMUKI_UP;
+		} else {
+			AppLogger::Error("ブーメラン周回タイプで無効な位置がセットされています. y: %d", atkPos.y);
+		}
+	}
+
+	int targetType = eCHAR_ALL ^ myCharType;
+	BattleCharMgr::GetInst()->RegisterDamage(DamageData(atkPos, damage, targetType, 1, GetObjectID()));
+}
+
+Skill_ブーメラン::~Skill_ブーメラン() {
+	for( int i = 0; i < sizeof(image) / sizeof(image[0]); i++ ) {
+		DeleteGraph(image[i]);
+	}
+}
+
+void Skill_ブーメラン::Draw() {
+	int ino = ( count % 16 ) / 4;
+	const CPoint<int> ofs(0, 20);
+	int xd = 0, yd = 0;
+	switch( attackType ) {
+	case eTYPE_直線:
+		xd = ( int ) ( ( double ) ( count % NEXT_STEP_COUNT ) * BattleField::PANEL_SIZE.x / NEXT_STEP_COUNT ) - 50;
+		if( myCharType == eCHAR_ENEMY )
+			xd *= -1;
+		break;
+	case eTYPE_周回:
+		if( ( ( myCharType == eCHAR_PLAYER ) && ( atkPos.x == BattleField::FIELD_NUM_X - 1 ) ) || ( ( myCharType == eCHAR_ENEMY ) && ( atkPos.x == 0 ) ) ) {// 縦方向に回転
+			yd = ( int ) ( ( double ) ( count % NEXT_STEP_COUNT ) * BattleField::PANEL_SIZE.y / ( NEXT_STEP_COUNT * 2 ) );
+			if( muki == def::eMUKI_UP )
+				yd *= -1;
+		} else {
+			xd = ( int ) ( ( double ) ( count % NEXT_STEP_COUNT ) * BattleField::PANEL_SIZE.x / NEXT_STEP_COUNT ) - 50;
+			if( IsWayBack() )// 帰り道なら反転
+				xd *= -1;
+			if( myCharType == eCHAR_ENEMY )
+				xd *= -1;
+		}
+		break;
+	}
+	CPoint<int> pos = BattleField::GetPixelPos(atkPos);
+	DrawRotaGraph(pos.x + ofs.x + xd, pos.y + ofs.y + yd, 1, 0, image[ino], TRUE);
+}
+
+bool Skill_ブーメラン::Process() {
+	if( count % NEXT_STEP_COUNT == NEXT_STEP_COUNT - 1 ) {// 一定カウント後一個次のマスへ
+		switch( attackType ) {
+		case eTYPE_直線:
+			atkPos.x += ( myCharType == eCHAR_PLAYER ) ? 1 : -1;
+			break;
+		case eTYPE_周回:
+			if(
+				( myCharType == eCHAR_PLAYER && atkPos.x == BattleField::FIELD_NUM_X - 1 && !IsCorner(atkPos.x, atkPos.y) ) ||
+				( myCharType == eCHAR_ENEMY && atkPos.x == 0 && !IsCorner(atkPos.x, atkPos.y) )
+				) {// Y方向に進むとき
+
+				atkPos.y += ( muki == def::eMUKI_UP ) ? -1 : 1;
+			} else {// X方向に進むとき
+
+				int nextX = 1;
+				// 帰り道なら反転
+				if( ( muki == def::eMUKI_UP && atkPos.y == 0 ) || ( muki == def::eMUKI_DOWN && atkPos.y == BattleField::FIELD_NUM_Y - 1 ) ) {
+					nextX = -1;
+				}
+				if( myCharType == eCHAR_ENEMY )// 敵の攻撃なら逆方向
+					nextX *= -1;
+				atkPos.x += nextX;
+			}
+			break;
+		}
+
+		if( atkPos.x < 0 || atkPos.x >= BattleField::FIELD_NUM_X ) {// 攻撃が範囲外に行けば
+			return true;
+		}
+
+		int targetType = eCHAR_ALL ^ myCharType;
+		BattleCharMgr::GetInst()->RegisterDamage(DamageData(atkPos, damage, targetType, 1, GetObjectID()));
+	}
+	count++;
 	return false;
 }
