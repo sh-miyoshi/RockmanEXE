@@ -22,11 +22,8 @@ class Skill_キャノン系:public SkillData {
 	static const int DAMAGE_REGISTER_COUNT = 20;
 	static const int SKILL_END_COUNT = 28;
 
-	CharType myCharType;
-	int count;
 	int imgBody[3];
 	CPoint<int> charPos;
-	int damage;
 public:
 	enum Type {
 		eTYPE_NORMAL,
@@ -45,11 +42,8 @@ class Skill_ショックウェーブ:public SkillData {
 	static const int IMAGE_DELAY = 4;// 次の画像に移るまでのカウント
 	static const int NEXT_STEP_COUNT = 7 * IMAGE_DELAY;
 
-	CharType myCharType;
-	int count;
 	CPoint<int> atkPos;
 	int image[7];
-	int damage;
 public:
 	Skill_ショックウェーブ(CPoint<int> charPos, int damage, CharType myCharType);
 	~Skill_ショックウェーブ();
@@ -62,13 +56,10 @@ class Skill_サンダーボール:public SkillData {
 	static const int NEXT_STEP_COUNT = 80;
 	static const int IMAGE_DELAY = 6;
 
-	CharType myCharType;
-	int count;
 	CPoint<int> atkPos;
 	CPoint<float> startPos, drawOfs;
 	def::Muki moveDirect, nextMoveDirect;
 	int image[4];
-	int damage;
 	unsigned int ariveTime;
 public:
 	Skill_サンダーボール(CPoint<int> charPos, int damage, CharType myCharType, unsigned int ariveTime);
@@ -81,10 +72,7 @@ public:
 class Skill_ソード系:public SkillData {
 	static const int SKILL_DELAY = 3;// 次の画像に移るまでのカウント
 
-	unsigned int count;
-	int damage;
 	int image[4];
-	CharType myCharType;
 	std::vector<CPoint<int>> atkPoses;
 public:
 	enum Type {
@@ -109,19 +97,37 @@ private:
 	static const int IMAGE_DELAY = 4;// 次の画像に移るまでのカウント
 	static const int NEXT_STEP_COUNT = 2 * IMAGE_DELAY;
 
-	CharType myCharType;
-	unsigned int count;
+
+
 	int image[4];
 	CPoint<int> atkPos;
 	Type attackType;
 	int muki;// 周回の時の向き(UP or DOWN)
-	int damage;
 
 	bool IsWayBack();
 	bool IsCorner(int x, int y);
 public:
 	Skill_ブーメラン(Type type, CPoint<int> initAtkPos, int damage, CharType myCharType);
 	~Skill_ブーメラン();
+
+	void Draw();
+	bool Process();
+};
+
+class Skill_ミニボム:public SkillData {
+	static const unsigned BOMB_ROTATE_DELAY = 4;
+	static const unsigned EXPLODE_DRAW_DLAY = 3;
+	static const unsigned SKILL_COUNT = 40;// ボムを投げてから着弾するまでのカウント
+
+	CPoint<int> initPos;
+	CPoint<float> atkPos;
+	bool isBombView;
+	int imgBomb[5];
+	int imgExplode[16];
+	unsigned int explodeCount;
+public:
+	Skill_ミニボム(CPoint<int> charPos, int damage, CharType myCharType);
+	~Skill_ミニボム();
 
 	void Draw();
 	bool Process();
@@ -150,6 +156,8 @@ std::shared_ptr<SkillData> SkillMgr::GetData(int id, SkillArg args) {
 		return std::shared_ptr<Skill_ブーメラン>(new Skill_ブーメラン(Skill_ブーメラン::eTYPE_周回, args.charPos, args.power, args.myCharType));
 	case eID_ブーメラン_直線:
 		return std::shared_ptr<Skill_ブーメラン>(new Skill_ブーメラン(Skill_ブーメラン::eTYPE_直線, args.charPos, args.power, args.myCharType));
+	case eID_ミニボム:
+		return std::shared_ptr<Skill_ミニボム>(new Skill_ミニボム(args.charPos, args.power, args.myCharType));
 	default:
 		AppLogger::Error("SkillMgr::GetData wrong skill id (%d)", id);
 		exit(1);
@@ -202,7 +210,9 @@ std::shared_ptr<SkillData> SkillMgr::GetData(ChipData c, SkillArg args) {
 //-------------------------------------------------------
 // バスター
 //-------------------------------------------------------
-Skill_バスター::Skill_バスター(CPoint<int> charPos, int damage, CharType myCharType):SkillData(false) {
+Skill_バスター::Skill_バスター(CPoint<int> charPos, int damage, CharType myCharType)
+	:SkillData(damage, myCharType, false) {
+
 	int targetType = eCHAR_ALL ^ myCharType;
 	CPoint<int> damagePos = BattleCharMgr::GetInst()->GetClosestCharPosWithSameLine(charPos, targetType);
 	if( damagePos.x > 0 ) {// 攻撃がヒットする位置に対象がいたら
@@ -229,7 +239,7 @@ bool Skill_バスター::Process() {
 // キャノン
 //-------------------------------------------------------
 Skill_キャノン系::Skill_キャノン系(Type skillType, CPoint<int> charPos, int damage, CharType myCharType)
-	:charPos(charPos), count(0), myCharType(myCharType), imgBody(), damage(damage), SkillData(false) {
+	:charPos(charPos), imgBody(), SkillData(damage, myCharType, false) {
 
 	int temp[9];
 	std::string fname = def::SKILL_IMAGE_PATH + "キャノン_body.png";
@@ -285,7 +295,7 @@ bool Skill_キャノン系::Process() {
 // ショックウェーブ
 //-------------------------------------------------------
 Skill_ショックウェーブ::Skill_ショックウェーブ(CPoint<int> charPos, int damage, CharType myCharType)
-	:count(0), myCharType(myCharType), image(), damage(damage), SkillData(true) {
+	:image(), SkillData(damage, myCharType, true) {
 
 	std::string fname = def::SKILL_IMAGE_PATH + "ショックウェーブ.png";
 	LoadDivGraphWithErrorCheck(image, fname, "Skill_ショックウェーブ::Skill_ショックウェーブ", 7, 1, 100, 140);
@@ -334,7 +344,7 @@ bool Skill_ショックウェーブ::Process() {
 // サンダーボール
 //-------------------------------------------------------
 Skill_サンダーボール::Skill_サンダーボール(CPoint<int> charPos, int damage, CharType myCharType, unsigned int ariveTime)
-	:myCharType(myCharType), count(0), image(), damage(damage), ariveTime(ariveTime), SkillData(true) {
+	:image(), ariveTime(ariveTime), SkillData(damage, myCharType, true) {
 
 	std::string fname = def::SKILL_IMAGE_PATH + "サンダーボール.png";
 	LoadDivGraphWithErrorCheck(image, fname, "Skill_サンダーボール::Skill_サンダーボール", 4, 1, 64, 80);
@@ -441,7 +451,7 @@ bool Skill_サンダーボール::Process() {
 // ソード系
 //-------------------------------------------------------
 Skill_ソード系::Skill_ソード系(Type type, CPoint<int> charPos, int damage, CharType myCharType)
-	:myCharType(myCharType), count(0), image(), damage(damage), SkillData(true) {
+	:image(), SkillData(damage, myCharType, true) {
 
 	// Set Image
 	std::string fname = def::SKILL_IMAGE_PATH + "ソード.png";
@@ -530,8 +540,7 @@ bool Skill_ブーメラン::IsCorner(int x, int y) {
 // ブーメラン
 //-------------------------------------------------------
 Skill_ブーメラン::Skill_ブーメラン(Type type, CPoint<int> initAtkPos, int damage, CharType myCharType)
-	:SkillData(true), myCharType(myCharType), count(0), image(), atkPos(initAtkPos), attackType(type)
-	, muki(def::eMUKI_UP), damage(damage) {
+	:SkillData(damage, myCharType, true), image(), atkPos(initAtkPos), attackType(type), muki(def::eMUKI_UP) {
 
 	// 画像の読み込み
 	std::string fname = def::SKILL_IMAGE_PATH + "ブーメラン.png";
@@ -621,5 +630,86 @@ bool Skill_ブーメラン::Process() {
 		BattleCharMgr::GetInst()->RegisterDamage(DamageData(atkPos, damage, targetType, 1, GetObjectID()));
 	}
 	count++;
+	return false;
+}
+
+//-------------------------------------------------------
+// ミニボム
+//-------------------------------------------------------
+Skill_ミニボム::Skill_ミニボム(CPoint<int> charPos, int damage, CharType myCharType)
+	:explodeCount(0), isBombView(false), imgBomb(), imgExplode()
+	, SkillData(damage, myCharType, false), initPos(charPos) {
+
+	std::string fname = def::SKILL_IMAGE_PATH + "ミニボム.png";
+	LoadDivGraphWithErrorCheck(imgBomb, fname, "Skill_ミニボム", 5, 1, 40, 30);
+
+	fname = def::SKILL_IMAGE_PATH + "explode.png";
+	LoadDivGraphWithErrorCheck(imgExplode, fname, "Skill_ミニボム", 8, 2, 110, 124);
+
+}
+
+Skill_ミニボム::~Skill_ミニボム() {
+	for( int i = 0; i < 5; i++ ) {
+		DeleteGraph(imgBomb[i]);
+	}
+
+	for( int i = 0; i < 16; i++ ) {
+		DeleteGraph(imgExplode[i]);
+	}
+}
+
+void Skill_ミニボム::Draw() {
+	if( isBombView ) {
+		int ino = ( count / BOMB_ROTATE_DELAY ) % 4;
+		int x = BattleField::PANEL_SIZE.x * initPos.x + 20 + ( int ) atkPos.x;
+		int y = BattleField::PANEL_SIZE.y * initPos.y + 170 + ( int ) atkPos.y;
+		DrawGraph(x, y, imgBomb[ino], TRUE);
+	}
+
+	// 落ちた時にボム処理
+	if( explodeCount > 0 ) {
+		int ino = ( explodeCount / EXPLODE_DRAW_DLAY ) * 2;
+		if( ino > 15 )
+			ino = 15;
+		int x = BattleField::PANEL_SIZE.x * ( initPos.x + 3 ) - 10;
+		int y = BattleField::PANEL_SIZE.y * initPos.y + 90;
+		DrawGraph(x, y, imgExplode[ino], TRUE);
+	}
+}
+
+bool Skill_ミニボム::Process() {
+	count++;
+
+	if( explodeCount == 0 ) {
+		// 放物線の計算
+		atkPos.x += ( BattleField::PANEL_SIZE.x * 3.f / SKILL_COUNT );
+		if( atkPos.x > BattleField::PANEL_SIZE.x / 2 )
+			isBombView = true;
+		if( atkPos.x >= BattleField::PANEL_SIZE.x * 3.f ) {
+			// 着弾時
+			isBombView = false;
+			explodeCount = 1;
+			// todo(不発の時はここでreturn true)
+
+			// ダメージの登録(投げた位置から3マス前に着弾) TODO(任意の位置に投げられるようにする)
+			CPoint<int> pos = initPos;
+			if( myCharType == eCHAR_PLAYER ) {
+				pos.x += 3;
+			} else if( myCharType == eCHAR_ENEMY ) {
+				pos.x -= 3;
+			}
+
+			int targetType = eCHAR_ALL ^ myCharType;
+			BattleCharMgr::GetInst()->RegisterDamage(DamageData(pos, damage, targetType, 1, GetObjectID()));
+		}
+		atkPos.y = atkPos.x * ( ( atkPos.x / 120 ) - 2 );// y = x^2/120 - 2x
+	} else {
+		// 着弾後の処理
+		explodeCount++;
+		if( explodeCount > EXPLODE_DRAW_DLAY * 15 / 2 ) {
+			return true;
+		}
+	}
+
 	return false;
 }

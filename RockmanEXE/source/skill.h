@@ -16,8 +16,15 @@ public:
 class SkillData {
 	int objectID;
 	bool isPenetrate;// UŒ‚ƒqƒbƒg‚àŠÑ’Ê‚µ‚Äˆ—‚ğ‘±s‚·‚é‚©
+	// TODO(makeMuteki)
+protected:
+	unsigned int count;
+	int damage;
+	CharType myCharType;
 public:
-	SkillData(bool isPenetrate):objectID(IDManager::CreateUniqueID()),isPenetrate(isPenetrate) {}
+	SkillData(int damage, CharType myCharType, bool isPenetrate)
+		:objectID(IDManager::CreateUniqueID()),isPenetrate(isPenetrate),
+		damage(damage), myCharType(myCharType),count(0){}
 	~SkillData() {}
 
 	virtual bool Process() = 0;
