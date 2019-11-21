@@ -133,6 +133,19 @@ public:
 	bool Process();
 };
 
+class Skill_リカバリー:public SkillData {
+	static const unsigned int SKILL_DELAY = 2;
+
+	int image[8];
+	CPoint<int> charPos;
+public:
+	Skill_リカバリー(CPoint<int> charPos, int power, CharType myCharType);
+	~Skill_リカバリー();
+
+	void Draw();
+	bool Process();
+};
+
 //-------------------------------------------------------
 // グローバルメソッド
 //-------------------------------------------------------
@@ -158,6 +171,8 @@ std::shared_ptr<SkillData> SkillMgr::GetData(int id, SkillArg args) {
 		return std::shared_ptr<Skill_ブーメラン>(new Skill_ブーメラン(Skill_ブーメラン::eTYPE_直線, args.charPos, args.power, args.myCharType));
 	case eID_ミニボム:
 		return std::shared_ptr<Skill_ミニボム>(new Skill_ミニボム(args.charPos, args.power, args.myCharType));
+	case eID_リカバリー:
+		return std::shared_ptr<Skill_リカバリー>(new Skill_リカバリー(args.charPos, args.power, args.myCharType));
 	default:
 		AppLogger::Error("SkillMgr::GetData wrong skill id (%d)", id);
 		exit(1);
@@ -190,8 +205,12 @@ std::shared_ptr<SkillData> SkillMgr::GetData(ChipData c, SkillArg args) {
 		id = eID_フレイムライン_固定;
 		break;
 	case ChipMgr::eID_リカバリー10:
+		id = eID_リカバリー;
+		args.power = 10;
+		break;
 	case ChipMgr::eID_リカバリー30:
 		id = eID_リカバリー;
+		args.power = 30;
 		break;
 	case ChipMgr::eID_ブーメラン:
 		id = eID_ブーメラン_周回;
@@ -711,5 +730,38 @@ bool Skill_ミニボム::Process() {
 		}
 	}
 
+	return false;
+}
+
+Skill_リカバリー::Skill_リカバリー(CPoint<int> charPos, int power, CharType myCharType)
+	:SkillData(-power, myCharType, false), charPos(charPos) {
+
+	std::string fname = def::SKILL_IMAGE_PATH + "リカバリー.png";
+	LoadDivGraphWithErrorCheck(image, fname, "Skill_リカバリー::Skill_リカバリー", 8, 1, 84, 144);
+
+	BattleCharMgr::GetInst()->RegisterRecovery(charPos, power, myCharType);
+}
+
+Skill_リカバリー::~Skill_リカバリー() {
+	for( int i = 0; i < 8; i++ ) {
+		DeleteGraph(image[i]);
+	}
+}
+
+void Skill_リカバリー::Draw() {
+	int ino = ( count / SKILL_DELAY );
+	if( ino > 7 ) {
+		ino = 7;
+	}
+
+	CPoint<int> pos = BattleField::GetPixelPos(charPos);
+	DrawRotaGraph(pos.x, pos.y - 10, 1, 0, image[ino], TRUE);
+}
+
+bool Skill_リカバリー::Process() {
+	count++;
+	if( count >= SKILL_DELAY * 8 ) {
+		return true;
+	}
 	return false;
 }

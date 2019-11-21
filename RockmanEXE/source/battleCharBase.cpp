@@ -66,7 +66,7 @@ bool BattleCharBase::MoveCheck(int x, int y) {
 
 BattleCharBase::BattleCharBase(std::string name, unsigned int hp, unsigned int hpMax, CharType myCharType)
 	:name(name), hp(hp), hpMax(hpMax), myCharType(myCharType), animInitialized(false)
-	, defaultAnim(nullptr), deleteCount(0){
+	, defaultAnim(nullptr), deleteCount(0) {
 }
 
 void BattleCharBase::Draw() {
@@ -111,6 +111,8 @@ void BattleCharBase::AttachAnim(std::shared_ptr<Animation> anim, bool forceRun) 
 void BattleCharBase::SetHP(int hp) {
 	if( hp <= 0 ) {
 		this->hp = 0;
+	} else if( hp >= ( int ) this->hpMax ) {
+		this->hp = this->hpMax;
 	} else {
 		this->hp = ( unsigned int ) hp;
 	}

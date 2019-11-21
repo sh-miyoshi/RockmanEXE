@@ -53,4 +53,5 @@ public:
 	std::list<int> GetInitEnemyList()const { return initEnemyList; }
 
 	void RegisterDamage(DamageData data);
+	void RegisterRecovery(CPoint<int> pos, int power, CharType charType);
 };

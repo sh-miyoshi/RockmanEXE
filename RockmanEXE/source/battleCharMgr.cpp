@@ -246,3 +246,22 @@ std::vector<CPoint<int>> BattleCharMgr::GetAllCharPos(int charType) {
 void BattleCharMgr::RegisterDamage(DamageData data) {
 	damageList.push_back(data);
 }
+
+void BattleCharMgr::RegisterRecovery(CPoint<int> pos, int power, CharType charType) {
+	if( charType == eCHAR_ENEMY ) {
+		for( auto enemy : enemyList ) {
+			if( enemy->GetPos() == pos ) {
+				int hp = ( int ) enemy->GetHP() + power;
+				enemy->SetHP(hp);
+				return;
+			}
+		}
+	} else if( charType == eCHAR_PLAYER ) {
+		if( player->GetPos() == pos ) {
+			int hp = ( int ) player->GetHP() + power;
+			player->SetHP(hp);
+		}
+	} else {
+		AppLogger::Warn("Got unexpected char type: %d", charType);
+	}
+}
